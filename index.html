@@ -8767,6 +8767,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     const desktopInviteResponseTimersByRecord = new Map();
     let desktopInviteActiveId = '';
     const featureDecisionTimers = new Map();
+    const directCheckReplyTimers = new Map();
     const redEnvelopeClaimTimers = new Map();
     const redEnvelopeExpiryTimers = new Map();
     let activeCallWindowMode = 'shrink';
@@ -17605,13 +17606,95 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (settings.historyDeleted) return;
       const existingIds = new Set([...document.querySelectorAll('#chatThreadBody .chat-check-bubble')].map(card => card.dataset.checkId).filter(Boolean));
       (settings.checkHistory || []).forEach(record => {
-        if (existingIds.has(record.id)) return;
-        sendChatCheckCard(record.text, record.direction, { id: record.id, time: record.time, kind: record.status === 'replied' ? 'reply' : '', status: record.status, persist: false });
+        if (!existingIds.has(record.id)) sendChatCheckCard(record.text, record.direction, { id: record.id, time: record.time, kind: record.kind || (record.direction === 'out' && record.status === 'replied' ? 'reply' : ''), status: record.status, answered: record.direction === 'out' && record.kind === 'question' && record.status === 'replied', persist: false });
+        if (record.direction === 'out' && (record.kind || 'question') === 'question' && record.status !== 'replied') scheduleDirectCheckReply(record, handle);
       });
       if (settings.pendingCheck && currentPartnerHandle === handle) {
         const card = document.querySelector(`.chat-check-bubble.incoming[data-check-id="${settings.pendingCheck.id}"]`);
         openIncomingCheckModal(settings.pendingCheck.text, settings.pendingCheck.id, card);
       }
+    }
+
+    function scheduleDirectCheckReply(record, handle = currentPartnerHandle) {
+      if (!record?.id || !handle || record.direction !== 'out' || (record.kind || 'question') !== 'question' || record.status === 'replied') return;
+      const settings = getChatSettings(handle);
+      const saved = (settings.checkHistory || []).find(item => item.id === record.id);
+      if (!saved || saved.status === 'replied') return;
+      // 对方会先在 1.5～4 秒内已读；查岗回复安排在发出后的 5～60 秒内。
+      if (!Number(saved.plannedReplyAt)) saved.plannedReplyAt = Number(saved.createdAt || Date.now()) + 5000 + Math.floor(Math.random() * 55001);
+      saved.kind = 'question';
+      settings.checkHistory = settings.checkHistory.map(item => item.id === saved.id ? saved : item);
+      saveChatSettings(settings, handle);
+      window.clearTimeout(directCheckReplyTimers.get(saved.id));
+      const timer = window.setTimeout(() => resolveDirectCheckReply(saved.id, handle), Math.max(0, Number(saved.plannedReplyAt) - Date.now()));
+      directCheckReplyTimers.set(saved.id, timer);
+    }
+
+    function resolveDirectCheckReply(checkId, handle = currentPartnerHandle) {
+      directCheckReplyTimers.delete(checkId);
+      const settings = getChatSettings(handle);
+      const record = (settings.checkHistory || []).find(item => item.id === checkId);
+      if (!record || record.status === 'replied' || record.direction !== 'out') return;
+      const role = getRoleRecord(handle) || ensureRoleRecord(handle, { name: handle });
+      // “暂时离开”优先级更高：离开期间角色不能发消息，恢复在线后再完成这条查岗。
+      if (isRoleTemporarilyAway(role)) {
+        record.plannedReplyAt = Date.now() + 15000;
+        settings.checkHistory = settings.checkHistory.map(item => item.id === record.id ? record : item);
+        saveChatSettings(settings, handle);
+        scheduleDirectCheckReply(record, handle);
+        return;
+      }
+      let replyText = pickRoleReplyText(role, []);
+      if (!String(replyText || '').trim()) replyText = '收到，已报备。';
+      record.kind = 'question';
+      record.status = 'replied';
+      record.replyText = String(replyText).trim();
+      record.repliedAt = Date.now();
+      settings.checkHistory = settings.checkHistory.map(item => item.id === record.id ? record : item);
+      saveChatSettings(settings, handle);
+      updateDirectCheckCardAsReplied(record);
+      appendDirectCheckReply(record, role, handle);
+    }
+
+    function updateDirectCheckCardAsReplied(record) {
+      const card = document.querySelector(`.chat-check-bubble:not(.incoming)[data-check-id="${CSS.escape(String(record.id))}"]`);
+      if (!card) return;
+      card.classList.add('is-replied');
+      const footer = card.querySelector('.chat-check-card-footer');
+      if (footer) footer.innerHTML = '<span>对方已回复</span><strong>已完成</strong>';
+    }
+
+    function appendDirectCheckReply(record, role, handle) {
+      const text = String(record.replyText || '收到，已报备。').trim();
+      if (!isChatConversationLoaded(handle)) {
+        appendProactiveIncomingMessage(role, text);
+        return;
+      }
+      const body = document.getElementById('chatThreadBody');
+      if (!body) return;
+      if (body.querySelector(`[data-check-reply-for="${CSS.escape(String(record.id))}"]`)) return;
+      const line = document.createElement('div');
+      line.className = 'chat-message-line incoming';
+      line.dataset.checkReplyFor = record.id;
+      line.dataset.createdAt = String(Date.now());
+      line.innerHTML = '<div class="chat-message-avatar partner-avatar"></div><div class="chat-message-content"><div class="chat-bubble"></div><div class="chat-message-meta">刚刚 · 查岗回复</div></div>';
+      line.querySelector('.chat-bubble').textContent = text;
+      const visual = role.avatarImage ? { type: 'image', src: role.avatarImage } : `linear-gradient(135deg,${role.color1 || '#9aa9b8'},${role.color2 || '#607386'})`;
+      setChatAvatarVisual(line.querySelector('.partner-avatar'), role.initials || String(role.name || handle).slice(0, 2), visual);
+      const typing = document.getElementById('chatTyping');
+      body.insertBefore(line, typing || null);
+      body.scrollTop = body.scrollHeight;
+      playGlobalSound('message');
+      scheduleSaveChatHistory();
+    }
+
+    function restoreAllPendingDirectCheckReplies() {
+      const all = readAllChatSettings();
+      Object.entries(all).forEach(([handle, settings]) => {
+        (Array.isArray(settings?.checkHistory) ? settings.checkHistory : []).forEach(record => {
+          if (record?.direction === 'out' && (record.kind || 'question') === 'question' && record.status !== 'replied') scheduleDirectCheckReply(record, handle);
+        });
+      });
     }
 
     function sendChatCheckCard(text, direction = 'out', options = {}) {
@@ -17620,12 +17703,13 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       resetDeletedHistoryForNewMessage(body);
       const incoming = direction === 'in';
       const id = options.id || `check-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-      const checkRecord = { id, text, direction, status: incoming ? 'pending' : options.kind === 'reply' ? 'replied' : 'sent', createdAt: Date.now(), time: options.time || new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) };
+      const checkRecord = { id, text, direction, kind: options.kind || (incoming ? 'incoming' : 'question'), status: incoming ? 'pending' : options.kind === 'reply' ? 'replied' : (options.status || 'sent'), createdAt: Number(options.createdAt) || Date.now(), time: options.time || new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) };
       if (options.persist !== false) {
         const settings = getChatSettings();
         settings.checkHistory = [...(settings.checkHistory || []), checkRecord].slice(-60);
         if (incoming) settings.pendingCheck = checkRecord;
         saveChatSettings(settings);
+        if (!incoming && checkRecord.kind === 'question') scheduleDirectCheckReply(checkRecord, currentPartnerHandle);
       }
       if (!incoming && options.persist !== false && !options.restored) recordUserChatActivity(currentPartnerHandle);
       const line = document.createElement('div');
@@ -17646,10 +17730,11 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       footer.className = 'chat-check-card-footer';
       const footerLabel = document.createElement('span');
       const replied = options.status === 'replied';
-      footerLabel.textContent = incoming ? replied ? '你已回复' : '待你回复' : options.kind === 'reply' ? '已发送回复' : '等待对方回复';
+      const answered = !incoming && options.kind !== 'reply' && (options.answered === true || replied);
+      footerLabel.textContent = incoming ? replied ? '你已回复' : '待你回复' : options.kind === 'reply' ? '已发送回复' : answered ? '对方已回复' : '等待对方回复';
       const footerStatus = document.createElement('strong');
-      footerStatus.textContent = incoming ? replied ? '已完成' : '查岗中' : options.kind === 'reply' ? '已送达' : '进行中';
-      if (replied) card.classList.add('is-replied');
+      footerStatus.textContent = incoming ? replied ? '已完成' : '查岗中' : options.kind === 'reply' ? '已送达' : answered ? '已完成' : '进行中';
+      if (replied || answered) card.classList.add('is-replied');
       footer.append(footerLabel, footerStatus);
       card.append(head, question, footer);
       if (incoming) card.addEventListener('click', () => openIncomingCheckModal(text, id, card));
@@ -17674,6 +17759,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       lucide.createIcons();
       return card;
     }
+
+    // 页面刷新后继续尚未完成的查岗计时，不要求用户先重新进入对应聊天室。
+    window.setTimeout(restoreAllPendingDirectCheckReplies, 0);
 
     function openIncomingCheckModal(question = '现在在做什么？', id = '', existingCard = null) {
       closeChatFeature();
@@ -20327,7 +20415,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const decisionId = line.querySelector('.chat-decision-bubble')?.dataset.decisionId;
       if (decisionId) { settings.decisionRecords = (settings.decisionRecords || []).filter(item => String(item?.id) !== String(decisionId)); featureDecisionTimers.get(decisionId) && clearTimeout(featureDecisionTimers.get(decisionId)); featureDecisionTimers.delete(decisionId); changed = true; }
       const checkId = line.querySelector('.chat-check-bubble')?.dataset.checkId;
-      if (checkId) { settings.checkHistory = (settings.checkHistory || []).filter(item => String(item?.id) !== String(checkId)); if (String(settings.pendingCheck?.id || '') === String(checkId)) settings.pendingCheck = null; if (String(activeIncomingCheckId || '') === String(checkId)) closeIncomingCheckModal(); changed = true; }
+      if (checkId) { settings.checkHistory = (settings.checkHistory || []).filter(item => String(item?.id) !== String(checkId)); if (String(settings.pendingCheck?.id || '') === String(checkId)) settings.pendingCheck = null; window.clearTimeout(directCheckReplyTimers.get(String(checkId))); directCheckReplyTimers.delete(String(checkId)); if (String(activeIncomingCheckId || '') === String(checkId)) closeIncomingCheckModal(); changed = true; }
       const inviteId = line.querySelector('.chat-invite-bubble')?.dataset.inviteId;
       if (inviteId) { settings.inviteHistory = (settings.inviteHistory || []).filter(item => String(item?.id) !== String(inviteId)); if (String(settings.pendingInvite?.id || '') === String(inviteId)) settings.pendingInvite = null; if(String(activeInviteId||'')===String(inviteId)){clearInviteResponseTasksById(inviteId);inviteResponseTimer=null;activeInviteId='';} changed = true; }
       const komoRequestId = line.dataset.komoRequestId || line.querySelector('[data-komo-request-id]')?.dataset.komoRequestId;
@@ -30311,6 +30399,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 (function(){
 'use strict';
 const KOMO_STATE_KEY='dream-messenger:komo-store:v1';
+const KOMO_ACTIVE_PAY_TRIGGER_PERCENT=40;
 const PRODUCTS=Object.freeze([
 {id:'strawberry-milk',name:'草莓牛奶',category:'饮料',price:1200,icon:'🥛',desc:'冷藏柜里的草莓牛奶。',tags:['甜','可爱']},
 {id:'lemon-soda',name:'柠檬汽水',category:'饮料',price:800,icon:'🍋',desc:'冰凉清爽的柠檬汽水。',tags:['清爽']},
@@ -30574,7 +30663,7 @@ window.cancelKomoPayRequest=async function(id){const state=loadKomoState(),task=
 function openKomoPayRequest(){const state=loadKomoState();if(!state.cart.length)return komoToast('购物袋是空的');const roles=contactRoles();if(!roles.length)return komoToast('还没有可选择的梦角联系人');openKomoModal(`<section class="komo-sheet"><header class="komo-sheet-head"><div><strong>请梦角代付</strong><small>备注只显示在我方请求卡中 · 对方约 30～60 秒后回应</small></div><button onclick="closeKomoModal()">×</button></header><label class="komo-field">选择梦角<select id="komoPayRole">${roles.map(role=>`<option value="${role.id}">${getRoleDisplayNameForApp(role)}</option>`).join('')}</select></label><label class="komo-field">我的备注<textarea id="komoPayNote" maxlength="80" placeholder="例如：今天想吃点甜的"></textarea></label><button class="komo-primary" style="width:100%" id="komoPayConfirm">发送代付请求</button></section>`);document.getElementById('komoPayConfirm').onclick=async()=>{const roleId=document.getElementById('komoPayRole').value,note=document.getElementById('komoPayNote').value.trim(),role=getRoleRecord(roleId);if(!role)return;const existing=state.payTasks.find(task=>task.kind==='manual'&&task.roleId===roleId&&task.status==='scheduled');if(existing)return komoToast('已经向这位梦角发出代付请求');const itemSnapshot=state.cart.map(item=>({...item})),totalSnapshotCents=itemSnapshot.reduce((sum,item)=>sum+(getProduct(item.productId)?.price||0)*item.qty,0),ackDueAt=Date.now()+30000+Math.floor(Math.random()*30001),task={id:uid('komo-pay-request'),kind:'manual',roleId,note,cartRoundId:state.cartRoundId,itemSnapshot,totalSnapshotCents,ackDueAt,ackSent:false,dueAt:ackDueAt+3000+Math.floor(Math.random()*5001),status:'scheduled',createdAt:Date.now()};state.payTasks.push(task);if(!await saveKomoState(state,'komo-pay-request'))return komoToast('代付请求保存失败');appendKomoPayRequestCard(task,role);closeKomoModal();komoToast('代付请求已发送');scheduleKomoPayTasks();};}
 function sponsoredItemSelection(state,roleId,mode,sourceItems=state.cart){const pref=rolePreference(state,roleId),rows=sourceItems.map(item=>({...item,product:getProduct(item.productId)})).filter(item=>item.product).sort((a,b)=>{const af=a.product.id===pref.favoriteProductId||a.product.tags.some(tag=>pref.likes.includes(tag));const bf=b.product.id===pref.favoriteProductId||b.product.tags.some(tag=>pref.likes.includes(tag));return Number(bf)-Number(af);});if(mode==='one')return rows.slice(0,1).map(({product,...item})=>item);if(mode==='several')return rows.slice(0,Math.max(1,Math.ceil(rows.length/2))).map(({product,...item})=>item);return rows.map(({product,...item})=>item);}
 async function completeKomoSponsoredPayment(task){const state=loadKomoState(),role=getRoleRecord(task.roleId);if(!role)return false;const wallet=roleWallet(state,task.roleId);if(task.kind==='manual'&&hash(`${task.id}:accept`)%100>=78){task.status='declined';task.completedAt=Date.now();updateKomoPayRequestCard(task,'已拒绝');appendKomoPaymentResultCard(role,task,null,'declined','这次不方便帮你代付，下次再帮你。');return true;}const requested=Array.isArray(task.itemSnapshot)&&task.itemSnapshot.length?task.itemSnapshot:state.cart;const available=requested.map(item=>{const current=state.cart.find(row=>row.productId===item.productId);return current?{productId:item.productId,qty:Math.min(item.qty,current.qty)}:null;}).filter(item=>item&&item.qty>0);if(!available.length){task.status='cancelled';task.completedAt=Date.now();updateKomoPayRequestCard(task,'购物袋已变化');appendKomoPaymentResultCard(role,task,null,'declined','请求中的商品已经不在购物袋里。');return true;}const roll=hash(`${task.id}:mode`)%100;let mode=roll<30?'all':roll<65?'several':'one';let selected=sponsoredItemSelection(state,task.roleId,mode,available);const originallySelected=selected.length;let total=selected.reduce((sum,item)=>sum+(getProduct(item.productId)?.price||0)*item.qty,0);while(selected.length&&wallet.balanceCents<total){selected=selected.slice(0,-1);total=selected.reduce((sum,item)=>sum+(getProduct(item.productId)?.price||0)*item.qty,0);}if(selected.length<originallySelected)mode=selected.length===1?'one':'several';if(!selected.length){task.status='declined';task.completedAt=Date.now();updateKomoPayRequestCard(task,'余额不足');appendKomoPaymentResultCard(role,task,null,'declined','我的 KOMO 钱包余额不够，这次没办法代付。');return true;}const order={id:uid('komo-sponsored'),items:selected.map(item=>({...item})),subtotalCents:total,discountCents:0,totalCents:total,payerRoleId:task.roleId,recipientRoleId:'',status:'sponsored',sponsorMode:mode,createdAt:Date.now(),requestId:task.id};wallet.balanceCents-=total;wallet.paidForMeCents=(wallet.paidForMeCents||0)+total;wallet.updatedAt=Date.now();selected.forEach(item=>{state.inventory[item.productId]=Math.max(0,Number(state.inventory[item.productId]||0)-item.qty);const cartItem=state.cart.find(row=>row.productId===item.productId);if(cartItem){cartItem.qty-=item.qty;if(cartItem.qty<=0)state.cart=state.cart.filter(row=>row!==cartItem);}const owned=state.pantry.find(row=>row.productId===item.productId);if(owned)owned.qty+=item.qty;else state.pantry.push({...item});});if(!state.cart.length)state.cartRoundId='';state.orders.push(order);task.status='completed';task.completedAt=Date.now();task.orderId=order.id;updateKomoPayRequestCard(task,mode==='all'?'已全部代付':mode==='several'?'已部分代付':'已代付一件');appendKomoPaymentResultCard(role,task,order,'completed');return true;}
-function scheduleKomoActiveCartIntervention(){const state=loadKomoState();if(!state.cart.length||!state.cartRoundId)return;const today=dayKey();if(state.payTasks.some(task=>task.kind==='active'&&task.cartRoundId===state.cartRoundId&&['scheduled','completed'].includes(task.status)))return;const roles=contactRoles().filter(role=>state.interventionLastByRole[role.id]!==today);if(!roles.length)return;const role=roles[hash(`${state.cartRoundId}:role`)%roles.length];if(hash(`${state.cartRoundId}:${role.id}:active-pay`)%100>=24)return;state.interventionLastByRole[role.id]=today;state.payTasks.push({id:uid('komo-active-pay'),kind:'active',roleId:role.id,cartRoundId:state.cartRoundId,itemSnapshot:state.cart.map(item=>({...item})),totalSnapshotCents:state.cart.reduce((sum,item)=>sum+(getProduct(item.productId)?.price||0)*item.qty,0),dueAt:Date.now()+30000+(hash(`${Date.now()}:${role.id}`)%90001),status:'scheduled',createdAt:Date.now()});saveKomoState(state,'komo-active-pay-schedule');scheduleKomoPayTasks();}
+function scheduleKomoActiveCartIntervention(){const state=loadKomoState();if(!state.cart.length||!state.cartRoundId)return;const today=dayKey();if(state.payTasks.some(task=>task.kind==='active'&&task.cartRoundId===state.cartRoundId&&['scheduled','completed'].includes(task.status)))return;const roles=contactRoles().filter(role=>state.interventionLastByRole[role.id]!==today);if(!roles.length)return;const role=roles[hash(`${state.cartRoundId}:role`)%roles.length];if(hash(`${state.cartRoundId}:${role.id}:active-pay`)%100>=KOMO_ACTIVE_PAY_TRIGGER_PERCENT)return;state.interventionLastByRole[role.id]=today;state.payTasks.push({id:uid('komo-active-pay'),kind:'active',roleId:role.id,cartRoundId:state.cartRoundId,itemSnapshot:state.cart.map(item=>({...item})),totalSnapshotCents:state.cart.reduce((sum,item)=>sum+(getProduct(item.productId)?.price||0)*item.qty,0),dueAt:Date.now()+30000+(hash(`${Date.now()}:${role.id}`)%90001),status:'scheduled',createdAt:Date.now()});saveKomoState(state,'komo-active-pay-schedule');scheduleKomoPayTasks();}
 function scheduleKomoPayTasks(){clearTimeout(komoPayTimer);scheduleKomoActiveCartIntervention();const tasks=loadKomoState().payTasks.filter(task=>task.status==='scheduled');if(!tasks.length)return;const next=Math.min(...tasks.map(task=>task.kind==='manual'&&!task.ackSent?Math.min(Number(task.ackDueAt)||Number(task.dueAt),Number(task.dueAt)):Number(task.dueAt)));komoPayTimer=setTimeout(processKomoPayTasks,Math.max(250,Math.min(60000,next-Date.now())));}
 async function processKomoPayTasks(){const state=loadKomoState(),now=Date.now();let changed=false;for(const task of state.payTasks){if(task.status!=='scheduled')continue;if(isRoleTemporarilyAway(task.roleId)){task.dueAt=Math.max(Number(task.dueAt)||0,now+60000);if(task.kind==='manual'&&!task.ackSent)task.ackDueAt=Math.max(Number(task.ackDueAt)||0,now+60000);changed=true;continue;}if(task.cartRoundId&&task.cartRoundId!==state.cartRoundId){task.status='cancelled';updateKomoPayRequestCard(task,'购物袋已变化');changed=true;continue;}if(task.kind==='manual'&&!task.ackSent&&now>=Number(task.ackDueAt||0)){const role=getRoleRecord(task.roleId);if(role){appendProactiveIncomingMessage(role,payRequestAck(role,task));updateKomoPayRequestCard(task,'正在查看');task.ackSent=true;task.ackSentAt=Date.now();changed=true;}}if(Number(task.dueAt)>now)continue;changed=await completeKomoSponsoredPayment(task)||changed;}if(changed){await saveKomoState(state,'komo-pay-process');if(document.getElementById('komoApp')?.classList.contains('is-visible'))renderKomo();}scheduleKomoPayTasks();}
 function openGiftCheckout(){const state=loadKomoState();if(!state.cart.length)return komoToast('购物袋是空的');const roles=contactRoles();if(!roles.length)return komoToast('还没有可选择的梦角联系人');openKomoModal(`<section class="komo-sheet"><header class="komo-sheet-head"><div><strong>送给梦角</strong><small>选择收礼人并附上一句话</small></div><button onclick="closeKomoModal()">×</button></header><label class="komo-field">收礼人<select id="komoGiftRole">${roles.map(role=>`<option value="${role.id}" ${komoEntryContext?.roleId===role.id?'selected':''}>${getRoleDisplayNameForApp(role)}</option>`).join('')}</select></label><label class="komo-field">留言<textarea id="komoGiftNote" maxlength="80" placeholder="路过货架的时候想到了你。"></textarea></label><label class="komo-field">礼物包装<select id="komoGiftWrapping">${WRAPPINGS.filter(item=>state.wrappings.includes(item.id)).map(item=>`<option value="${item.id}">${item.icon} ${item.name}</option>`).join('')}</select></label><button class="komo-primary" style="width:100%" id="komoGiftConfirm">确认支付并送出</button></section>`);document.getElementById('komoGiftConfirm').onclick=()=>checkoutKomo('gift',document.getElementById('komoGiftRole').value,document.getElementById('komoGiftNote').value.trim(),document.getElementById('komoGiftWrapping').value);}
