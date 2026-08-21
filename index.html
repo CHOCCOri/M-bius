@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#111318">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Möbius">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
@@ -14,6 +14,19 @@
   <meta name="dream-push-vapid-public-key" content="">
   <meta name="dream-push-subscribe-endpoint" content="">
   <title>Möbius</title>
+  <script>
+  /* iOS Safari / 主屏幕模式：使用真实视觉视口高度，避免键盘、地址栏和 Home Indicator 推动整页。 */
+  (function(){
+    const root=document.documentElement;
+    const isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    if(isiOS)root.dataset.ios='true';
+    if(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)root.dataset.standalone='true';
+    let frame=0;
+    const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const viewport=window.visualViewport;const height=Math.round(viewport?.height||window.innerHeight||document.documentElement.clientHeight);if(height>0)root.style.setProperty('--app-viewport-height',`${height}px`);root.style.setProperty('--app-viewport-offset-top',`${Math.max(0,Math.round(viewport?.offsetTop||0))}px`);});};
+    update();window.addEventListener('resize',update,{passive:true});window.addEventListener('orientationchange',()=>setTimeout(update,120),{passive:true});window.visualViewport?.addEventListener('resize',update,{passive:true});window.visualViewport?.addEventListener('scroll',update,{passive:true});window.addEventListener('pageshow',update,{passive:true});document.addEventListener('focusin',event=>{if(/^(INPUT|TEXTAREA|SELECT)$/u.test(event.target?.tagName||''))setTimeout(update,60);});document.addEventListener('focusout',event=>{if(/^(INPUT|TEXTAREA|SELECT)$/u.test(event.target?.tagName||''))setTimeout(()=>{update();if(root.dataset.standalone==='true')window.scrollTo(0,0);},120);});
+    window.__updateMobiusViewport=update;
+  })();
+  </script>
   <script>
   /* V3 启动恢复：先读取统一数据库，再允许应用使用本地启动缓存。 */
   (function () {
@@ -6976,7 +6989,32 @@
   </style>
 
 <style id="tipsAppStyles">
-.tips-icon-mark{position:absolute;right:5px;bottom:4px;width:10px;height:10px;display:grid;place-items:center;border-radius:50%;background:var(--card-black);color:var(--card-white);font:800 6px ui-monospace,monospace}.tips-app{position:absolute;inset:0;z-index:375;display:none;flex-direction:column;overflow:hidden;background:linear-gradient(155deg,#f8f7f2 0%,#eef3f3 52%,#f7f4ee 100%);color:#283238}.tips-app.is-visible{display:flex}.tips-app-head{min-height:72px;display:flex;align-items:center;gap:9px;padding:36px 12px 8px;border-bottom:1px solid rgba(74,90,96,.13);background:rgba(250,250,247,.82);backdrop-filter:blur(18px)}.tips-app-head button{width:28px;height:28px;display:grid;place-items:center;border:1px solid rgba(74,90,96,.14);border-radius:50%;background:rgba(255,255,255,.78);color:#405058;cursor:pointer}.tips-app-title{min-width:0;flex:1}.tips-app-title small{display:block;color:#819096;font:700 5.5px ui-monospace,monospace;letter-spacing:.17em}.tips-app-title strong{display:block;margin-top:2px;font-size:15px}.tips-search-wrap{display:flex;align-items:center;gap:7px;margin:9px 11px 0;padding:0 10px;border:1px solid rgba(65,83,89,.13);border-radius:11px;background:rgba(255,255,255,.76)}.tips-search-wrap svg{flex:0 0 auto;color:#859399}.tips-search-wrap input{width:100%;height:33px;border:0;outline:0;background:transparent;color:#29353a;font-size:8px}.tips-search-wrap input::placeholder{color:#9aa5a8}.tips-category-bar{display:flex;gap:5px;overflow-x:auto;padding:8px 11px 7px;scrollbar-width:none}.tips-category-bar::-webkit-scrollbar{display:none}.tips-category-bar button{flex:0 0 auto;min-height:25px;padding:0 10px;border:1px solid rgba(69,87,94,.13);border-radius:999px;background:rgba(255,255,255,.72);color:#718087;font-size:6.5px;font-weight:800;cursor:pointer}.tips-category-bar button.active{border-color:#34454d;background:#34454d;color:#fff}.tips-app-scroll{min-height:0;flex:1;overflow-y:auto;padding:2px 11px calc(22px + env(safe-area-inset-bottom));scrollbar-width:none}.tips-app-scroll::-webkit-scrollbar{display:none}.tips-intro{position:relative;overflow:hidden;margin:3px 0 9px;padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,#35464d,#65777b);color:#fff;box-shadow:0 10px 25px rgba(42,59,65,.15)}.tips-intro::after{content:'?';position:absolute;right:8px;bottom:-19px;color:rgba(255,255,255,.08);font:900 72px/1 ui-monospace,monospace}.tips-intro small{display:block;color:rgba(255,255,255,.63);font:700 5.5px ui-monospace,monospace;letter-spacing:.14em}.tips-intro strong{display:block;margin-top:5px;font-size:13px}.tips-intro p{max-width:82%;margin:6px 0 0;color:rgba(255,255,255,.78);font-size:7px;line-height:1.65}.tips-declaration{margin:0 0 10px;padding:11px 12px;border:1px solid rgba(110,86,60,.16);border-radius:13px;background:rgba(255,252,244,.8);box-shadow:0 4px 14px rgba(70,57,42,.045);color:#65594d}.tips-declaration-head{display:flex;align-items:center;gap:7px}.tips-declaration-head i{width:25px;height:25px;display:grid;place-items:center;flex:0 0 25px;border-radius:8px;background:#34454d;color:#fff}.tips-declaration-head strong{font-size:9px}.tips-declaration-head small{display:block;margin-top:2px;color:#95887b;font:5.5px ui-monospace,monospace;letter-spacing:.12em}.tips-declaration p{margin:8px 0 0;color:#74685b;font-size:7px;line-height:1.75}.tips-declaration b{color:#3f5158;font-weight:900}.tips-section-label{display:flex;align-items:end;justify-content:space-between;margin:12px 2px 7px}.tips-section-label strong{font-size:10px}.tips-section-label small{color:#8a989d;font-size:6px}.tips-guide-list{display:grid;gap:7px}.tips-guide-card{padding:11px;border:1px solid rgba(68,87,94,.12);border-radius:13px;background:rgba(255,255,255,.78);box-shadow:0 4px 14px rgba(48,66,72,.045)}.tips-guide-head{display:flex;align-items:center;gap:8px}.tips-guide-icon{width:31px;height:31px;display:grid;place-items:center;flex:0 0 auto;border-radius:10px;background:#e9efee;color:#40535a}.tips-guide-copy{min-width:0;flex:1}.tips-guide-copy strong,.tips-guide-copy small{display:block}.tips-guide-copy strong{font-size:9px}.tips-guide-copy small{margin-top:3px;color:#879499;font-size:6px}.tips-guide-toggle{width:23px;height:23px;border:0;border-radius:50%;background:#eff3f2;color:#68797f;cursor:pointer;transition:.18s}.tips-guide-card.expanded .tips-guide-toggle{transform:rotate(45deg);background:#34454d;color:#fff}.tips-guide-detail{display:none;margin-top:9px;padding-top:8px;border-top:1px dashed rgba(72,90,97,.16)}.tips-guide-card.expanded .tips-guide-detail{display:block}.tips-guide-detail ul{display:grid;gap:6px;margin:0;padding:0;list-style:none}.tips-guide-detail li{position:relative;padding-left:13px;color:#64747a;font-size:7px;line-height:1.55}.tips-guide-detail li::before{content:'•';position:absolute;left:3px;top:0;color:#3f555d;font-weight:900}.tips-guide-keywords{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.tips-guide-keywords span{padding:3px 6px;border-radius:999px;background:#edf2f1;color:#708087;font-size:5.5px}.tips-empty{padding:45px 14px;text-align:center;color:#8a979b;font-size:8px}.tips-app-foot{padding:7px 11px calc(8px + env(safe-area-inset-bottom));border-top:1px solid rgba(74,90,96,.11);background:rgba(249,250,247,.86);color:#8a979b;font-size:5.5px;text-align:center;backdrop-filter:blur(16px)}
+.tips-icon-mark{position:absolute;right:5px;bottom:4px;width:10px;height:10px;display:grid;place-items:center;border-radius:50%;background:var(--card-black);color:var(--card-white);font:800 6px ui-monospace,monospace}.tips-app{position:absolute;inset:0;z-index:375;display:none;flex-direction:column;overflow:hidden;background:linear-gradient(155deg,#f8f7f2 0%,#eef3f3 52%,#f7f4ee 100%);color:#283238}.tips-app.is-visible{display:flex}.tips-app-head{min-height:72px;display:flex;align-items:center;gap:9px;padding:36px 12px 8px;border-bottom:1px solid rgba(74,90,96,.13);background:rgba(250,250,247,.82);backdrop-filter:blur(18px)}.tips-app-head button{width:28px;height:28px;display:grid;place-items:center;border:1px solid rgba(74,90,96,.14);border-radius:50%;background:rgba(255,255,255,.78);color:#405058;cursor:pointer}.tips-app-title{min-width:0;flex:1}.tips-app-title small{display:block;color:#819096;font:700 5.5px ui-monospace,monospace;letter-spacing:.17em}.tips-app-title strong{display:block;margin-top:2px;font-size:15px}.tips-search-wrap{display:flex;align-items:center;gap:7px;margin:9px 11px 0;padding:0 10px;border:1px solid rgba(65,83,89,.13);border-radius:11px;background:rgba(255,255,255,.76)}.tips-search-wrap svg{flex:0 0 auto;color:#859399}.tips-search-wrap input{width:100%;height:33px;border:0;outline:0;background:transparent;color:#29353a;font-size:8px}.tips-search-wrap input::placeholder{color:#9aa5a8}.tips-category-bar{display:flex;gap:5px;overflow-x:auto;padding:8px 11px 7px;scrollbar-width:none}.tips-category-bar::-webkit-scrollbar{display:none}.tips-category-bar button{flex:0 0 auto;min-height:25px;padding:0 10px;border:1px solid rgba(69,87,94,.13);border-radius:999px;background:rgba(255,255,255,.72);color:#718087;font-size:6.5px;font-weight:800;cursor:pointer}.tips-category-bar button.active{border-color:#34454d;background:#34454d;color:#fff}.tips-app-scroll{min-height:0;flex:1;overflow-y:auto;padding:2px 11px calc(22px + env(safe-area-inset-bottom));scrollbar-width:none}.tips-app-scroll::-webkit-scrollbar{display:none}.tips-intro{position:relative;overflow:hidden;margin:3px 0 9px;padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,#35464d,#65777b);color:#fff;box-shadow:0 10px 25px rgba(42,59,65,.15)}.tips-intro::after{content:'?';position:absolute;right:8px;bottom:-19px;color:rgba(255,255,255,.08);font:900 72px/1 ui-monospace,monospace}.tips-intro small{display:block;color:rgba(255,255,255,.63);font:700 5.5px ui-monospace,monospace;letter-spacing:.14em}.tips-intro strong{display:block;margin-top:5px;font-size:13px}.tips-intro p{max-width:82%;margin:6px 0 0;color:rgba(255,255,255,.78);font-size:7px;line-height:1.65}.tips-section-label{display:flex;align-items:end;justify-content:space-between;margin:12px 2px 7px}.tips-section-label strong{font-size:10px}.tips-section-label small{color:#8a989d;font-size:6px}.tips-guide-list{display:grid;gap:7px}.tips-guide-card{padding:11px;border:1px solid rgba(68,87,94,.12);border-radius:13px;background:rgba(255,255,255,.78);box-shadow:0 4px 14px rgba(48,66,72,.045)}.tips-guide-head{display:flex;align-items:center;gap:8px}.tips-guide-icon{width:31px;height:31px;display:grid;place-items:center;flex:0 0 auto;border-radius:10px;background:#e9efee;color:#40535a}.tips-guide-copy{min-width:0;flex:1}.tips-guide-copy strong,.tips-guide-copy small{display:block}.tips-guide-copy strong{font-size:9px}.tips-guide-copy small{margin-top:3px;color:#879499;font-size:6px}.tips-guide-toggle{width:23px;height:23px;border:0;border-radius:50%;background:#eff3f2;color:#68797f;cursor:pointer;transition:.18s}.tips-guide-card.expanded .tips-guide-toggle{transform:rotate(45deg);background:#34454d;color:#fff}.tips-guide-detail{display:none;margin-top:9px;padding-top:8px;border-top:1px dashed rgba(72,90,97,.16)}.tips-guide-card.expanded .tips-guide-detail{display:block}.tips-guide-detail ul{display:grid;gap:6px;margin:0;padding:0;list-style:none}.tips-guide-detail li{position:relative;padding-left:13px;color:#64747a;font-size:7px;line-height:1.55}.tips-guide-detail li::before{content:'•';position:absolute;left:3px;top:0;color:#3f555d;font-weight:900}.tips-guide-keywords{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.tips-guide-keywords span{padding:3px 6px;border-radius:999px;background:#edf2f1;color:#708087;font-size:5.5px}.tips-empty{padding:45px 14px;text-align:center;color:#8a979b;font-size:8px}.tips-app-foot{padding:7px 11px calc(8px + env(safe-area-inset-bottom));border-top:1px solid rgba(74,90,96,.11);background:rgba(249,250,247,.86);color:#8a979b;font-size:5.5px;text-align:center;backdrop-filter:blur(16px)}
+</style>
+<style id="siteUsageAnnouncementStyles">
+.site-usage-announcement{position:absolute;inset:0;z-index:2200;display:none;align-items:center;justify-content:center;padding:15px;background:rgba(24,16,18,.68);backdrop-filter:blur(9px) saturate(80%);-webkit-backdrop-filter:blur(9px) saturate(80%)}
+.site-usage-announcement.is-open{display:flex}
+.site-usage-sheet{position:relative;width:min(450px,100%);max-height:calc(100% - 16px);display:flex;flex-direction:column;overflow:hidden;border:2px solid #7f2435;border-radius:15px;background:#fffaf1;color:#342728;box-shadow:0 28px 80px rgba(29,10,14,.46),0 0 0 5px rgba(255,247,232,.16)}
+.site-usage-sheet::before{content:"";height:7px;flex:0 0 7px;background:repeating-linear-gradient(135deg,#7f2435 0 9px,#f1d8a2 9px 18px,#242021 18px 27px,#f1d8a2 27px 36px)}
+.site-usage-head{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:14px 15px;border-bottom:2px solid #7f2435;background:linear-gradient(135deg,#8e2b40,#69192c);color:#fff}
+.site-usage-mark{width:43px;height:43px;display:grid;place-items:center;flex:0 0 43px;border:2px solid rgba(255,244,217,.8);border-radius:50%;background:#fff5df;color:#7f2435;box-shadow:0 6px 16px rgba(45,8,18,.26),inset 0 0 0 3px rgba(127,36,53,.08)}
+.site-usage-mark svg{width:21px;height:21px;stroke-width:2.3}
+.site-usage-title{min-width:0;flex:1}
+.site-usage-title small{display:block;color:#f0d9a7;font:800 6px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.18em}
+.site-usage-title strong{display:block;margin-top:4px;color:#fff;font:950 18px/1.15 Georgia,"Songti SC",serif;letter-spacing:.08em;text-shadow:0 2px 0 rgba(52,7,18,.34)}
+.site-usage-title::after{content:"请务必完整阅读";display:inline-flex;margin-top:6px;padding:3px 7px;border:1px solid rgba(255,244,217,.42);border-radius:999px;background:rgba(255,255,255,.09);color:#fff1d0;font-size:6px;font-weight:900;letter-spacing:.08em}
+.site-usage-body{min-height:0;overflow-y:auto;padding:17px 16px 10px;background:radial-gradient(circle,#b79c75 .45px,transparent .6px) 0 0/9px 9px,#fffaf1}
+.site-usage-body p{position:relative;margin:0;padding:13px 13px 13px 16px;border:1px solid rgba(127,36,53,.22);border-left:5px solid #7f2435;border-radius:10px;background:rgba(255,255,255,.72);color:#3b2c2d;font-size:9px;font-weight:900;line-height:1.95;letter-spacing:.015em;text-align:justify;box-shadow:0 5px 14px rgba(74,38,31,.06)}
+.site-usage-body p strong{font-weight:900}
+.site-usage-body b{color:#781f32;font-weight:1000;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.site-usage-science{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:13px;padding:11px 10px;border:2px solid #7f2435;border-radius:10px;background:#f7e8cd;color:#701c2f;font-size:8px;font-weight:1000;letter-spacing:.06em;text-align:center}
+.site-usage-science svg{width:15px;height:15px;stroke-width:2.4}
+.site-usage-foot{flex:0 0 auto;padding:10px 16px calc(15px + env(safe-area-inset-bottom));border-top:1px solid rgba(127,36,53,.18);background:#fff5e3}
+.site-usage-accept{width:100%;min-height:42px;border:1px solid #541020;border-radius:9px;background:linear-gradient(135deg,#922d44,#6d192d);color:#fff8e8;font-size:9px;font-weight:950;letter-spacing:.05em;cursor:pointer;box-shadow:0 9px 20px rgba(93,22,43,.25),inset 0 1px 0 rgba(255,255,255,.18)}
+.site-usage-accept:hover{filter:brightness(1.06)}
+.site-usage-accept:active{transform:scale(.985)}
+@media(max-width:430px){.site-usage-announcement{align-items:flex-end;padding:7px}.site-usage-sheet{max-height:90%;border-radius:17px 17px 10px 10px}.site-usage-head{padding:13px}.site-usage-title strong{font-size:16px}.site-usage-body{padding:13px 12px 8px}.site-usage-body p{padding:11px 10px 11px 13px;font-size:8.5px;line-height:1.9}.site-usage-foot{padding-left:12px;padding-right:12px}}
+@media(prefers-reduced-motion:reduce){.site-usage-accept{transition:none}}
 </style>
 
 <style id="answerBookStyles">
@@ -6997,10 +7035,38 @@
 /* KOMO 轻互动与动效 */
 .komo-head .komo-motion-button{font-size:13px}.komo-app[data-komo-motion="off"] *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.komo-app.komo-opening .komo-brand{animation:komoSignOn .55s ease both}.komo-app.komo-opening .komo-tabs{animation:komoSlideDown .45s .08s ease both}.komo-app.komo-opening .komo-scroll{animation:komoStoreFade .5s .12s ease both}.komo-product{position:relative}.komo-product.komo-product-enter{animation:komoShelfIn .38s var(--komo-delay,0ms) cubic-bezier(.2,.82,.25,1) both}.komo-app[data-komo-motion="light"] .komo-product.komo-product-enter{animation-duration:.18s;animation-delay:0ms}.komo-app[data-komo-motion="light"] .komo-product-icon::after,.komo-app[data-komo-motion="light"] .komo-product::after,.komo-app[data-komo-motion="light"] .komo-detail-visual::after,.komo-app[data-komo-motion="light"] .komo-detail-visual>span,.komo-app[data-komo-motion="light"] .komo-clerk-roster span{animation:none!important}.komo-product:active{transform:scale(.975)}.komo-product-icon{position:relative;transition:transform .18s ease}.komo-product:hover .komo-product-icon{transform:translateY(-2px) scale(1.06)}.komo-product[data-komo-effect="hot"] .komo-product-icon::after{content:"⌁";position:absolute;right:-1px;top:-8px;color:#c58a62;font-size:12px;opacity:.55;animation:komoSteam 1.8s ease-in-out infinite}.komo-product[data-komo-effect="cold"] .komo-product-icon::after{content:"✦";position:absolute;right:1px;top:0;color:#77aebd;font-size:8px;animation:komoSpark 1.5s ease-in-out infinite}.komo-product[data-komo-effect="gift"] .komo-product-icon::after{content:"⌁";position:absolute;right:-3px;bottom:-2px;color:#b65b75;font-size:10px;transform:rotate(-30deg)}.komo-product[data-komo-effect="limited"]{box-shadow:0 5px 15px rgba(111,77,126,.09)}.komo-product[data-komo-effect="limited"]::after{content:"✦";position:absolute;right:8px;top:8px;color:#9b668d;font-size:7px;animation:komoSpark 1.4s ease-in-out infinite}.komo-product[data-komo-effect="drink"]{border-color:#d6e7e8;background:linear-gradient(145deg,#fff,#f4fbfb)}.komo-product[data-komo-effect="drink"] .komo-product-icon::after{content:"◦ °";right:-4px;top:-5px;color:#66a5ad;letter-spacing:1px;animation:komoBubbles 1.8s ease-in-out infinite}.komo-product[data-komo-effect="snack"]{border-color:#eadfca;background:linear-gradient(145deg,#fff,#fffaf0)}.komo-product[data-komo-effect="snack"] .komo-product-icon::after{content:"···";right:-7px;bottom:-2px;color:#b88a51;letter-spacing:1px;animation:komoCrumbs 1.7s ease-in-out infinite}.komo-product[data-komo-effect="daily"]{border-color:#dde3df}.komo-product[data-komo-effect="daily"] .komo-product-icon::after{content:"／";right:1px;top:1px;color:#8ca097;opacity:.35;animation:komoCleanSweep 2.4s ease-in-out infinite}.komo-product[data-komo-effect="breakfast"]{border-color:#eadfc6;background:linear-gradient(145deg,#fff,#fff9e9)}.komo-product[data-komo-effect="breakfast"] .komo-product-icon::after{content:"☀";right:-3px;top:-4px;color:#e2a84d;font-size:9px;animation:komoSpark 2s ease-in-out infinite}.komo-product[data-komo-effect="health"]{border-color:#d7e6dc;background:linear-gradient(145deg,#fff,#f5fbf6)}.komo-product[data-komo-effect="health"] .komo-product-icon::after{content:"＋";right:-3px;top:-4px;color:#5d9a70;font-size:9px;font-weight:900;animation:komoHealthPulse 1.8s ease-in-out infinite}.komo-product[data-komo-effect="stationery"]{border-color:#dedbea;background:linear-gradient(145deg,#fff,#f8f7fd)}.komo-product[data-komo-effect="stationery"] .komo-product-icon::after{content:"〰";right:-5px;bottom:-3px;color:#7e75a1;font-size:10px;animation:komoWriteLine 2.1s ease-in-out infinite}.komo-product[data-komo-effect="komo"]{border-color:#d5e2d8;background:linear-gradient(145deg,#fff,#f1f8f2)}.komo-product[data-komo-effect="komo"] .komo-product-icon::after{content:"🐾";right:-7px;bottom:-4px;font-size:9px;animation:komoPawTiny 1.9s ease-in-out infinite}.komo-product[data-komo-effect="seasonal"]{border-color:#e7d8df;background:linear-gradient(145deg,#fff,#fff6f8)}.komo-product[data-komo-effect="seasonal"] .komo-product-icon::after{content:"✿";right:-4px;top:-5px;color:#c56f8b;font-size:9px;animation:komoSeasonFloat 2s ease-in-out infinite}.komo-product[data-komo-effect="seasonal"][data-komo-season="summer"] .komo-product-icon::after{content:"☼";color:#dc9e3f}.komo-product[data-komo-effect="seasonal"][data-komo-season="autumn"] .komo-product-icon::after{content:"🍁"}.komo-product[data-komo-effect="seasonal"][data-komo-season="winter"] .komo-product-icon::after{content:"❄";color:#79a7bd}.komo-product[data-komo-effect="home"]{border-color:#dfdbea;background:linear-gradient(145deg,#fff,#faf8fd)}.komo-product[data-komo-effect="home"] .komo-product-icon::after{content:"◌";right:-4px;top:-5px;color:#9b82aa;font-size:11px;animation:komoAroma 2.4s ease-out infinite}.komo-product[data-komo-effect="digital"]{border-color:#d5e1e7;background:linear-gradient(145deg,#fff,#f3f8fb)}.komo-product[data-komo-effect="digital"] .komo-product-icon::after{content:"●";right:1px;bottom:1px;color:#4fba78;font-size:6px;animation:komoLed 1.35s steps(2,end) infinite}.komo-product[data-komo-effect="care"]{border-color:#ead9df;background:linear-gradient(145deg,#fff,#fff7fa)}.komo-product[data-komo-effect="care"] .komo-product-icon::after{content:"♡";right:-4px;top:-5px;color:#bd708a;font-size:10px;animation:komoCareGlow 2s ease-in-out infinite}.komo-detail-visual{position:relative;height:102px;display:grid;place-items:center;overflow:hidden;border:1px solid #dce5de;border-radius:15px;background:linear-gradient(145deg,#edf4ef,#f8fbf8);font-size:52px}.komo-detail-visual>span{position:relative;z-index:2;animation:komoDetailFloat 2.4s ease-in-out infinite}.komo-detail-visual::before,.komo-detail-visual::after{position:absolute;pointer-events:none}.komo-detail-visual[data-komo-effect="drink"]::after{content:"○  ◦  °";left:18%;bottom:8px;color:#79b2ba;font-size:12px;letter-spacing:10px;animation:komoBubbles 2s ease-in-out infinite}.komo-detail-visual[data-komo-effect="hot"]::after,.komo-detail-visual[data-komo-effect="breakfast"]::after{content:"⌁  ⌁";top:8px;color:#c68a62;font-size:17px;letter-spacing:8px;animation:komoSteam 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="cold"]::after{content:"✦  ❄  ✦";inset:10px;color:#78a9bb;font-size:11px;letter-spacing:16px;animation:komoSpark 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="gift"]::after,.komo-detail-visual[data-komo-effect="stationery"]::after{content:"〰 ♡ 〰";bottom:7px;color:#b66b82;font-size:11px;letter-spacing:4px}.komo-detail-visual[data-komo-effect="limited"]::after,.komo-detail-visual[data-komo-effect="seasonal"]::after{content:"✦  ·  ✦";inset:13px;color:#9c668c;font-size:12px;letter-spacing:18px;animation:komoSpark 1.5s ease-in-out infinite}.komo-detail-visual[data-komo-effect="health"]::after{content:"＋";right:18px;top:13px;color:#63a277;font-size:15px;animation:komoHealthPulse 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="komo"]::after{content:"🐾   🐾";bottom:7px;color:#55705d;font-size:10px;letter-spacing:15px;animation:komoPawTiny 2s ease-in-out infinite}.komo-detail-visual[data-komo-effect="home"]::after{content:"◌";inset:17px;color:#9b82aa;font-size:22px;animation:komoAroma 2.4s ease-out infinite}.komo-detail-visual[data-komo-effect="digital"]::after{content:"●";right:17px;bottom:13px;color:#4fba78;font-size:9px;animation:komoLed 1.35s steps(2,end) infinite}.komo-detail-visual[data-komo-effect="care"]::after{content:"♡";right:17px;top:12px;color:#bd708a;font-size:16px;animation:komoCareGlow 2s ease-in-out infinite}.komo-clerk{position:relative;overflow:hidden}.komo-clerk-avatar{transition:transform .2s ease}.komo-clerk.komo-clerk-greeting .komo-clerk-avatar{animation:komoClerkHello .65s cubic-bezier(.2,.9,.25,1)}.komo-clerk.komo-clerk-recommend::after{content:"🐾";position:absolute;left:54px;bottom:3px;color:#607d68;font-size:12px;animation:komoPawPath .8s ease both}.komo-clerk-roster span.active{animation:komoDutyGlow 2.4s ease-in-out infinite}.komo-fly-item{position:fixed;z-index:9999;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#fff;box-shadow:0 8px 22px rgba(40,61,48,.22);font-size:22px;pointer-events:none;animation:komoFlyToBag .62s cubic-bezier(.2,.8,.25,1) forwards}.komo-tabs button.komo-cart-pulse{animation:komoCartPulse .55s ease}.komo-wallet-card.komo-wallet-pulse{animation:komoWalletPulse .7s ease}.komo-receipt{transform-origin:50% 0;animation:komoReceiptPrint .48s cubic-bezier(.2,.85,.25,1) both}.komo-row.komo-new-order{animation:komoShelfIn .42s ease both}.komo-stamps i.filled{animation:komoStampDrop .45s cubic-bezier(.2,.9,.3,1) both}.komo-motion-toast{position:absolute;right:45px;top:41px;z-index:9;padding:4px 7px;border-radius:999px;background:#365744;color:#fff;font-size:5.5px;opacity:0;transform:translateY(-4px);pointer-events:none}.komo-motion-toast.show{animation:komoMotionToast 1.2s ease both}.komo-app[data-komo-phase="dawn"]{background:linear-gradient(155deg,#1e2f38,#526861 42%,#edf1e9);color:#edf5ef}.komo-app[data-komo-phase="dawn"] .komo-head{background:rgba(31,48,55,.9);border-color:rgba(255,255,255,.12);color:#fff}.komo-app[data-komo-phase="dawn"] .komo-brand small{color:rgba(255,255,255,.55)}.komo-app[data-komo-phase="morning"]{background:linear-gradient(155deg,#fff4d9,#eef4e9 38%,#f3f6f2)}.komo-app[data-komo-phase="day"]{background:linear-gradient(155deg,#eef7ef,#f8faf6 45%,#f3f6f2)}.komo-app[data-komo-phase="night"]{background:linear-gradient(155deg,#263d35,#73806b 38%,#eef1e9);color:#edf5ef}.komo-app[data-komo-phase="night"] .komo-head{background:rgba(39,58,51,.9);border-color:rgba(255,255,255,.12);color:#fff}.komo-app[data-komo-phase="night"] .komo-brand small{color:rgba(255,255,255,.55)}.komo-app[data-komo-phase="dawn"] .komo-scroll,.komo-app[data-komo-phase="night"] .komo-scroll{background:linear-gradient(180deg,rgba(244,247,241,.93),#f3f6f2 120px);color:#24302a}.komo-head.komo-hour-glow{animation:komoHourGlow 1.5s ease both}.komo-clerk-copy small{transition:opacity .18s ease,transform .18s ease}.komo-clerk-copy small.komo-status-changing{opacity:0;transform:translateY(3px)}.komo-shift-greeting{position:absolute;left:50%;top:86px;z-index:18;min-width:220px;display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid rgba(255,255,255,.75);border-radius:16px;background:rgba(252,254,250,.94);color:#2d4235;box-shadow:0 16px 36px rgba(33,54,41,.2);backdrop-filter:blur(14px);opacity:0;transform:translate(-50%,-12px) scale(.96);pointer-events:none;transition:.28s ease}.komo-shift-greeting.show{opacity:1;transform:translate(-50%,0) scale(1)}.komo-shift-greeting>span{font-size:34px}.komo-shift-greeting div{min-width:0}.komo-shift-greeting small,.komo-shift-greeting strong,.komo-shift-greeting em{display:block}.komo-shift-greeting small{color:#829087;font:5px ui-monospace,monospace;letter-spacing:.15em}.komo-shift-greeting strong{margin-top:3px;font-size:10px}.komo-shift-greeting em{margin-top:2px;color:#7c8d81;font-size:6px;font-style:normal}.komo-clerk-easter{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:rgba(31,48,39,.76);color:#fff;backdrop-filter:blur(15px);opacity:0;transform:scale(1.04);pointer-events:none;transition:.26s ease}.komo-clerk-easter.show{opacity:1;transform:scale(1)}.komo-clerk-easter>small{color:rgba(255,255,255,.58);font:6px ui-monospace,monospace;letter-spacing:.17em}.komo-clerk-easter>div{display:flex;gap:9px;margin-top:14px}.komo-clerk-easter span{width:59px;height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);border-radius:16px;background:rgba(255,255,255,.1);font-size:31px;animation:komoStaffPop .58s var(--staff-delay,0ms) cubic-bezier(.2,.9,.25,1) both}.komo-clerk-easter span:nth-child(2){--staff-delay:70ms}.komo-clerk-easter span:nth-child(3){--staff-delay:140ms}.komo-clerk-easter span:nth-child(4){--staff-delay:210ms}.komo-clerk-easter b{margin-top:5px;color:rgba(255,255,255,.75);font-size:6px}.komo-clerk-easter>strong{margin-top:14px;font:800 11px Georgia,"Songti SC",serif;letter-spacing:.04em}.komo-app[data-komo-phase="night"] .komo-brand strong::after,.komo-app[data-komo-phase="dawn"] .komo-brand strong::after{content:" ✦";color:#dfe8b4;animation:komoSpark 2s ease-in-out infinite}@keyframes komoSignOn{from{opacity:0;filter:blur(3px);transform:translateY(-5px)}to{opacity:1;filter:none;transform:none}}@keyframes komoSlideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}@keyframes komoStoreFade{from{opacity:0}to{opacity:1}}@keyframes komoShelfIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}@keyframes komoSteam{0%,100%{opacity:.2;transform:translateY(4px)}50%{opacity:.75;transform:translateY(-3px)}}@keyframes komoSpark{0%,100%{opacity:.25;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(18deg)}}@keyframes komoClerkHello{0%{transform:none}30%{transform:translateY(-5px) rotate(-5deg) scale(1.07)}60%{transform:translateY(0) rotate(5deg)}100%{transform:none}}@keyframes komoPawPath{from{opacity:0;transform:translate(-12px,5px) rotate(-20deg)}50%{opacity:1}to{opacity:0;transform:translate(62px,-30px) rotate(18deg)}}@keyframes komoDutyGlow{0%,100%{box-shadow:0 0 0 2px rgba(54,87,68,.08)}50%{box-shadow:0 0 0 3px rgba(54,87,68,.2)}}@keyframes komoFlyToBag{from{left:var(--from-x);top:var(--from-y);opacity:1;transform:scale(1)}to{left:var(--to-x);top:var(--to-y);opacity:.15;transform:scale(.45) rotate(18deg)}}@keyframes komoCartPulse{30%{transform:scale(1.08);background:#365744;color:#fff}100%{transform:none}}@keyframes komoWalletPulse{30%{transform:scale(1.018);box-shadow:0 0 0 4px rgba(119,174,130,.18),0 12px 26px rgba(48,83,62,.22)}100%{transform:none}}@keyframes komoReceiptPrint{from{opacity:0;transform:scaleY(.18) translateY(-18px)}to{opacity:1;transform:none}}@keyframes komoStampDrop{0%{opacity:.3;transform:scale(1.6) rotate(-13deg)}100%{opacity:1;transform:none}}@keyframes komoBubbles{0%{opacity:0;transform:translateY(5px) scale(.8)}50%{opacity:.9}100%{opacity:0;transform:translateY(-7px) scale(1.12)}}@keyframes komoCrumbs{0%,100%{opacity:.25;transform:rotate(0)}50%{opacity:.8;transform:translate(2px,2px) rotate(12deg)}}@keyframes komoCleanSweep{0%,70%,100%{opacity:.18;transform:translateX(-5px)}35%{opacity:.7;transform:translateX(4px)}}@keyframes komoHealthPulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.2)}}@keyframes komoWriteLine{0%,100%{opacity:.25;clip-path:inset(0 100% 0 0)}50%,75%{opacity:.8;clip-path:inset(0)}}@keyframes komoPawTiny{0%,100%{opacity:.3;transform:translate(0,2px) rotate(-8deg)}50%{opacity:1;transform:translate(3px,-2px) rotate(8deg)}}@keyframes komoSeasonFloat{0%,100%{opacity:.35;transform:translateY(3px) rotate(-8deg)}50%{opacity:1;transform:translateY(-4px) rotate(8deg)}}@keyframes komoAroma{0%{opacity:.7;transform:scale(.55)}100%{opacity:0;transform:scale(1.5)}}@keyframes komoLed{0%,45%{opacity:.2;filter:none}50%,100%{opacity:1;filter:drop-shadow(0 0 3px #4fba78)}}@keyframes komoCareGlow{0%,100%{opacity:.3;transform:scale(.85)}50%{opacity:.9;transform:scale(1.15)}}@keyframes komoDetailFloat{0%,100%{transform:translateY(1px)}50%{transform:translateY(-4px)}}@keyframes komoHourGlow{0%,100%{box-shadow:none}35%{box-shadow:inset 0 -2px 0 rgba(238,231,161,.75),0 5px 22px rgba(220,210,130,.24);filter:brightness(1.08)}}@keyframes komoStaffPop{from{opacity:0;transform:translateY(14px) scale(.75)}to{opacity:1;transform:none}}@keyframes komoMotionToast{0%{opacity:0;transform:translateY(-4px)}15%,78%{opacity:1;transform:none}100%{opacity:0}}@media(prefers-reduced-motion:reduce){.komo-app *{animation:none!important;transition:none!important}}
 </style>
+<style id="iosCompatibilityStyles">
+:root{--app-viewport-height:100dvh;--app-viewport-offset-top:0px;--ios-safe-top:env(safe-area-inset-top,0px);--ios-safe-bottom:env(safe-area-inset-bottom,0px)}
+html[data-ios],html[data-ios] body{width:100%;height:var(--app-viewport-height,100dvh);min-height:0;overflow:hidden;background:var(--bg-screen,#f4f4f6);overscroll-behavior:none;-webkit-text-size-adjust:100%}
+html[data-ios] body{margin:0;padding:0!important}
+html[data-ios] .screen,html[data-ios] #appScreen{width:100%!important;height:var(--app-viewport-height,100dvh)!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;overflow:hidden!important}
+html[data-ios][data-standalone="true"],html[data-ios][data-standalone="true"] body{position:fixed;inset:0}
+html[data-ios][data-standalone="true"] #appScreen{position:absolute!important;inset:0!important}
+html[data-ios] #appScreen{--app-bottom-safe:var(--ios-safe-bottom);--app-bottom-nav-base:52px;--app-bottom-nav-height:calc(var(--app-bottom-nav-base) + var(--app-bottom-safe));--app-bottom-nav-padding:0 16px var(--app-bottom-safe)}
+html[data-ios] #appScreen>.app-header{min-height:calc(56px + var(--ios-safe-top))!important;padding:calc(8px + var(--ios-safe-top)) 12px 6px!important}
+html[data-ios] #appScreen>.bottom-nav{height:var(--app-bottom-nav-height)!important;min-height:var(--app-bottom-nav-height)!important;flex-basis:var(--app-bottom-nav-height)!important;padding:0 16px var(--app-bottom-safe)!important;background:var(--glass-bg,var(--card-white,#fff))!important}
+html[data-ios] #appScreen>.desktop-viewport{min-height:0!important;height:auto!important;overflow-x:auto!important;overflow-y:hidden!important}
+html[data-ios] #appScreen>.chat-app .chat-list-header,html[data-ios] #appScreen>.chat-app .chat-thread-header,html[data-ios] #appScreen>.chat-app .chat-profile-page-header,html[data-ios] #appScreen>.chat-app .chat-settings-header,html[data-ios] #appScreen>.mail-app .mail-app-head,html[data-ios] #appScreen>.moon-app .moon-head,html[data-ios] #appScreen>.circle-app .circle-app-head,html[data-ios] #appScreen>.global-settings-app .global-settings-head,html[data-ios] #appScreen>.tips-app .tips-app-head,html[data-ios] #appScreen>.answer-book-app .answer-book-head,html[data-ios] #appScreen>.komo-app .komo-head,html[data-ios] #appScreen>.desktop-invite-app .desktop-invite-head{padding-top:calc(8px + var(--ios-safe-top))!important;min-height:calc(56px + var(--ios-safe-top))!important}
+html[data-ios] #appScreen>.chat-app .chat-thread-body,html[data-ios] #appScreen>.chat-app .chat-list-scroll,html[data-ios] #appScreen>.mail-app .mail-app-body,html[data-ios] #appScreen>.circle-app .circle-app-scroll{min-height:0!important;-webkit-overflow-scrolling:touch}
+html[data-ios] input,html[data-ios] textarea,html[data-ios] select{font-size:16px!important;-webkit-text-size-adjust:100%;touch-action:manipulation}
+html[data-ios] [contenteditable="true"]:focus{font-size:16px!important}
+html[data-ios] #chatMessageInput{font-size:16px!important;line-height:1.35!important}
+html[data-ios] .chat-composer{padding-bottom:calc(7px + var(--ios-safe-bottom))!important}
+html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data-ios] .circle-visitors-foot{padding-bottom:calc(12px + var(--ios-safe-bottom))!important}
+@supports(height:-webkit-fill-available){html[data-ios],html[data-ios] body{min-height:-webkit-fill-available}}
+</style>
 </head>
 <body>
 
   <div class="screen" id="appScreen">
+
+    <section class="site-usage-announcement" id="siteUsageAnnouncement" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="siteUsageAnnouncementTitle">
+      <div class="site-usage-sheet">
+        <header class="site-usage-head"><span class="site-usage-mark"><i data-lucide="triangle-alert" size="20"></i></span><div class="site-usage-title"><small>IMPORTANT NOTICE · PLEASE READ</small><strong id="siteUsageAnnouncementTitle">网站使用公告</strong></div></header>
+        <div class="site-usage-body"><p><strong>本网站仅供交流学习，禁止用于盈利和任何危害他人利益的行为。请在了解字卡传讯的原理后再进行使用。本网站运行所依托的是代码和概率，决策功能仅为提升使用趣味性，决策过程中产生的结果仅为随机概率，切勿依靠此功能进行重大事项的决策，因此产生的任何后果，本网站概不负责。不信谣不传谣，<b>请相信科学！</b></strong></p><div class="site-usage-science"><i data-lucide="flask-conical" size="13"></i><span>理性使用 · 尊重他人 · 相信科学</span></div></div>
+        <footer class="site-usage-foot"><button class="site-usage-accept" id="siteUsageAnnouncementAccept" type="button" onclick="closeSiteUsageAnnouncement()">我已了解并进入网站</button></footer>
+      </div>
+    </section>
 
     <!-- Header 区域 -->
     <div class="app-header">
@@ -7569,7 +7635,6 @@
       <nav class="tips-category-bar" id="tipsCategoryBar" aria-label="说明分类"></nav>
       <main class="tips-app-scroll" id="tipsAppScroll">
         <section class="tips-intro"><small>QUICK START · USER GUIDE</small><strong>从这里认识 Möbius</strong><p>按分类查看功能介绍，点击任意卡片展开完整使用方法，快速找到你想体验的内容。</p></section>
-        <section class="tips-declaration" aria-labelledby="tipsDeclarationTitle"><div class="tips-declaration-head"><i><i data-lucide="shield-check" size="13"></i></i><div><strong id="tipsDeclarationTitle">使用声明</strong><small>NOTICE · PLEASE READ</small></div></div><p>本网站仅供交流学习，禁止用于盈利和任何危害他人利益的行为。请在了解字卡传讯的逻辑后再进行使用。<b>请相信科学！</b></p></section>
         <div class="tips-section-label"><strong id="tipsSectionTitle">全部说明</strong><small id="tipsResultCount">0 项</small></div>
         <div class="tips-guide-list" id="tipsGuideList"></div>
       </main>
@@ -7730,6 +7795,7 @@
             <div class="dashboard-setting-row notification-row"><div><strong>通知预览模式</strong><small>隐藏预览将仅显示“您有一条新消息”，保护隐私。</small></div><div class="notification-control"><select id="globalNotificationPreviewModeSelect" aria-label="通知预览模式"><option value="full">完整预览</option><option value="hidden">隐藏内容</option></select></div></div>
             <div class="dashboard-setting-row notification-row"><div><strong>免打扰时间</strong><small>开启后在设定时段内不推送系统通知，消息仍会进入通知中心。</small></div><div class="notification-control"><label class="setting-toggle" style="margin-right:2px"><input id="globalNotificationDndToggle" type="checkbox"><i></i></label><span class="notification-control time-pair"><input id="globalNotificationDndStart" type="time" value="22:00"> — <input id="globalNotificationDndEnd" type="time" value="08:00"></span></div></div>
             <div class="dashboard-setting-row"><div><strong>网站内消息横幅</strong><small>页面在前台时显示顶部消息横幅，可与后台系统通知和锁屏通知并存。</small></div><label class="setting-toggle"><input id="globalInAppPopupToggle" type="checkbox" checked><i></i></label></div>
+            <div class="dashboard-setting-row"><div><strong>进入网站时显示使用公告</strong><small>关闭后不再重复弹出；当前浏览器首次进入网站时仍会强制显示一次。</small></div><label class="setting-toggle"><input id="globalUsageAnnouncementToggle" type="checkbox" checked><i></i></label></div>
             <div class="dashboard-setting-row notification-row" hidden style="display:none !important"><div><strong>通知中心</strong><small>查看最近系统通知，点击条目可路由至对应聊天、邮件或朋友圈。</small></div><div class="notification-control"><span class="notification-badge-inline" id="notificationCenterCount">0</span><button class="small" type="button" onclick="openNotificationCenter()">打开中心</button><button class="small danger" type="button" onclick="clearNotificationCenter()">清理全部</button></div></div>
             <!-- 兼容旧开关：隐藏但保留以兼容旧存储 -->
             <input id="globalBackgroundNotificationToggle" type="checkbox" hidden>
@@ -8163,6 +8229,12 @@
               <button class="chat-settings-choice" data-avatar-shape="circle" type="button" onclick="setChatAvatarShape('circle')">圆形</button>
               <button class="chat-settings-choice" data-avatar-shape="rounded" type="button" onclick="setChatAvatarShape('rounded')">方圆形</button>
             </div>
+          </section>
+
+          <section class="chat-settings-section">
+            <div class="chat-settings-section-title"><span>对方拟态语音</span><small>当前聊天室</small></div>
+            <div class="chat-settings-help">关闭后，对方不会再发送新的拟态语音；已有语音记录和我方长按发送语音不受影响。</div>
+            <div class="chat-settings-toggle-row"><span>允许对方发送拟态语音</span><button class="chat-glass-toggle" id="partnerVoiceToggle" type="button" onclick="togglePartnerVoiceEnabled()" aria-label="允许对方发送拟态语音" aria-pressed="true"></button></div>
           </section>
 
           <section class="chat-settings-section">
@@ -9312,6 +9384,7 @@
         if (lastAt > 0 && now - lastAt < cooldown) return false;
       }
       // 文字/语音现在有内置安慰句兜底（pickRoleReplyText），字卡池为空也依然可以回复。
+      if (kind === 'voice' && settings.partnerVoiceEnabled === false) return false;
       if (kind === 'text' || kind === 'voice') return getRoleContentCardPool(role).length > 0 || PRESET_REPLY_CARD_TEXTS.size > 0;
       if (kind === 'sticker') {
         return (Array.isArray(settings.stickerTheirs) ? settings.stickerTheirs : []).some(item =>
@@ -9881,7 +9954,7 @@
     bindChatVoiceHoldButton();
 
     function appendProactiveIncomingVoice(role, transcript, duration = 0) {
-      if (isRoleTemporarilyAway(role)) return false;
+      if (isRoleTemporarilyAway(role) || getChatSettings(role?.id).partnerVoiceEnabled === false) return false;
       const text = String(transcript || '').trim();
       if (!text) return false;
       const seconds = duration || estimateProactiveVoiceDuration(text);
@@ -9912,6 +9985,7 @@
     }
 
     function triggerProactiveVoice(role) {
+      if(getChatSettings(role?.id).partnerVoiceEnabled===false)return false;
       const cards = pickRoleCardBatch(role, 1, 3);
       if (!cards.length) return false;
       return appendProactiveIncomingVoice(role, cards.join(' '));
@@ -10239,7 +10313,7 @@
       settings.pendingCheck = record;
       settings.checkHistory = [...(settings.checkHistory || []), record].slice(-60);
       saveChatSettings(settings, role.id);
-      if (!isChatConversationLoaded(role.id)) incrementChatUnreadCount(role.id, 1, '[查岗]');
+      if (!isChatConversationLoaded(role.id)) incrementChatUnreadCount(role.id, 1, `[查岗] ${cleanChatPreviewText(question,36)}`);
       return true;
     }
 
@@ -10332,7 +10406,7 @@
       settings.redEnvelopes = [...(settings.redEnvelopes || []), record].slice(-100);
       saveChatSettings(settings, role.id);
       if (isChatConversationLoaded(role.id)) { appendRedEnvelopeCard(record); playGlobalSound('message'); showChatToast(`${getRoleDisplayNameForApp(role)} 发来一个红包`); }
-      else incrementChatUnreadCount(role.id, 1, '[红包]');
+      else incrementChatUnreadCount(role.id, 1, '红包');
       return true;
     }
 
@@ -11093,8 +11167,8 @@
     const TIPS_GUIDES = Object.freeze([
       { id:'desktop', category:'start', icon:'layout-grid', title:'桌面与组件', summary:'移动图标、添加页面和管理组件', keywords:['桌面','组件','长按','布局','左右滑动','日历'], steps:['长按桌面空白处进入编辑模式，可以拖动图标和组件。','点击“＋ 新增页”创建桌面页面；退出编辑模式后，在桌面任意空白处或图标区域左右滑动即可切换页面，也可以点击底部分页圆点。','点击“＋ 组件库”挑选喜欢的组件，也可以把暂时不用的组件收回。','日历圆环中央会随内容变化：MOON 当前阶段显示周期进度或天数，待办显示完成率，纪念日显示相应天数。','编辑时可以使用自动整理、撤销与重做，让桌面保持顺手的布局。'] },
       { id:'roles', category:'start', icon:'contact-round', title:'联系人与梦角', summary:'建立角色资料并进入专属聊天室', keywords:['联系人','梦角','头像','昵称'], steps:['在 CHAT 联系人页创建梦角，并设置名称、头像、配色和角色资料。','点击联系人即可进入专属聊天室，每位梦角都拥有自己的聊天空间和个性设置。','在角色个人主页点击昵称，可以添加、删除或选择昵称；每位角色最多保存 4 个。','无论由你还是由 TA 切换当前昵称，新昵称都会同步显示在联系人、聊天、群聊、朋友圈、梦笺、邀请和其他相关位置。'] },
-      { id:'direct-chat', category:'chat', icon:'message-square-heart', title:'私聊与连续回复', summary:'文字、引用、批量发送和主动消息', keywords:['私聊','文字','引用','回复','主动消息'], steps:['在输入栏填写内容后发送，连续发送的文字可以自然组成一轮对话。','长按消息可打开更多操作；开启引用回复后，可以针对指定内容继续交流。','梦角主动联系时，联系人列表会显示未读数量；进入聊天室后会自动标记已读。','长按联系人可开启“暂时离开”；开启后该角色不会发送聊天、主动联系、来电或其他新信息，关闭后恢复。','每位梦角的聊天内容和个性化设置彼此独立，切换联系人时互不混淆。'] },
-      { id:'voice', category:'chat', icon:'mic', title:'拟态语音', summary:'长按语音按钮发送，双击展开文字', keywords:['语音','长按','双击','录音'], steps:['长按输入框右侧的语音按钮开始拟态录制，松开后发送。','语音气泡的长度会随按住时长变化。','双击对方的语音气泡可以展开文字，再次双击即可收起。','录制时可以根据屏幕提示完成或取消本次发送。'] },
+      { id:'direct-chat', category:'chat', icon:'message-square-heart', title:'私聊与连续回复', summary:'文字、引用、批量发送和主动消息', keywords:['私聊','文字','引用','回复','主动消息'], steps:['在输入栏填写内容后发送，连续发送的文字可以自然组成一轮对话。','长按消息可打开更多操作；开启引用回复后，可以针对指定内容继续交流。','双击聊天室顶栏的标题、状态或空白区域，可以平滑回到聊天记录顶部；返回键、头像和通话等按钮不会触发。','梦角主动联系时，联系人列表会显示未读数量；进入聊天室后会自动标记已读。','长按联系人可开启“暂时离开”；开启后该角色不会发送聊天、主动联系、来电或其他新信息，关闭后恢复。','每位梦角的聊天内容和个性化设置彼此独立，切换联系人时互不混淆。'] },
+      { id:'voice', category:'chat', icon:'mic', title:'拟态语音', summary:'长按语音按钮发送，双击展开文字', keywords:['语音','长按','双击','录音'], steps:['长按输入框右侧的语音按钮开始拟态录制，松开后发送。','语音气泡的长度会随按住时长变化。','双击对方的语音气泡可以展开文字，再次双击即可收起。','如果不希望收到对方拟态语音，可在当前聊天室“更多 → 对方拟态语音”中关闭；已有语音和我方发送不受影响。','录制时可以根据屏幕提示完成或取消本次发送。'] },
       { id:'media', category:'chat', icon:'paperclip', title:'附件、表情与画板', summary:'发送图片、表情包及画板传讯', keywords:['附件','图片','表情包','画板'], steps:['展开附件面板，可以发送图片、画板传讯和其他互动内容。','我方与对方拥有各自的表情包列表，可在当前聊天室设置中管理。','点击聊天中的图片或画板可以全屏查看、缩放与下载。','长按消息可打开操作菜单；是否启用消息操作可在全局设置中选择。'] },
       { id:'dream-link-map', category:'chat', icon:'share-2', title:'梦境连接图', summary:'读懂节点、线条、圆环、信号点与颜色的画面语言', keywords:['梦境连接图','画板传讯','连接','节点','线条','圆环','信号点','颜色'], steps:['左侧的深色节点可以理解为“我”，右侧的彩色节点可以理解为“TA”。两个节点共同组成一幅属于你们的梦境连接画面。','连接两端的完整实线象征顺畅而连贯的传讯；较粗、清晰的线条带来更集中、更坚定的连接感，较细、柔和的线条则像安静而轻盈的陪伴。','明显弯曲的线条像绕行中的思绪，表达连接正在流动、寻找方向，或带着一点梦境般的游移感。','虚线像断续抵达的信号与轻声试探；中间留白的断线则像双方暂时安静，各自守在连接的两端。','节点外侧的圆环代表感应范围和回声。完整圆环像稳定扩散的回应，残缺圆环像尚未闭合的波纹，点划圆环则像细微而跳动的感应。','路径上的彩色小点可以理解为传讯途中散落的词句、心绪和回声；背景中的微光则构成你们相遇的梦境空间。','深色节点像稳定的锚点；红色可理解为热烈，橙色像活力，绿色像安抚，蓝色像平静，紫色像神秘梦境，粉色像柔软心意。','整张图更适合当作一种氛围与想象来阅读：顺着线条、颜色和光点感受当下画面即可，不必把它当成精确的关系判断。'] },
       { id:'call', category:'chat', icon:'phone-call', title:'语音与视频通话', summary:'呼叫、来电、迷你窗口和通话记录', keywords:['通话','视频','语音','来电'], steps:['在 CHAT 顶栏可以发起语音或视频通话，也可能收到任意梦角的主动来电。','无论当前停留在桌面、朋友圈、MAIL、KOMO 或其他页面，来电都会以全局弹窗显示接听和拒绝操作。','通话窗口可以缩小，方便一边浏览其他页面一边保持陪伴。','挂断或错过后，记录会保存到来电梦角对应的聊天室。','你可以分别设置语音通话、视频通话及我方窗口的背景。'] },
@@ -11106,7 +11180,7 @@
       { id:'komo-wallet', category:'komo', icon:'wallet-cards', title:'KOMO 钱包', summary:'虚拟余额、充值、红包收入与流水', keywords:['KOMO','钱包','余额','充值','红包'], steps:['KOMO 使用本地虚拟钱包，可通过虚拟充值增加余额。','领取梦角发来的红包后，金额也会进入我的钱包。','双击钱包卡，可以选择梦角并查看对方的钱包信息。','每次收入和支出都会形成钱包流水，方便随时查看。'] },
       { id:'komo-shop', category:'komo', icon:'shopping-bag', title:'购物、送礼与代付', summary:'丰富货架、每日轮班店员、礼物和梦角代付', keywords:['购物','送礼','代付','优惠券','店员','轮班'], steps:['KOMO 设有饮料、热食、零食、早餐主食、甜点冷藏、日用、礼物、健康应急、文具礼物、家居护理、数码应急等多个品类。','店内共有 Komo、Mugi、Yuzu 和 Nori 四位店员，四人按照日期自动轮班；值班店员每天自动更换，不需要手动选择。','每位店员拥有自己的状态、招呼和偏好推荐，店员栏中的头像用于查看轮班成员与今日值班。','不同商品分类拥有各自的视觉提示：热食有热气、饮料有气泡、冷藏甜点有冰晶、礼物有丝带、限定与季节商品有星光或季节符号，健康、文具、家居、数码和护理品也有各自的小动效。','便利店会随凌晨、清晨、白天与夜晚切换灯光氛围；每天第一次打开会显示今日值班店员，停留在货架时店员也可能换一条状态。','连续点击 KOMO 招牌可以发现四位店员共同出现的小彩蛋。','商品卡、加入购物袋、店员招呼、钱包充值、小票和印章都带有轻量互动效果；右上角的“✦”可以在标准、轻量和关闭动效之间切换。','商品加入购物袋后，可以自己结算、送给梦角或发起代付请求。','发出代付请求后，梦角会先回应请求，再显示最终结果。','等待期间可以取消尚未完成的代付请求；填写的“我的备注”会保留在我方请求卡中。'] },
       { id:'moon-box', category:'tools', icon:'moon-star', title:'MOON、BOOK 与 BOX', summary:'周期记录、答案之书和记忆收藏', keywords:['MOON','BOOK','答案之书','BOX','周期','记忆'], steps:['MOON 用于记录周期和相关状态，也可以在桌面日历中展示。','BOOK 是答案之书：先写下或默念一个问题，再翻开一条本地答案；问题不会被分析。','每次翻页都会保存提问与答案，可从右上角书签入口查看、收藏或删除；记录支持单独导出和导入 JSON。','“今日之页”每天保持同一个答案且不会自动写入普通历史；可以手动收藏。长按答案可复制或收藏，双击书页会出现一条隐藏批注，偶尔还会翻到特别的彩蛋页。','答案之书用于娱乐和自我整理，重要决定仍需结合现实信息。','BOX 用于收藏想保存的记忆内容；删除前请确认不再需要。','重要内容建议配合全局备份功能定期导出。'] },
-      { id:'notifications', category:'data', icon:'bell-ring', title:'通知与提醒', summary:'开启站内横幅、系统提醒与未读角标', keywords:['通知','后台','提醒','权限','锁屏'], steps:['在全局设置中开启系统通知，并按浏览器提示授予通知权限。','网站处于前台时，可以通过顶部横幅及时看到新提醒。','切换到后台后，提醒效果会受到浏览器与系统后台权限影响。','如果没有收到提醒，请检查免打扰、仅后台通知以及浏览器通知权限。'] },
+      { id:'notifications', category:'data', icon:'bell-ring', title:'通知与提醒', summary:'开启站内横幅、系统提醒与未读角标', keywords:['通知','后台','提醒','权限','锁屏'], steps:['在全局设置中开启系统通知，并按浏览器提示授予通知权限。','网站处于前台时，可以通过顶部横幅及时看到新提醒；表情包只显示“表情包”，颜文字直接显示原内容，红包只显示“红包”，邀请只显示“INVITE”，语音、图片、查岗和画板传讯显示对应摘要。','切换到后台后，系统通知会使用相同的消息摘要；提醒效果仍会受到浏览器与系统后台权限影响。','如果没有收到提醒，请检查免打扰、仅后台通知以及浏览器通知权限。'] },
       { id:'backup', category:'data', icon:'database-backup', title:'备份与恢复', summary:'导出重要资料，并在需要时恢复', keywords:['备份','恢复','导出','导入','JSON','数据'], steps:['全局设置支持按分类导出和导入，也可以生成完整备份。','单个聊天室可在“CHAT → 更多 → 聊天记录”中导出 JSON；导入 JSON 时会合并到当前聊天室并跳过重复消息。','清理浏览器网站数据前，请先导出重要聊天、信件和个人设置。','如果更换设备或浏览器，可使用之前导出的 JSON 文件恢复内容。'] }
     ]);
     let activeTipsCategory = 'all';
@@ -11190,7 +11264,7 @@
     document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.getElementById('answerBookApp')?.classList.contains('is-visible'))closeAnswerBook();});
     function openAnswerBookQuestion(){
       answerBookVolume(`<div class="answer-book-kicker">WRITE YOUR QUESTION</div><h2 class="answer-book-question-title">写下此刻的问题</h2><p class="answer-book-question-copy">问题只会用于本次展示，不会分析关键词。</p><textarea class="answer-book-question-input" id="answerBookQuestionInput" maxlength="180" placeholder="例如：我现在应该主动联系 TA 吗？"></textarea><div class="answer-book-question-actions"><button class="answer-book-secondary" type="button" onclick="renderAnswerBookCover()">返回封面</button><button class="answer-book-primary" type="button" onclick="submitAnswerBookQuestion()">翻开答案</button></div>`,true);
-      window.setTimeout(()=>document.getElementById('answerBookQuestionInput')?.focus(),80);
+      if(canAutoFocusInput())window.setTimeout(()=>document.getElementById('answerBookQuestionInput')?.focus(),80);
     }
     function submitAnswerBookQuestion(){const input=document.getElementById('answerBookQuestionInput');const question=String(input?.value||'').replace(/\s+/g,' ').trim().slice(0,180);if(!question){showAnswerBookToast('请写下问题，或返回选择默念问题');input?.focus();return;}revealAnswerBook(question);}
     function revealAnswerBook(question=''){
@@ -11242,6 +11316,14 @@
     }
     function exportAnswerBookRecords(){const records=loadAnswerBookRecords(),payload={type:'mobius-answer-book',schemaVersion:1,exportedAt:new Date().toISOString(),records};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`mobius-answer-book-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);showAnswerBookToast(`已导出 ${records.length} 条记录`);}
     async function importAnswerBookRecords(event){const input=event.target,file=input.files?.[0];if(!file)return;try{const payload=JSON.parse(await file.text()),source=Array.isArray(payload)?payload:payload?.records;if(payload?.type&&payload.type!=='mobius-answer-book')throw new Error('type');if(!Array.isArray(source))throw new Error('format');const current=loadAnswerBookRecords(),map=new Map(current.map(item=>[item.id,item]));let added=0;source.forEach((item,index)=>{if(!item||!String(item.answer||'').trim())return;let id=String(item.id||`imported-answer-${Date.now()}-${index}`);if(map.has(id)){const same=map.get(id);if(same.question===String(item.question||'')&&same.answer===String(item.answer||''))return;id=`${id}-${Math.random().toString(36).slice(2,7)}`;}map.set(id,{id,question:String(item.question||'').slice(0,180),answer:String(item.answer||'').slice(0,300),answerIndex:Number.isFinite(Number(item.answerIndex))?Number(item.answerIndex):-1,easter:item.easter===true,origin:String(item.origin||''),dailyKey:String(item.dailyKey||''),favorite:item.favorite===true,createdAt:Number(item.createdAt)||Date.now()});added++;});if(!saveAnswerBookRecords([...map.values()]))throw new Error('save');renderAnswerBookHistory();showAnswerBookToast(`已导入 ${added} 条记录`);}catch(_){showAnswerBookToast('导入失败：请选择有效的答案之书 JSON');}finally{input.value='';}}
+
+    const USAGE_ANNOUNCEMENT_SEEN_KEY='mobius:usage-announcement-seen:v1';
+    function canAutoFocusInput(){return window.matchMedia?.('(pointer:fine)').matches===true&&!document.documentElement.hasAttribute('data-ios');}
+    function hasSeenSiteUsageAnnouncement(){try{return localStorage.getItem(USAGE_ANNOUNCEMENT_SEEN_KEY)==='1';}catch(_){return false;}}
+    function openSiteUsageAnnouncement(){const modal=document.getElementById('siteUsageAnnouncement');if(!modal)return;modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');window.setTimeout(()=>document.getElementById('siteUsageAnnouncementAccept')?.focus(),80);}
+    function closeSiteUsageAnnouncement(){const modal=document.getElementById('siteUsageAnnouncement');if(!modal)return;try{localStorage.setItem(USAGE_ANNOUNCEMENT_SEEN_KEY,'1');}catch(_){}modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');window.__updateMobiusViewport?.();}
+    function initializeSiteUsageAnnouncement(){let enabled=true;try{enabled=loadGlobalAppSettings().usageAnnouncementEnabled!==false;}catch(_){}if(!hasSeenSiteUsageAnnouncement()||enabled)openSiteUsageAnnouncement();}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeSiteUsageAnnouncement,{once:true});else initializeSiteUsageAnnouncement();
 
     function openApp(appName, message) {
       if (document.getElementById('appScreen').classList.contains('edit-mode')) return;
@@ -11622,7 +11704,7 @@
       if (signature) signature.value = defaultSignature;
       if (app) app.classList.add('composing');
       if (panel) panel.hidden = false;
-      window.setTimeout(() => (original ? body : recipient)?.focus(), 40);
+      if(canAutoFocusInput())window.setTimeout(() => (original ? body : recipient)?.focus(), 40);
       lucide.createIcons();
     }
 
@@ -13380,7 +13462,7 @@
       renderCircleDraftImages();
       const modal = document.getElementById('circleComposeModal');
       if (modal) { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); }
-      window.setTimeout(() => input?.focus(), 40);
+      if(canAutoFocusInput())window.setTimeout(() => input?.focus(), 40);
       lucide.createIcons();
     }
 
@@ -13468,7 +13550,7 @@
 
     function loadGlobalAppSettings() {
       if (globalAppSettings) return globalAppSettings;
-      const defaults = { theme: 'mono', quoteReply: true, readReceipt: true, receiptStyle: 'icon', autonomyHesitationEnabled: true, typingMimic: true, cardSentence: false, messageActionsEnabled: true, simulationEnabled: true, messageSoundEnabled: false, messageSoundSrc: '', messageSoundName: '', ringtoneEnabled: false, ringtoneSrc: '', ringtoneName: '', globalFontSource: '', globalFontName: '', auroraPalette: 'cream', backgroundNotification: false, inAppPopup: true, systemNotificationEnabled: true, notificationAppBadgeEnabled: true, notificationOnlyBackground: false, notificationPreviewMode: 'full', notificationDndEnabled: false, notificationDndStart: '22:00', notificationDndEnd: '08:00', notificationServiceWorkerEnabled: true, fontScale: 100, desktopIconShape: 'rounded', desktopIconMaterial: 'glass', desktopThemeColor: '', desktopAccentColor: '', desktopThemeOpacity: 75, desktopThemeBlur: 12, desktopWallpaper: '', replyMaxReplies: 5, replyMinSeconds: 3, replyMaxSeconds: 60, replyWeights: [45,32,15,6,2], groupReplyMaxMembers: 3, groupForceReply: true, groupAutonomousRounds: 2, groupAutonomousChance: 45, schedulerEnabled: true, proactiveContactEnabled: true, proactiveContactMinMinutes: 15, proactiveContactMaxMinutes: 60, proactiveMessageEnabled: true, proactiveLetterEnabled: true, proactiveCircleEnabled: true, proactiveMessageMinSeconds: 300, proactiveMessageMaxMinutes: 36, proactiveLetterMinMinutes: 60, proactiveLetterMaxHours: 24, letterReplyMinMinutes: 1, letterReplyMaxHours: 2, circlePostMinMinutes: 30, circlePostMaxHours: 4, circleVisitorEnabled: true, circleVisitorMinMinutes: 30, circleVisitorMaxHours: 6, circleCommentReplyEnabled: true, circleCommentMinMinutes: 5, circleCommentMaxMinutes: 30, proactiveMinMinutes: 5, proactiveMaxMinutes: 30 };
+      const defaults = { theme: 'mono', quoteReply: true, readReceipt: true, receiptStyle: 'icon', autonomyHesitationEnabled: true, typingMimic: true, cardSentence: false, messageActionsEnabled: true, simulationEnabled: true, messageSoundEnabled: false, messageSoundSrc: '', messageSoundName: '', ringtoneEnabled: false, ringtoneSrc: '', ringtoneName: '', globalFontSource: '', globalFontName: '', auroraPalette: 'cream', backgroundNotification: false, inAppPopup: true, usageAnnouncementEnabled: true, systemNotificationEnabled: true, notificationAppBadgeEnabled: true, notificationOnlyBackground: false, notificationPreviewMode: 'full', notificationDndEnabled: false, notificationDndStart: '22:00', notificationDndEnd: '08:00', notificationServiceWorkerEnabled: true, fontScale: 100, desktopIconShape: 'rounded', desktopIconMaterial: 'glass', desktopThemeColor: '', desktopAccentColor: '', desktopThemeOpacity: 75, desktopThemeBlur: 12, desktopWallpaper: '', replyMaxReplies: 5, replyMinSeconds: 3, replyMaxSeconds: 60, replyWeights: [45,32,15,6,2], groupReplyMaxMembers: 3, groupForceReply: true, groupAutonomousRounds: 2, groupAutonomousChance: 45, schedulerEnabled: true, proactiveContactEnabled: true, proactiveContactMinMinutes: 15, proactiveContactMaxMinutes: 60, proactiveMessageEnabled: true, proactiveLetterEnabled: true, proactiveCircleEnabled: true, proactiveMessageMinSeconds: 300, proactiveMessageMaxMinutes: 36, proactiveLetterMinMinutes: 60, proactiveLetterMaxHours: 24, letterReplyMinMinutes: 1, letterReplyMaxHours: 2, circlePostMinMinutes: 30, circlePostMaxHours: 4, circleVisitorEnabled: true, circleVisitorMinMinutes: 30, circleVisitorMaxHours: 6, circleCommentReplyEnabled: true, circleCommentMinMinutes: 5, circleCommentMaxMinutes: 30, proactiveMinMinutes: 5, proactiveMaxMinutes: 30 };
       const saved = readDreamJSON(GLOBAL_SETTINGS_KEY, {});
       globalAppSettings = { ...defaults, ...(saved && typeof saved === 'object' ? saved : {}) };
       globalAppSettings.theme = ['mono', 'fog-blue', 'aurora', 'custom'].includes(globalAppSettings.theme) ? globalAppSettings.theme : 'mono';
@@ -13505,6 +13587,7 @@
       globalAppSettings.notificationDndEnd = /^\d{2}:\d{2}$/.test(String(globalAppSettings.notificationDndEnd||'')) ? String(globalAppSettings.notificationDndEnd) : '08:00';
       globalAppSettings.notificationServiceWorkerEnabled = globalAppSettings.notificationServiceWorkerEnabled !== false;
       globalAppSettings.inAppPopup = globalAppSettings.inAppPopup !== false;
+      globalAppSettings.usageAnnouncementEnabled = globalAppSettings.usageAnnouncementEnabled !== false;
       globalAppSettings.fontScale = Math.max(80, Math.min(150, Number(globalAppSettings.fontScale) || 100));
       globalAppSettings.desktopIconShape = ['circle', 'rounded', 'square'].includes(globalAppSettings.desktopIconShape) ? globalAppSettings.desktopIconShape : 'rounded';
       globalAppSettings.desktopIconMaterial = ['glass', 'flat', 'solid'].includes(globalAppSettings.desktopIconMaterial) ? globalAppSettings.desktopIconMaterial : 'glass';
@@ -14334,6 +14417,7 @@
       const ringtoneToggle = document.getElementById('globalRingtoneToggle');
       const backgroundNotification = document.getElementById('globalBackgroundNotificationToggle');
       const inAppPopup = document.getElementById('globalInAppPopupToggle');
+      const usageAnnouncement = document.getElementById('globalUsageAnnouncementToggle');
       if (receiptStyle) receiptStyle.value = settings.receiptStyle;
       if (soundToggle) soundToggle.checked = settings.messageSoundEnabled;
       if (ringtoneToggle) ringtoneToggle.checked = settings.ringtoneEnabled;
@@ -14343,6 +14427,7 @@
       if (ringtoneSoundName) ringtoneSoundName.textContent = settings.ringtoneSrc ? `已上传：${settings.ringtoneName || '本地通话铃声'} · 来电与呼出等待均会循环播放` : '未上传本地铃声；用于对方来电和我方呼出等待。';
       if (backgroundNotification) backgroundNotification.checked = settings.backgroundNotification;
       if (inAppPopup) inAppPopup.checked = settings.inAppPopup;
+      if (usageAnnouncement) usageAnnouncement.checked = settings.usageAnnouncementEnabled !== false;
       if (hesitation) hesitation.checked = settings.autonomyHesitationEnabled;
       if (typingMimic) typingMimic.checked = settings.typingMimic;
       if (cardSentence) cardSentence.checked = settings.cardSentence;
@@ -14544,7 +14629,7 @@
       history: { label: '聊天记录' },
       stickers: { label: '表情包' }
     });
-    const CHAT_BACKUP_SETTINGS_FIELDS = Object.freeze(['avatarShape', 'wallpaper', 'bubblePreset', 'customBubbleCSS', 'themeCSS', 'selfName', 'selfAvatar', 'selfGradient', 'callVoiceBackground', 'callVideoBackground', 'callSelfBackground', 'companionBackground', 'chatGlassEnabled', 'chatGlassBlur', 'chatGlassOpacity', 'listenMiniStyle']);
+    const CHAT_BACKUP_SETTINGS_FIELDS = Object.freeze(['avatarShape', 'wallpaper', 'bubblePreset', 'customBubbleCSS', 'themeCSS', 'selfName', 'selfAvatar', 'selfGradient', 'callVoiceBackground', 'callVideoBackground', 'callSelfBackground', 'partnerVoiceEnabled', 'companionBackground', 'chatGlassEnabled', 'chatGlassBlur', 'chatGlassOpacity', 'listenMiniStyle']);
     const CHAT_BACKUP_SPECIAL_FIELDS = Object.freeze(['decisionRecords', 'boardRecords', 'redEnvelopes', 'checkHistory', 'pendingCheck', 'pendingReply', 'pendingProactiveMessages', 'pendingProactiveBoards', 'messageKindCooldowns', 'inviteHistory', 'pendingInvite', 'listenQueue', 'listenIndex', 'listenFavorites', 'chatFavorites', 'patTexts']);
     const CHAT_BACKUP_STICKER_FIELDS = Object.freeze(['stickerMine', 'stickerTheirs', 'kaomoji']);
 
@@ -14935,6 +15020,7 @@
       document.getElementById('globalRingtoneInput')?.addEventListener('change', event => handleGlobalSoundUpload(event, 'ringtone'));
       document.getElementById('globalBackgroundNotificationToggle')?.addEventListener('change', event => { loadGlobalAppSettings().backgroundNotification = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast('后台通知设置已更新'); });
       document.getElementById('globalInAppPopupToggle')?.addEventListener('change', event => { loadGlobalAppSettings().inAppPopup = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast('消息弹窗设置已更新'); });
+      document.getElementById('globalUsageAnnouncementToggle')?.addEventListener('change', event => { loadGlobalAppSettings().usageAnnouncementEnabled = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast(event.target.checked ? '以后进入网站时会显示使用公告' : '已关闭后续使用公告；首次进入规则不受影响'); });
       document.getElementById('globalHesitationToggle')?.addEventListener('change', event => { loadGlobalAppSettings().autonomyHesitationEnabled = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast('欲言又止设置已更新'); });
       document.getElementById('globalTypingMimicToggle')?.addEventListener('change', event => { loadGlobalAppSettings().typingMimic = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast('正在输入拟态设置已更新'); });
       document.getElementById('globalCardSentenceToggle')?.addEventListener('change', event => { loadGlobalAppSettings().cardSentence = event.target.checked; persistGlobalAppSettings(); showGlobalSettingsToast('拼字卡设置已更新'); });
@@ -15056,7 +15142,7 @@
       const body = document.getElementById('chatThreadBody');
       if (body) body.scrollTop = body.scrollHeight;
       const input = document.getElementById('chatMessageInput');
-      if (input) { input.value = ''; input.focus(); }
+      if (input) { input.value = ''; if(canAutoFocusInput())input.focus(); }
       const composer = document.getElementById('chatComposer');
       if (composer) composer.classList.remove('has-text');
       lucide.createIcons();
@@ -15534,6 +15620,7 @@
         callVoiceBackground: '',
         callVideoBackground: '',
         callSelfBackground: '',
+        partnerVoiceEnabled: true,
         stickerMine: [
           { name: '软乎乎', emoji: '🥹' },
           { name: '开心', emoji: '🥳' },
@@ -15595,6 +15682,7 @@
         selfName: typeof saved.selfName === 'string' ? saved.selfName.slice(0, 24) : defaults.selfName,
         selfAvatar: typeof saved.selfAvatar === 'string' ? saved.selfAvatar : defaults.selfAvatar,
         selfGradient: typeof saved.selfGradient === 'string' && saved.selfGradient ? saved.selfGradient : defaults.selfGradient,
+        partnerVoiceEnabled: saved.partnerVoiceEnabled !== false,
         decisionRecords: Array.isArray(saved.decisionRecords) ? saved.decisionRecords : defaults.decisionRecords.slice(),
         boardRecords: Array.isArray(saved.boardRecords) ? saved.boardRecords : defaults.boardRecords.slice(),
         redEnvelopes: Array.isArray(saved.redEnvelopes) ? saved.redEnvelopes : defaults.redEnvelopes.slice(),
@@ -16418,7 +16506,7 @@
       if (preview) { preview.dataset.coverSource = ''; preview.style.backgroundImage = ''; }
       if (submit) { submit.disabled = false; submit.textContent = '添加到共享队列'; }
       form.hidden = false;
-      window.setTimeout(() => title?.focus(), 40);
+      if(canAutoFocusInput())window.setTimeout(() => title?.focus(), 40);
     }
 
     function closeListenSongForm() {
@@ -17542,7 +17630,7 @@
       const questionNode = document.getElementById('incomingCheckQuestion');
       const reply = document.getElementById('incomingCheckReply');
       if (questionNode) questionNode.textContent = question;
-      if (reply) { reply.value = ''; window.setTimeout(() => reply.focus(), 40); }
+      if (reply) { reply.value = ''; if(canAutoFocusInput())window.setTimeout(() => reply.focus(), 40); }
       document.querySelectorAll('[data-incoming-check-quick]').forEach(button => {
         button.onclick = () => {
           if (reply) { reply.value = button.dataset.incomingCheckQuick; reply.focus(); }
@@ -18524,17 +18612,23 @@
 
     async function deepRecoverChatHistory() { const recovered=await recoverChatHistoryFromDurableCopies(true); if(!recovered) window.alert('当前来源中没有找到比现有记录更完整的聊天副本。'); }
 
+    function cleanChatPreviewText(value,max=52){const text=String(value||'').replace(/\s+/g,' ').trim();return text.length>max?`${text.slice(0,max)}…`:text;}
+    function chatMessagePreviewFromBubble(bubble,line=null){
+      if(!bubble)return'发来一条新消息';
+      if(bubble.classList.contains('chat-voice-bubble')){const seconds=Math.max(0,Math.round(Number(bubble.dataset.voiceDuration)||0));return seconds?`[语音] ${seconds}秒`:'[语音]';}
+      if(bubble.classList.contains('chat-sticker-bubble')){if(line?.dataset.messageKind==='kaomoji'){const text=cleanChatPreviewText(bubble.textContent,24);return text||'颜文字';}return '表情包';}
+      if(bubble.classList.contains('chat-image-bubble')){const caption=cleanChatPreviewText(bubble.querySelector('.chat-board-caption')?.textContent||bubble.querySelector('img')?.alt,24).replace(/^图片$/u,'');return caption?`[图片] ${caption}`:'[图片]';}
+      if(bubble.classList.contains('chat-red-envelope-bubble'))return'红包';
+      if(bubble.classList.contains('chat-invite-bubble'))return'INVITE';
+      if(bubble.classList.contains('chat-check-bubble')){const question=cleanChatPreviewText(bubble.querySelector('.chat-check-card-question')?.textContent,36);return question?`[查岗] ${question}`:'[查岗]';}
+      if(bubble.classList.contains('chat-board-bubble')){const caption=cleanChatPreviewText(bubble.querySelector('.chat-board-caption')?.textContent,26);return caption?`[画板传讯] ${caption}`:'[画板传讯]';}
+      if(bubble.classList.contains('chat-decision-bubble')){const question=cleanChatPreviewText(bubble.querySelector('.chat-decision-question')?.textContent,32);return question?`[决策] ${question}`:'[决策]';}
+      const clone=bubble.cloneNode(true);clone.querySelectorAll('.chat-quoted-context,.chat-quote-block,.mail-reply-reference').forEach(node=>node.remove());const text=cleanChatPreviewText(clone.textContent,52);return text||'发来一条新消息';
+    }
+    function chatPendingItemPreview(item={}){const type=String(item.kind||item.type||'text');if(type==='voice'){const seconds=Math.max(0,Math.round(Number(item.duration)||0));return seconds?`[语音] ${seconds}秒`:'[语音]';}if(type==='sticker')return '表情包';if(type==='kaomoji')return cleanChatPreviewText(item.text||item.emoji,24)||'颜文字';if(type==='poke')return `[拍一拍] ${cleanChatPreviewText(item.text,30)}`;if(type==='board')return '[画板传讯]';if(type==='image')return '[图片]';return cleanChatPreviewText(item.text,52)||'发来一条消息';}
     function incomingChatNodePreview(line) {
       if (!line?.classList.contains('incoming')) return '';
-      if (line.dataset.messageKind === 'kaomoji') return line.querySelector('.chat-sticker-bubble')?.textContent?.trim() || '[颜文字]';
-      if (line.querySelector('.chat-sticker-bubble')) return '[贴图]';
-      if (line.querySelector('.chat-board-bubble')) return '[画板]';
-      if (line.querySelector('.chat-invite-bubble')) return '[邀请]';
-      if (line.querySelector('.chat-red-envelope-bubble')) return '[红包]';
-      if (line.querySelector('.chat-check-bubble')) return '[查岗]';
-      const transcript = line.querySelector('.chat-voice-transcript')?.textContent?.replace(/\s+/g, ' ').trim();
-      if (line.querySelector('.chat-voice-bubble')) return transcript || '[语音]';
-      return line.querySelector('.chat-bubble')?.textContent?.replace(/\s+/g, ' ').trim() || '发来一条新消息';
+      return chatMessagePreviewFromBubble(line.querySelector('.chat-bubble'),line);
     }
 
     function observeChatHistory() {
@@ -18667,20 +18761,9 @@
 
     function pendingChatArrivalPreview(settings) {
       const entries = [];
-      (Array.isArray(settings?.pendingProactiveMessages) ? settings.pendingProactiveMessages : []).forEach((item, index) => {
-        const type = String(item?.kind || item?.type || 'text');
-        let text = String(item?.text || (type === 'sticker' || type === 'kaomoji' ? item?.name || item?.emoji : '') || '').replace(/\s+/g, ' ').trim();
-        if (!text && type === 'sticker') text = '[贴图]';
-        if (!text && type === 'kaomoji') text = '[颜文字]';
-        if (!text && type === 'voice') text = '[语音]';
-        if (!text && type === 'poke') text = '[拍一拍]';
-        entries.push({ text: text || '发来一条消息', at: Number(item?.createdAt) || index });
-      });
-      (Array.isArray(settings?.pendingProactiveBoards) ? settings.pendingProactiveBoards : []).forEach((item, index) => {
-        entries.push({ text: '[画板]', at: Number(item?.createdAt) || index });
-      });
-      entries.sort((a, b) => a.at - b.at);
-      return entries.length ? entries[entries.length - 1].text : '发来一条新消息';
+      (Array.isArray(settings?.pendingProactiveMessages) ? settings.pendingProactiveMessages : []).forEach((item, index) => entries.push({text:chatPendingItemPreview(item),at:Number(item?.createdAt)||index}));
+      (Array.isArray(settings?.pendingProactiveBoards) ? settings.pendingProactiveBoards : []).forEach((item, index) => entries.push({text:'[画板传讯]',at:Number(item?.createdAt)||index}));
+      entries.sort((a,b)=>a.at-b.at);return entries.length?entries[entries.length-1].text:'发来一条新消息';
     }
 
     function getChatBannerIdentity(handle) {
@@ -19349,6 +19432,8 @@
       document.querySelectorAll('[data-bubble-preset]').forEach(button => button.classList.toggle('active', button.dataset.bubblePreset === settings.bubblePreset));
       document.querySelectorAll('[data-listen-mini-style]').forEach(button => button.classList.toggle('active', button.dataset.listenMiniStyle === settings.listenMiniStyle));
       const glassToggle = document.getElementById('chatGlassToggle');
+      const partnerVoiceToggle = document.getElementById('partnerVoiceToggle');
+      if(partnerVoiceToggle){partnerVoiceToggle.classList.toggle('active',settings.partnerVoiceEnabled!==false);partnerVoiceToggle.setAttribute('aria-pressed',String(settings.partnerVoiceEnabled!==false));}
       const glassBlur = document.getElementById('chatGlassBlurInput');
       const glassOpacity = document.getElementById('chatGlassOpacityInput');
       if (glassToggle) { glassToggle.classList.toggle('active', settings.chatGlassEnabled); glassToggle.setAttribute('aria-pressed', String(settings.chatGlassEnabled)); }
@@ -19514,6 +19599,19 @@
       applyAvatarShape(shape);
       renderChatSettings();
       showChatToast(shape === 'rounded' ? '已切换为方圆形头像' : '已切换为圆形头像');
+    }
+
+    function togglePartnerVoiceEnabled() {
+      const handle=String(currentPartnerHandle||'');if(!handle)return;
+      const role=getRoleRecord(handle),settings=getChatSettings(handle),enabled=settings.partnerVoiceEnabled===false;
+      settings.partnerVoiceEnabled=enabled;
+      if(!enabled){
+        settings.pendingProactiveMessages=(settings.pendingProactiveMessages||[]).filter(item=>String(item?.kind||item?.type||'')!=='voice');
+        if(settings.pendingReply?.kind==='voice')settings.pendingReply={...settings.pendingReply,kind:'text',total:1,remaining:1,plannedAt:Date.now()+350};
+      }
+      saveChatSettings(settings,handle);clearReplyEngine(handle);
+      if(!enabled&&settings.pendingReply&&role)window.setTimeout(()=>scheduleRoleReplies(document.getElementById('chatThreadBody'),document.getElementById('chatTyping'),role,true),0);
+      renderChatSettings();showChatToast(enabled?'已允许对方发送拟态语音':'已关闭对方拟态语音');
     }
 
     function renderWallpaperState(src) {
@@ -20434,7 +20532,7 @@
       if (input) {
         input.value = chatThreadSearchState.query || '';
         performChatThreadSearch(input.value);
-        window.setTimeout(() => input.focus(), 30);
+        if(canAutoFocusInput())window.setTimeout(() => input.focus(), 30);
       }
       lucide.createIcons();
     }
@@ -20469,7 +20567,7 @@
       if (!panel) return;
       panel.hidden = false;
       updateChatBatchComposer();
-      window.setTimeout(() => document.getElementById('chatBatchInput')?.focus(), 30);
+      if(canAutoFocusInput())window.setTimeout(() => document.getElementById('chatBatchInput')?.focus(), 30);
     }
 
     function closeChatBatchComposer(force = false) {
@@ -20802,6 +20900,30 @@
         suppressPartnerAvatarDoubleTapUntil = Date.now() + 750;
         openChatInteractionModal();
       }, true);
+    }
+
+    function scrollChatThreadToTop() {
+      const body=document.getElementById('chatThreadBody');if(!body)return;
+      const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
+      try{body.scrollTo({top:0,behavior:reduced?'auto':'smooth'});}catch(_){body.scrollTop=0;}
+    }
+
+    function bindChatHeaderDoubleTap() {
+      const header=document.querySelector('#chatApp .chat-thread-header');
+      if(!header||header.dataset.doubleTapTopBound==='true')return;
+      header.dataset.doubleTapTopBound='true';header.title='双击空白处或标题回到聊天顶部';
+      const excluded=target=>Boolean(target?.closest?.('button,.chat-thread-avatar,input,textarea,select,a'));
+      let lastTapAt=0,lastTapTarget=null;
+      header.addEventListener('pointerup',event=>{
+        if(event.pointerType==='mouse'||excluded(event.target))return;
+        const now=Date.now();
+        if(lastTapTarget===event.target&&now-lastTapAt<=430){event.preventDefault();event.stopPropagation();lastTapAt=0;lastTapTarget=null;scrollChatThreadToTop();}
+        else{lastTapAt=now;lastTapTarget=event.target;}
+      },true);
+      header.addEventListener('dblclick',event=>{
+        if(excluded(event.target))return;
+        event.preventDefault();event.stopPropagation();scrollChatThreadToTop();
+      },true);
     }
 
     function bindChatEnhancementEscape() {
@@ -21326,7 +21448,7 @@
       const fileInput = document.getElementById('selfProfileAvatarInput');
       if (nameInput) {
         nameInput.value = profile.name;
-        window.setTimeout(() => { nameInput.focus(); nameInput.select(); }, 40);
+        if(canAutoFocusInput())window.setTimeout(() => { nameInput.focus(); nameInput.select(); }, 40);
       }
       if (fileInput) fileInput.value = '';
       renderSelfProfileAvatarPreview();
@@ -21521,7 +21643,7 @@
       currentDreamGradient = dreamGradient(getDreamCorners().length);
       if (nameInput) {
         nameInput.value = defaultName;
-        window.setTimeout(() => { nameInput.focus(); nameInput.select(); }, 40);
+        if(canAutoFocusInput())window.setTimeout(() => { nameInput.focus(); nameInput.select(); }, 40);
       }
       if (fileInput) fileInput.value = '';
       resetDreamAvatarPreview(dreamInitials(defaultName), currentDreamGradient);
@@ -21659,6 +21781,7 @@
       bindPartnerAvatarInteractions();
       bindChatMessageInteractions();
       bindChatMediaViewerInteractions();
+      bindChatHeaderDoubleTap();
       bindChatEnhancementEscape();
       document.querySelectorAll('.chat-row').forEach(bindChatRowLongPress);
       const threadBody = document.getElementById('chatThreadBody');
@@ -22278,7 +22401,7 @@
       desktopTodoDraft = loadDesktopWidgetState().todos.map(item => ({ ...item }));
       if (desktopTodoDraft.length < 20) desktopTodoDraft.push({ id:`todo-${Date.now()}-${Math.random().toString(16).slice(2,7)}`, text:'', done:false, dueAt:'', priority:'normal' });
       const editor = ensureDesktopTodoEditor(); renderDesktopTodoEditorRows(); editor.classList.add('is-open'); editor.setAttribute('aria-hidden','false');
-      window.setTimeout(() => editor.querySelector('.desktop-todo-editor-row:last-child .desktop-todo-text')?.focus(), 30);
+      if(canAutoFocusInput())window.setTimeout(() => editor.querySelector('.desktop-todo-editor-row:last-child .desktop-todo-text')?.focus(), 30);
     }
 
     function toggleDesktopTodo(item) {
@@ -25139,8 +25262,8 @@
           const previousId = seen[inviteHandle] || '';
           if(cur && cur.direction==='in' && cur.status==='pending' && String(cur.id||'')!==previousId){
             const inviteIdentity = inviteHandle ? getChatBannerIdentity(inviteHandle) : null;
-            showSystemInAppBanner({ handle:inviteHandle, title:inviteIdentity?.name || '新的邀请', preview:cur.note ? `邀请你${desktopInviteActivityLabel(cur.activity)}：${String(cur.note).slice(0,50)}` : '收到一条新的邀请', route:'invite', routeData:{handle:inviteHandle}, initials:inviteIdentity?.initials||'邀', visual:inviteIdentity?.visual||'linear-gradient(135deg,#a9475f,#7e3449)' });
-            showSystemNotification({ title:'新的邀请', body:cur.note?`${desktopInviteActivityLabel(cur.activity)}：${String(cur.note).slice(0,50)}`:'收到一条新的邀请', route:'invite', routeData:{handle:inviteHandle}, tag:'invite-'+(cur.id||Date.now()) });
+            showSystemInAppBanner({ handle:inviteHandle, title:inviteIdentity?.name || '新的邀请', preview:'INVITE', route:'invite', routeData:{handle:inviteHandle}, initials:inviteIdentity?.initials||'邀', visual:inviteIdentity?.visual||'linear-gradient(135deg,#a9475f,#7e3449)' });
+            showSystemNotification({ title:'新的邀请', body:'INVITE', route:'invite', routeData:{handle:inviteHandle}, tag:'invite-'+(cur.id||Date.now()) });
           }
           seen[inviteHandle] = cur && cur.direction==='in' && cur.status==='pending' ? String(cur.id||'pending') : '';
         } catch(e){}
@@ -25650,6 +25773,7 @@
 
   function extractPreviewFromBubble(bubble){
     if(!bubble) return '新的梦角 · 开始一段对话吧';
+    if(typeof chatMessagePreviewFromBubble==='function')return chatMessagePreviewFromBubble(bubble,bubble.closest?.('.chat-message-line'));
     // 优先处理特殊卡片
     if(bubble.classList.contains('chat-sticker-bubble')){
       const img = bubble.querySelector('img');
@@ -25666,7 +25790,7 @@
     // 普通文本气泡
     // 克隆并移除引用块
     const clone = bubble.cloneNode(true);
-    clone.querySelectorAll('.chat-quote-block').forEach(n=>n.remove());
+    clone.querySelectorAll('.chat-quote-block,.chat-quoted-context').forEach(n=>n.remove());
     let text = (clone.textContent || '').trim().replace(/\s+/g,' ');
     if(!text) text = bubble.textContent.trim().slice(0,30);
     if(text.length>28) text = text.slice(0,28)+'…';
@@ -25744,13 +25868,13 @@
       if(settings){
         const pendings = [];
         if(Array.isArray(settings.pendingProactiveMessages)) pendings.push(...settings.pendingProactiveMessages);
-        if(Array.isArray(settings.pendingProactiveBoards)) pendings.push(...settings.pendingProactiveBoards.map(b=>({text:'[画板]', createdAt:b.createdAt||0})));
+        if(Array.isArray(settings.pendingProactiveBoards)) pendings.push(...settings.pendingProactiveBoards.map(b=>({kind:'board',text:'[画板传讯]',createdAt:b.createdAt||0})));
         if(Array.isArray(settings.pendingCheck) && settings.pendingCheck) {}
         // 取最新的 pending
         if(pendings.length){
           const sorted = [...pendings].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
           const latest = sorted[0];
-          const text = (latest.text||'').trim().slice(0,28) || '[新消息]';
+          const text = typeof chatPendingItemPreview==='function' ? chatPendingItemPreview(latest) : ((latest.text||'').trim().slice(0,28)||'[新消息]');
           const ts = latest.createdAt||0;
           if(!best || ts>best.ts){
             best = {preview: text, time: '刚刚', ts, isOutgoing:false, isPending:true};
@@ -25759,7 +25883,7 @@
         // 邀请、红包等也可视为预览，但暂以文字为主
         if(settings.pendingInvite && settings.pendingInvite.status==='pending'){
           const ts = settings.pendingInvite.createdAt||0;
-          const txt = '[邀请] ' + (settings.pendingInvite.note||'').slice(0,18);
+          const txt = 'INVITE';
           if(!best || ts>best.ts) best = {preview: txt, time:'刚刚', ts, isOutgoing:false};
         }
       }
@@ -26161,7 +26285,7 @@
     modal.style.pointerEvents = 'auto';
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden','false');
-    setTimeout(()=> input && input.focus(), 80);
+    if(canAutoFocusInput())setTimeout(()=> input && input.focus(), 80);
     if(window.lucide) try{ lucide.createIcons(); }catch(e){}
   };
   window.closeGroupCreation = function(){
@@ -27157,14 +27281,15 @@
 
   function messageText(message) {
     const content = message?.content || {};
-    if (message.type === 'text' || message.type === 'kaomoji' || message.type === 'voice' || message.type === 'poke') return String(content.text || '');
-    if (message.type === 'image') return '[图片]';
-    if (message.type === 'sticker') return '[表情包]';
-    if (message.type === 'board') return '[画板]';
-    if (message.type === 'red-envelope') return '[红包]';
-    if (message.type === 'invite') return '[邀请]';
-    if (message.type === 'check') return '[查岗]';
-    if (message.type === 'decision') return '[决策]';
+    if (message.type === 'text' || message.type === 'kaomoji' || message.type === 'poke') return String(content.text || '');
+    if (message.type === 'voice') return `[语音]${Number(content.duration)>0?` ${Math.round(Number(content.duration))}秒`:''}`;
+    if (message.type === 'image') return `[图片]${content.name?` ${String(content.name).slice(0,22)}`:''}`;
+    if (message.type === 'sticker') return '表情包';
+    if (message.type === 'board') return `[画板传讯]${content.caption?` ${String(content.caption).slice(0,24)}`:''}`;
+    if (message.type === 'red-envelope') return '红包';
+    if (message.type === 'invite') return 'INVITE';
+    if (message.type === 'check') return `[群查岗] ${String(content.text||'等待报备').slice(0,28)}`;
+    if (message.type === 'decision') return `[群决策] ${String(content.text||content.question||'等待选择').slice(0,28)}`;
     return String(content.title || content.text || '[群消息]');
   }
   function groupPreview(message) {
@@ -29398,7 +29523,7 @@
     modal.querySelector('#boxSnapshotWorkspaceMeta').textContent = '保存后将进入“聊天收藏”分类';
     const frozen = modal.querySelector('#boxSnapshotFrozenPreview'); frozen.innerHTML = '<div class="box-empty"><div><strong>手动聊天收藏</strong><p>保存后会生成独立的冻结预览。</p></div></div>';
     modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false');
-    window.setTimeout(() => modal.querySelector('#boxSnapshotTitle')?.focus(), 40);
+    if(canAutoFocusInput())window.setTimeout(() => modal.querySelector('#boxSnapshotTitle')?.focus(), 40);
   }
 
   function closeBoxSnapshotEditor() {
@@ -29610,7 +29735,7 @@
     document.getElementById('boxDiaryTags').value = source.tags || '';
     renderBoxEditorMedia(); renderBoxLinkList();
     const modal = document.getElementById('boxDiaryEditorModal'); modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false');
-    window.setTimeout(() => document.getElementById('boxDiaryBody')?.focus(), 60);
+    if(canAutoFocusInput())window.setTimeout(() => document.getElementById('boxDiaryBody')?.focus(), 60);
     try { if (window.lucide) lucide.createIcons(); } catch (_) {}
   }
 
@@ -30396,5 +30521,5 @@ window.KomoStore={version:'6.0.0',load:loadKomoState,exportData:()=>JSON.parse(J
 let komoLocalCatchUpTimer=null;const catchUpKomoLocalTasks=()=>{if(document.hidden)return;clearTimeout(komoLocalCatchUpTimer);komoLocalCatchUpTimer=setTimeout(()=>{komoLocalCatchUpTimer=null;processKomoGiftTasks();processKomoShoppingRequests();processKomoPayTasks();window.renderDesktopKomoWidget?.();},80);};document.addEventListener('visibilitychange',catchUpKomoLocalTasks);document.addEventListener('dream:local-scheduler-catchup',catchUpKomoLocalTasks);window.addEventListener('pageshow',catchUpKomoLocalTasks);scheduleKomoGiftTasks();scheduleKomoShoppingRequests();scheduleKomoPayTasks();window.renderDesktopKomoWidget?.();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2d88b7cfc0a0901',t:'MTc4NzEzNjA3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e83e5adc9902be',t:'MTc4NzMwMDY4OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
