@@ -21,9 +21,10 @@
     const isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
     if(isiOS)root.dataset.ios='true';
     if(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)root.dataset.standalone='true';
-    let frame=0;
-    const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const viewport=window.visualViewport;const height=Math.round(viewport?.height||window.innerHeight||document.documentElement.clientHeight);if(height>0)root.style.setProperty('--app-viewport-height',`${height}px`);root.style.setProperty('--app-viewport-offset-top',`${Math.max(0,Math.round(viewport?.offsetTop||0))}px`);});};
-    update();window.addEventListener('resize',update,{passive:true});window.addEventListener('orientationchange',()=>setTimeout(update,120),{passive:true});window.visualViewport?.addEventListener('resize',update,{passive:true});window.visualViewport?.addEventListener('scroll',update,{passive:true});window.addEventListener('pageshow',update,{passive:true});document.addEventListener('focusin',event=>{if(/^(INPUT|TEXTAREA|SELECT)$/u.test(event.target?.tagName||''))setTimeout(update,60);});document.addEventListener('focusout',event=>{if(/^(INPUT|TEXTAREA|SELECT)$/u.test(event.target?.tagName||''))setTimeout(()=>{update();if(root.dataset.standalone==='true')window.scrollTo(0,0);},120);});
+    let frame=0,stableHeight=Math.round(window.innerHeight||document.documentElement.clientHeight||0);
+    const isFormControl=node=>/^(INPUT|TEXTAREA|SELECT)$/u.test(node?.tagName||'');
+    const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const viewport=window.visualViewport,focused=isFormControl(document.activeElement),standalone=root.dataset.standalone==='true',inner=Math.round(window.innerHeight||document.documentElement.clientHeight||0);if(!focused&&inner>0)stableHeight=inner;const height=standalone&&focused?Math.max(stableHeight,inner):inner;const visualHeight=Math.round(viewport?.height||height),offsetTop=Math.max(0,Math.round(viewport?.offsetTop||0));const keyboardInset=focused?Math.max(0,height-visualHeight-offsetTop):0;if(height>0)root.style.setProperty('--app-viewport-height',`${height}px`);root.style.setProperty('--app-viewport-offset-top',`${offsetTop}px`);root.style.setProperty('--app-keyboard-inset',`${keyboardInset}px`);root.dataset.keyboardOpen=keyboardInset>80?'true':'false';});};
+    update();window.addEventListener('resize',update,{passive:true});window.addEventListener('orientationchange',()=>{stableHeight=0;setTimeout(update,120);},{passive:true});window.visualViewport?.addEventListener('resize',update,{passive:true});window.visualViewport?.addEventListener('scroll',update,{passive:true});window.addEventListener('pageshow',update,{passive:true});document.addEventListener('focusin',event=>{if(isFormControl(event.target)){setTimeout(update,60);if(event.target?.id==='chatMessageInput')setTimeout(()=>{const body=document.getElementById('chatThreadBody');if(body)body.scrollTop=body.scrollHeight;},120);}});document.addEventListener('focusout',event=>{if(isFormControl(event.target))setTimeout(()=>{update();if(root.dataset.standalone==='true')window.scrollTo(0,0);},160);});
     window.__updateMobiusViewport=update;
   })();
   </script>
@@ -350,7 +351,7 @@
       opacity: 1;
     }
 
-    .add-page-btn, .reopen-drawer-btn {
+    .add-page-btn, .delete-page-btn, .reopen-drawer-btn {
       display: none;
       font-size: 10px;
       font-weight: 800;
@@ -362,8 +363,8 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    .edit-mode .add-page-btn { display: inline-block; }
-    .edit-mode .reopen-drawer-btn { display: inline-block; }
+    .edit-mode .add-page-btn, .edit-mode .delete-page-btn, .edit-mode .reopen-drawer-btn { display: inline-block; }
+    .delete-page-btn.is-disabled { opacity: .38; pointer-events: none; }
 
     .press-ripple {
       position: absolute; width: 60px; height: 60px; border-radius: 50%;
@@ -394,6 +395,8 @@
     }
 
     .edit-mode .desktop-page .remove-badge { display: flex; background: #000; color: #fff; }
+    .edit-mode .desktop-page .draggable-card.system-app-protected > .remove-badge { display:none !important; }
+    .draggable-card.system-app-protected > .remove-badge { pointer-events:none !important; }
     .drawer-content .add-badge { display: flex; background: #10b981; color: #fff; }
 
     /* 抽屉 Drawer */
@@ -2898,9 +2901,11 @@
     /* 表情包 / 颜文字 / 拍一拍面板：参考上传网站，并沿用当前主页玻璃卡片语言 */
     .chat-thread-view [hidden] { display: none !important; }
     .chat-expression-toggle {
-      width: 20px;
-      height: 23px;
-      flex: 0 0 20px;
+      width: 35px;
+      height: 35px;
+      min-width: 35px;
+      flex: 0 0 35px;
+      margin-left: -8px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -2910,6 +2915,10 @@
       background: transparent;
       color: #262626;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .chat-expression-toggle:active { transform: scale(.9); }
     .chat-expression-toggle.active { color: #0095f6; }
@@ -4867,7 +4876,16 @@
     .nav-btn { width: var(--app-nav-button-size,34px); height: var(--app-nav-button-size,34px); flex: 0 0 var(--app-nav-button-size,34px); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; }
     .nav-btn svg { width: var(--app-nav-icon-size,18px); height: var(--app-nav-icon-size,18px); }
     /* 主页、字卡管理与朋友圈共用同一套底栏尺寸，避免切换页面时上下跳动。 */
-    #appScreen { --app-bottom-nav-height: 52px; --app-bottom-nav-padding: 0 16px; --app-nav-button-size: 34px; --app-nav-icon-size: 18px; }
+    #appScreen {
+      --app-bottom-safe: env(safe-area-inset-bottom, 0px);
+      --app-bottom-nav-base: 44px;
+      /* 34px 按钮在 44px 栏内本身已有 5px 底部余量，只补足剩余安全区，避免重复留白。 */
+      --app-bottom-nav-extra: max(0px, calc(var(--app-bottom-safe) - 5px));
+      --app-bottom-nav-height: calc(var(--app-bottom-nav-base) + var(--app-bottom-nav-extra));
+      --app-bottom-nav-padding: 0 16px var(--app-bottom-nav-extra);
+      --app-nav-button-size: 34px;
+      --app-nav-icon-size: 18px;
+    }
     #appScreen > .bottom-nav { height: var(--app-bottom-nav-height); min-height: var(--app-bottom-nav-height); padding: var(--app-bottom-nav-padding); }
     #appScreen > .bottom-nav .nav-btn { width: var(--app-nav-button-size); height: var(--app-nav-button-size); flex-basis: var(--app-nav-button-size); }
     #appScreen > .card-manager-page { inset: 0 0 var(--app-bottom-nav-height); }
@@ -7036,15 +7054,15 @@
 .komo-head .komo-motion-button{font-size:13px}.komo-app[data-komo-motion="off"] *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.komo-app.komo-opening .komo-brand{animation:komoSignOn .55s ease both}.komo-app.komo-opening .komo-tabs{animation:komoSlideDown .45s .08s ease both}.komo-app.komo-opening .komo-scroll{animation:komoStoreFade .5s .12s ease both}.komo-product{position:relative}.komo-product.komo-product-enter{animation:komoShelfIn .38s var(--komo-delay,0ms) cubic-bezier(.2,.82,.25,1) both}.komo-app[data-komo-motion="light"] .komo-product.komo-product-enter{animation-duration:.18s;animation-delay:0ms}.komo-app[data-komo-motion="light"] .komo-product-icon::after,.komo-app[data-komo-motion="light"] .komo-product::after,.komo-app[data-komo-motion="light"] .komo-detail-visual::after,.komo-app[data-komo-motion="light"] .komo-detail-visual>span,.komo-app[data-komo-motion="light"] .komo-clerk-roster span{animation:none!important}.komo-product:active{transform:scale(.975)}.komo-product-icon{position:relative;transition:transform .18s ease}.komo-product:hover .komo-product-icon{transform:translateY(-2px) scale(1.06)}.komo-product[data-komo-effect="hot"] .komo-product-icon::after{content:"⌁";position:absolute;right:-1px;top:-8px;color:#c58a62;font-size:12px;opacity:.55;animation:komoSteam 1.8s ease-in-out infinite}.komo-product[data-komo-effect="cold"] .komo-product-icon::after{content:"✦";position:absolute;right:1px;top:0;color:#77aebd;font-size:8px;animation:komoSpark 1.5s ease-in-out infinite}.komo-product[data-komo-effect="gift"] .komo-product-icon::after{content:"⌁";position:absolute;right:-3px;bottom:-2px;color:#b65b75;font-size:10px;transform:rotate(-30deg)}.komo-product[data-komo-effect="limited"]{box-shadow:0 5px 15px rgba(111,77,126,.09)}.komo-product[data-komo-effect="limited"]::after{content:"✦";position:absolute;right:8px;top:8px;color:#9b668d;font-size:7px;animation:komoSpark 1.4s ease-in-out infinite}.komo-product[data-komo-effect="drink"]{border-color:#d6e7e8;background:linear-gradient(145deg,#fff,#f4fbfb)}.komo-product[data-komo-effect="drink"] .komo-product-icon::after{content:"◦ °";right:-4px;top:-5px;color:#66a5ad;letter-spacing:1px;animation:komoBubbles 1.8s ease-in-out infinite}.komo-product[data-komo-effect="snack"]{border-color:#eadfca;background:linear-gradient(145deg,#fff,#fffaf0)}.komo-product[data-komo-effect="snack"] .komo-product-icon::after{content:"···";right:-7px;bottom:-2px;color:#b88a51;letter-spacing:1px;animation:komoCrumbs 1.7s ease-in-out infinite}.komo-product[data-komo-effect="daily"]{border-color:#dde3df}.komo-product[data-komo-effect="daily"] .komo-product-icon::after{content:"／";right:1px;top:1px;color:#8ca097;opacity:.35;animation:komoCleanSweep 2.4s ease-in-out infinite}.komo-product[data-komo-effect="breakfast"]{border-color:#eadfc6;background:linear-gradient(145deg,#fff,#fff9e9)}.komo-product[data-komo-effect="breakfast"] .komo-product-icon::after{content:"☀";right:-3px;top:-4px;color:#e2a84d;font-size:9px;animation:komoSpark 2s ease-in-out infinite}.komo-product[data-komo-effect="health"]{border-color:#d7e6dc;background:linear-gradient(145deg,#fff,#f5fbf6)}.komo-product[data-komo-effect="health"] .komo-product-icon::after{content:"＋";right:-3px;top:-4px;color:#5d9a70;font-size:9px;font-weight:900;animation:komoHealthPulse 1.8s ease-in-out infinite}.komo-product[data-komo-effect="stationery"]{border-color:#dedbea;background:linear-gradient(145deg,#fff,#f8f7fd)}.komo-product[data-komo-effect="stationery"] .komo-product-icon::after{content:"〰";right:-5px;bottom:-3px;color:#7e75a1;font-size:10px;animation:komoWriteLine 2.1s ease-in-out infinite}.komo-product[data-komo-effect="komo"]{border-color:#d5e2d8;background:linear-gradient(145deg,#fff,#f1f8f2)}.komo-product[data-komo-effect="komo"] .komo-product-icon::after{content:"🐾";right:-7px;bottom:-4px;font-size:9px;animation:komoPawTiny 1.9s ease-in-out infinite}.komo-product[data-komo-effect="seasonal"]{border-color:#e7d8df;background:linear-gradient(145deg,#fff,#fff6f8)}.komo-product[data-komo-effect="seasonal"] .komo-product-icon::after{content:"✿";right:-4px;top:-5px;color:#c56f8b;font-size:9px;animation:komoSeasonFloat 2s ease-in-out infinite}.komo-product[data-komo-effect="seasonal"][data-komo-season="summer"] .komo-product-icon::after{content:"☼";color:#dc9e3f}.komo-product[data-komo-effect="seasonal"][data-komo-season="autumn"] .komo-product-icon::after{content:"🍁"}.komo-product[data-komo-effect="seasonal"][data-komo-season="winter"] .komo-product-icon::after{content:"❄";color:#79a7bd}.komo-product[data-komo-effect="home"]{border-color:#dfdbea;background:linear-gradient(145deg,#fff,#faf8fd)}.komo-product[data-komo-effect="home"] .komo-product-icon::after{content:"◌";right:-4px;top:-5px;color:#9b82aa;font-size:11px;animation:komoAroma 2.4s ease-out infinite}.komo-product[data-komo-effect="digital"]{border-color:#d5e1e7;background:linear-gradient(145deg,#fff,#f3f8fb)}.komo-product[data-komo-effect="digital"] .komo-product-icon::after{content:"●";right:1px;bottom:1px;color:#4fba78;font-size:6px;animation:komoLed 1.35s steps(2,end) infinite}.komo-product[data-komo-effect="care"]{border-color:#ead9df;background:linear-gradient(145deg,#fff,#fff7fa)}.komo-product[data-komo-effect="care"] .komo-product-icon::after{content:"♡";right:-4px;top:-5px;color:#bd708a;font-size:10px;animation:komoCareGlow 2s ease-in-out infinite}.komo-detail-visual{position:relative;height:102px;display:grid;place-items:center;overflow:hidden;border:1px solid #dce5de;border-radius:15px;background:linear-gradient(145deg,#edf4ef,#f8fbf8);font-size:52px}.komo-detail-visual>span{position:relative;z-index:2;animation:komoDetailFloat 2.4s ease-in-out infinite}.komo-detail-visual::before,.komo-detail-visual::after{position:absolute;pointer-events:none}.komo-detail-visual[data-komo-effect="drink"]::after{content:"○  ◦  °";left:18%;bottom:8px;color:#79b2ba;font-size:12px;letter-spacing:10px;animation:komoBubbles 2s ease-in-out infinite}.komo-detail-visual[data-komo-effect="hot"]::after,.komo-detail-visual[data-komo-effect="breakfast"]::after{content:"⌁  ⌁";top:8px;color:#c68a62;font-size:17px;letter-spacing:8px;animation:komoSteam 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="cold"]::after{content:"✦  ❄  ✦";inset:10px;color:#78a9bb;font-size:11px;letter-spacing:16px;animation:komoSpark 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="gift"]::after,.komo-detail-visual[data-komo-effect="stationery"]::after{content:"〰 ♡ 〰";bottom:7px;color:#b66b82;font-size:11px;letter-spacing:4px}.komo-detail-visual[data-komo-effect="limited"]::after,.komo-detail-visual[data-komo-effect="seasonal"]::after{content:"✦  ·  ✦";inset:13px;color:#9c668c;font-size:12px;letter-spacing:18px;animation:komoSpark 1.5s ease-in-out infinite}.komo-detail-visual[data-komo-effect="health"]::after{content:"＋";right:18px;top:13px;color:#63a277;font-size:15px;animation:komoHealthPulse 1.8s ease-in-out infinite}.komo-detail-visual[data-komo-effect="komo"]::after{content:"🐾   🐾";bottom:7px;color:#55705d;font-size:10px;letter-spacing:15px;animation:komoPawTiny 2s ease-in-out infinite}.komo-detail-visual[data-komo-effect="home"]::after{content:"◌";inset:17px;color:#9b82aa;font-size:22px;animation:komoAroma 2.4s ease-out infinite}.komo-detail-visual[data-komo-effect="digital"]::after{content:"●";right:17px;bottom:13px;color:#4fba78;font-size:9px;animation:komoLed 1.35s steps(2,end) infinite}.komo-detail-visual[data-komo-effect="care"]::after{content:"♡";right:17px;top:12px;color:#bd708a;font-size:16px;animation:komoCareGlow 2s ease-in-out infinite}.komo-clerk{position:relative;overflow:hidden}.komo-clerk-avatar{transition:transform .2s ease}.komo-clerk.komo-clerk-greeting .komo-clerk-avatar{animation:komoClerkHello .65s cubic-bezier(.2,.9,.25,1)}.komo-clerk.komo-clerk-recommend::after{content:"🐾";position:absolute;left:54px;bottom:3px;color:#607d68;font-size:12px;animation:komoPawPath .8s ease both}.komo-clerk-roster span.active{animation:komoDutyGlow 2.4s ease-in-out infinite}.komo-fly-item{position:fixed;z-index:9999;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#fff;box-shadow:0 8px 22px rgba(40,61,48,.22);font-size:22px;pointer-events:none;animation:komoFlyToBag .62s cubic-bezier(.2,.8,.25,1) forwards}.komo-tabs button.komo-cart-pulse{animation:komoCartPulse .55s ease}.komo-wallet-card.komo-wallet-pulse{animation:komoWalletPulse .7s ease}.komo-receipt{transform-origin:50% 0;animation:komoReceiptPrint .48s cubic-bezier(.2,.85,.25,1) both}.komo-row.komo-new-order{animation:komoShelfIn .42s ease both}.komo-stamps i.filled{animation:komoStampDrop .45s cubic-bezier(.2,.9,.3,1) both}.komo-motion-toast{position:absolute;right:45px;top:41px;z-index:9;padding:4px 7px;border-radius:999px;background:#365744;color:#fff;font-size:5.5px;opacity:0;transform:translateY(-4px);pointer-events:none}.komo-motion-toast.show{animation:komoMotionToast 1.2s ease both}.komo-app[data-komo-phase="dawn"]{background:linear-gradient(155deg,#1e2f38,#526861 42%,#edf1e9);color:#edf5ef}.komo-app[data-komo-phase="dawn"] .komo-head{background:rgba(31,48,55,.9);border-color:rgba(255,255,255,.12);color:#fff}.komo-app[data-komo-phase="dawn"] .komo-brand small{color:rgba(255,255,255,.55)}.komo-app[data-komo-phase="morning"]{background:linear-gradient(155deg,#fff4d9,#eef4e9 38%,#f3f6f2)}.komo-app[data-komo-phase="day"]{background:linear-gradient(155deg,#eef7ef,#f8faf6 45%,#f3f6f2)}.komo-app[data-komo-phase="night"]{background:linear-gradient(155deg,#263d35,#73806b 38%,#eef1e9);color:#edf5ef}.komo-app[data-komo-phase="night"] .komo-head{background:rgba(39,58,51,.9);border-color:rgba(255,255,255,.12);color:#fff}.komo-app[data-komo-phase="night"] .komo-brand small{color:rgba(255,255,255,.55)}.komo-app[data-komo-phase="dawn"] .komo-scroll,.komo-app[data-komo-phase="night"] .komo-scroll{background:linear-gradient(180deg,rgba(244,247,241,.93),#f3f6f2 120px);color:#24302a}.komo-head.komo-hour-glow{animation:komoHourGlow 1.5s ease both}.komo-clerk-copy small{transition:opacity .18s ease,transform .18s ease}.komo-clerk-copy small.komo-status-changing{opacity:0;transform:translateY(3px)}.komo-shift-greeting{position:absolute;left:50%;top:86px;z-index:18;min-width:220px;display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid rgba(255,255,255,.75);border-radius:16px;background:rgba(252,254,250,.94);color:#2d4235;box-shadow:0 16px 36px rgba(33,54,41,.2);backdrop-filter:blur(14px);opacity:0;transform:translate(-50%,-12px) scale(.96);pointer-events:none;transition:.28s ease}.komo-shift-greeting.show{opacity:1;transform:translate(-50%,0) scale(1)}.komo-shift-greeting>span{font-size:34px}.komo-shift-greeting div{min-width:0}.komo-shift-greeting small,.komo-shift-greeting strong,.komo-shift-greeting em{display:block}.komo-shift-greeting small{color:#829087;font:5px ui-monospace,monospace;letter-spacing:.15em}.komo-shift-greeting strong{margin-top:3px;font-size:10px}.komo-shift-greeting em{margin-top:2px;color:#7c8d81;font-size:6px;font-style:normal}.komo-clerk-easter{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:rgba(31,48,39,.76);color:#fff;backdrop-filter:blur(15px);opacity:0;transform:scale(1.04);pointer-events:none;transition:.26s ease}.komo-clerk-easter.show{opacity:1;transform:scale(1)}.komo-clerk-easter>small{color:rgba(255,255,255,.58);font:6px ui-monospace,monospace;letter-spacing:.17em}.komo-clerk-easter>div{display:flex;gap:9px;margin-top:14px}.komo-clerk-easter span{width:59px;height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);border-radius:16px;background:rgba(255,255,255,.1);font-size:31px;animation:komoStaffPop .58s var(--staff-delay,0ms) cubic-bezier(.2,.9,.25,1) both}.komo-clerk-easter span:nth-child(2){--staff-delay:70ms}.komo-clerk-easter span:nth-child(3){--staff-delay:140ms}.komo-clerk-easter span:nth-child(4){--staff-delay:210ms}.komo-clerk-easter b{margin-top:5px;color:rgba(255,255,255,.75);font-size:6px}.komo-clerk-easter>strong{margin-top:14px;font:800 11px Georgia,"Songti SC",serif;letter-spacing:.04em}.komo-app[data-komo-phase="night"] .komo-brand strong::after,.komo-app[data-komo-phase="dawn"] .komo-brand strong::after{content:" ✦";color:#dfe8b4;animation:komoSpark 2s ease-in-out infinite}@keyframes komoSignOn{from{opacity:0;filter:blur(3px);transform:translateY(-5px)}to{opacity:1;filter:none;transform:none}}@keyframes komoSlideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}@keyframes komoStoreFade{from{opacity:0}to{opacity:1}}@keyframes komoShelfIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}@keyframes komoSteam{0%,100%{opacity:.2;transform:translateY(4px)}50%{opacity:.75;transform:translateY(-3px)}}@keyframes komoSpark{0%,100%{opacity:.25;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(18deg)}}@keyframes komoClerkHello{0%{transform:none}30%{transform:translateY(-5px) rotate(-5deg) scale(1.07)}60%{transform:translateY(0) rotate(5deg)}100%{transform:none}}@keyframes komoPawPath{from{opacity:0;transform:translate(-12px,5px) rotate(-20deg)}50%{opacity:1}to{opacity:0;transform:translate(62px,-30px) rotate(18deg)}}@keyframes komoDutyGlow{0%,100%{box-shadow:0 0 0 2px rgba(54,87,68,.08)}50%{box-shadow:0 0 0 3px rgba(54,87,68,.2)}}@keyframes komoFlyToBag{from{left:var(--from-x);top:var(--from-y);opacity:1;transform:scale(1)}to{left:var(--to-x);top:var(--to-y);opacity:.15;transform:scale(.45) rotate(18deg)}}@keyframes komoCartPulse{30%{transform:scale(1.08);background:#365744;color:#fff}100%{transform:none}}@keyframes komoWalletPulse{30%{transform:scale(1.018);box-shadow:0 0 0 4px rgba(119,174,130,.18),0 12px 26px rgba(48,83,62,.22)}100%{transform:none}}@keyframes komoReceiptPrint{from{opacity:0;transform:scaleY(.18) translateY(-18px)}to{opacity:1;transform:none}}@keyframes komoStampDrop{0%{opacity:.3;transform:scale(1.6) rotate(-13deg)}100%{opacity:1;transform:none}}@keyframes komoBubbles{0%{opacity:0;transform:translateY(5px) scale(.8)}50%{opacity:.9}100%{opacity:0;transform:translateY(-7px) scale(1.12)}}@keyframes komoCrumbs{0%,100%{opacity:.25;transform:rotate(0)}50%{opacity:.8;transform:translate(2px,2px) rotate(12deg)}}@keyframes komoCleanSweep{0%,70%,100%{opacity:.18;transform:translateX(-5px)}35%{opacity:.7;transform:translateX(4px)}}@keyframes komoHealthPulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.2)}}@keyframes komoWriteLine{0%,100%{opacity:.25;clip-path:inset(0 100% 0 0)}50%,75%{opacity:.8;clip-path:inset(0)}}@keyframes komoPawTiny{0%,100%{opacity:.3;transform:translate(0,2px) rotate(-8deg)}50%{opacity:1;transform:translate(3px,-2px) rotate(8deg)}}@keyframes komoSeasonFloat{0%,100%{opacity:.35;transform:translateY(3px) rotate(-8deg)}50%{opacity:1;transform:translateY(-4px) rotate(8deg)}}@keyframes komoAroma{0%{opacity:.7;transform:scale(.55)}100%{opacity:0;transform:scale(1.5)}}@keyframes komoLed{0%,45%{opacity:.2;filter:none}50%,100%{opacity:1;filter:drop-shadow(0 0 3px #4fba78)}}@keyframes komoCareGlow{0%,100%{opacity:.3;transform:scale(.85)}50%{opacity:.9;transform:scale(1.15)}}@keyframes komoDetailFloat{0%,100%{transform:translateY(1px)}50%{transform:translateY(-4px)}}@keyframes komoHourGlow{0%,100%{box-shadow:none}35%{box-shadow:inset 0 -2px 0 rgba(238,231,161,.75),0 5px 22px rgba(220,210,130,.24);filter:brightness(1.08)}}@keyframes komoStaffPop{from{opacity:0;transform:translateY(14px) scale(.75)}to{opacity:1;transform:none}}@keyframes komoMotionToast{0%{opacity:0;transform:translateY(-4px)}15%,78%{opacity:1;transform:none}100%{opacity:0}}@media(prefers-reduced-motion:reduce){.komo-app *{animation:none!important;transition:none!important}}
 </style>
 <style id="iosCompatibilityStyles">
-:root{--app-viewport-height:100dvh;--app-viewport-offset-top:0px;--ios-safe-top:env(safe-area-inset-top,0px);--ios-safe-bottom:env(safe-area-inset-bottom,0px)}
+:root{--app-viewport-height:100dvh;--app-viewport-offset-top:0px;--app-keyboard-inset:0px;--ios-safe-top:env(safe-area-inset-top,0px);--ios-safe-bottom:env(safe-area-inset-bottom,0px)}
 html[data-ios],html[data-ios] body{width:100%;height:var(--app-viewport-height,100dvh);min-height:0;overflow:hidden;background:var(--bg-screen,#f4f4f6);overscroll-behavior:none;-webkit-text-size-adjust:100%}
 html[data-ios] body{margin:0;padding:0!important}
 html[data-ios] .screen,html[data-ios] #appScreen{width:100%!important;height:var(--app-viewport-height,100dvh)!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;overflow:hidden!important}
 html[data-ios][data-standalone="true"],html[data-ios][data-standalone="true"] body{position:fixed;inset:0}
 html[data-ios][data-standalone="true"] #appScreen{position:absolute!important;inset:0!important}
-html[data-ios] #appScreen{--app-bottom-safe:var(--ios-safe-bottom);--app-bottom-nav-base:52px;--app-bottom-nav-height:calc(var(--app-bottom-nav-base) + var(--app-bottom-safe));--app-bottom-nav-padding:0 16px var(--app-bottom-safe)}
+html[data-ios] #appScreen{--app-bottom-safe:var(--ios-safe-bottom);--app-bottom-nav-base:44px;--app-bottom-nav-extra:max(0px,calc(var(--app-bottom-safe) - 5px));--app-bottom-nav-height:calc(var(--app-bottom-nav-base) + var(--app-bottom-nav-extra));--app-bottom-nav-padding:0 16px var(--app-bottom-nav-extra)}
 html[data-ios] #appScreen>.app-header{min-height:calc(56px + var(--ios-safe-top))!important;padding:calc(8px + var(--ios-safe-top)) 12px 6px!important}
-html[data-ios] #appScreen>.bottom-nav{height:var(--app-bottom-nav-height)!important;min-height:var(--app-bottom-nav-height)!important;flex-basis:var(--app-bottom-nav-height)!important;padding:0 16px var(--app-bottom-safe)!important;background:var(--glass-bg,var(--card-white,#fff))!important}
+html[data-ios] #appScreen>.bottom-nav{height:var(--app-bottom-nav-height)!important;min-height:var(--app-bottom-nav-height)!important;flex-basis:var(--app-bottom-nav-height)!important;padding:0 16px var(--app-bottom-nav-extra)!important;background:var(--glass-bg,var(--card-white,#fff))!important}
 html[data-ios] #appScreen>.desktop-viewport{min-height:0!important;height:auto!important;overflow-x:auto!important;overflow-y:hidden!important}
 html[data-ios] #appScreen>.chat-app .chat-list-header,html[data-ios] #appScreen>.chat-app .chat-thread-header,html[data-ios] #appScreen>.chat-app .chat-profile-page-header,html[data-ios] #appScreen>.chat-app .chat-settings-header,html[data-ios] #appScreen>.mail-app .mail-app-head,html[data-ios] #appScreen>.moon-app .moon-head,html[data-ios] #appScreen>.circle-app .circle-app-head,html[data-ios] #appScreen>.global-settings-app .global-settings-head,html[data-ios] #appScreen>.tips-app .tips-app-head,html[data-ios] #appScreen>.answer-book-app .answer-book-head,html[data-ios] #appScreen>.komo-app .komo-head,html[data-ios] #appScreen>.desktop-invite-app .desktop-invite-head{padding-top:calc(8px + var(--ios-safe-top))!important;min-height:calc(56px + var(--ios-safe-top))!important}
 html[data-ios] #appScreen>.chat-app .chat-thread-body,html[data-ios] #appScreen>.chat-app .chat-list-scroll,html[data-ios] #appScreen>.mail-app .mail-app-body,html[data-ios] #appScreen>.circle-app .circle-app-scroll{min-height:0!important;-webkit-overflow-scrolling:touch}
@@ -7052,7 +7070,44 @@ html[data-ios] input,html[data-ios] textarea,html[data-ios] select{font-size:16p
 html[data-ios] [contenteditable="true"]:focus{font-size:16px!important}
 html[data-ios] #chatMessageInput{font-size:16px!important;line-height:1.35!important}
 html[data-ios] .chat-composer{padding-bottom:calc(7px + var(--ios-safe-bottom))!important}
+html[data-ios][data-keyboard-open="true"] #chatApp.thread-open .chat-thread-view{height:100%!important;padding-bottom:var(--app-keyboard-inset)!important}
+html[data-ios][data-keyboard-open="true"] #chatApp.thread-open .chat-composer{padding-bottom:7px!important}
+html[data-ios][data-keyboard-open="true"] #chatApp.thread-open .chat-thread-body{scroll-padding-bottom:12px!important}
 html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data-ios] .circle-visitors-foot{padding-bottom:calc(12px + var(--ios-safe-bottom))!important}
+
+/* iOS / Android 窄屏桌面编辑适配：主题面板始终位于安全区和顶栏下方，不越过左右边界。 */
+.desktop-theme-panel{
+  top:calc(58px + env(safe-area-inset-top,0px));
+  right:max(10px,env(safe-area-inset-right,0px));
+  width:min(202px,calc(100% - 20px));
+  max-width:calc(100vw - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - 20px);
+  max-height:calc(var(--app-viewport-height,100dvh) - 58px - env(safe-area-inset-top,0px) - var(--app-bottom-nav-height,44px) - 12px);
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.desktop-theme-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+.desktop-theme-options button{min-width:0;padding-inline:2px;line-height:1.15;overflow-wrap:anywhere;}
+.desktop-theme-palette-row{min-width:0;}
+.desktop-theme-palette-row>div{min-width:0;justify-content:flex-end;}
+.desktop-theme-palette-row button{min-width:18px;}
+
+@media(max-width:430px){
+  #appScreen.edit-mode>.app-header{gap:5px!important;}
+  #appScreen.edit-mode>.app-header>div:first-child{min-width:0;max-width:112px;}
+  #appScreen.edit-mode>.app-header .editable-sub{font-size:7px;}
+  #appScreen.edit-mode>.app-header .title{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #appScreen.edit-mode>.app-header .header-actions{min-width:0;gap:3px;}
+  #appScreen.edit-mode .edit-history-actions{gap:2px;}
+  #appScreen.edit-mode .edit-history-btn{width:24px;height:24px;}
+  #appScreen.edit-mode .edit-theme-btn{min-height:24px;padding:0 6px;}
+  #appScreen.edit-mode .finish-edit-btn{padding:6px 9px;font-size:10px;white-space:nowrap;}
+}
+@media(max-width:360px){
+  #appScreen.edit-mode>.app-header>div:first-child{max-width:84px;}
+  #appScreen.edit-mode .edit-history-btn{width:22px;height:22px;}
+  #appScreen.edit-mode .edit-theme-btn{padding-inline:4px;}
+  #appScreen.edit-mode .finish-edit-btn{padding-inline:7px;}
+}
 @supports(height:-webkit-fill-available){html[data-ios],html[data-ios] body{min-height:-webkit-fill-available}}
 </style>
 </head>
@@ -7188,6 +7243,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     <div class="page-indicator-bar" id="pageIndicatorBar">
       <div class="page-dot active" onclick="scrollToPage(0)"></div>
       <span class="add-page-btn" onclick="addNewPage()">+ 新增页</span>
+      <span class="delete-page-btn" id="desktopDeletePageButton" onclick="deleteCurrentDesktopPage()">− 删除页</span>
       <span class="reopen-drawer-btn" onclick="openDrawer()">+ 组件库</span>
     </div>
 
@@ -7956,11 +8012,11 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         </section>
         <div class="chat-composer" id="chatComposer">
           <button class="chat-composer-icon" id="chatAttachmentToggle" type="button" onclick="toggleAttachmentPanel()" aria-label="附件" aria-expanded="false"><i data-lucide="paperclip" size="20"></i></button>
-          <label class="chat-input-wrap">
+          <div class="chat-input-wrap">
             <button class="chat-expression-toggle" id="chatExpressionToggle" type="button" onclick="toggleExpressionPanel()" aria-label="表情包" aria-expanded="false"><i data-lucide="smile" size="17"></i></button>
             <input class="chat-input" id="chatMessageInput" type="text" placeholder="发送消息..." autocomplete="off" oninput="handleChatInput(this)" onkeydown="handleChatKeydown(event)">
             <button class="chat-batch-inline-button" id="chatBatchInlineButton" type="button" onclick="openChatBatchComposer()" aria-label="批量发送" title="批量发送"><i data-lucide="list-plus" size="14"></i></button>
-          </label>
+          </div>
           <div class="composer-actions" aria-label="更多发送方式">
             <button class="chat-composer-icon chat-continue-button" id="chatContinueButton" type="button" onclick="continueRoleReply()" aria-label="让对方继续说" title="让对方继续说"><span class="chat-continue-dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
             <button class="chat-composer-icon chat-voice-hold-button" id="chatVoiceHoldButton" type="button" aria-label="按住发送拟态语音" title="按住发送拟态语音"><i data-lucide="mic" size="20"></i></button>
@@ -8652,6 +8708,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     const DESKTOP_WIDGET_MEDIA_USAGE_KEY = 'dream-messenger:desktop-widget-media-usage:v2';
     const DESKTOP_GRID_SIZE = 8;
     const DESKTOP_LAYOUT_COLUMNS = 24;
+    const PROTECTED_DESKTOP_APP_IDS = new Set(['app-chat','app-moon','app-tarot','app-mail','app-box','app-invite']);
     const PRESET_REPLY_CARD_TEXTS = new Set(['今晚月色真美。', '见字如面，今天过得开心吗？', '你的情绪也值得被照顾。', '留一张字卡给今天。', '慢慢来，灵感会找到你。', '收到啦，晚点继续和你聊 ✨', '我在这里，慢慢说给我听。', '好呀，这件事我想听你讲完。']);
     const PRESET_MOOD_STATUS_TEXTS = new Set(['今晚月色真美', '正在收听', '在窗边', '整理档案', '共享空间', '写着新信', '正在发光', '安静', '柔软', '清醒', '在线', '想念']);
     const PRESET_POKE_CARD_TEXTS = new Set(['拍一拍', '揉了揉脑袋', '轻轻戳了戳']);
@@ -22716,6 +22773,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       initializeDesktopWidgetRegistry();
       document.querySelectorAll('.draggable-card').forEach((card, index) => {
         card.dataset.layoutId = desktopCardStableId(card, index);
+        card.classList.toggle('system-app-protected',PROTECTED_DESKTOP_APP_IDS.has(card.dataset.layoutId));
         desktopCardCatalog.set(card.dataset.layoutId, card);
       });
     }
@@ -22922,7 +22980,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const pages = [...document.querySelectorAll('#desktopViewport .desktop-page')];
       const cards = new Map(desktopCardCatalog);
       document.querySelectorAll('.draggable-card').forEach(card => cards.set(card.dataset.layoutId, card));
-      const removed = new Set(Array.isArray(snapshot.removed) ? snapshot.removed : []);
+      const removed = new Set((Array.isArray(snapshot.removed) ? snapshot.removed : []).filter(id=>!PROTECTED_DESKTOP_APP_IDS.has(String(id))));
       removed.forEach(id => cards.get(id)?.remove());
       [...cards.entries()].forEach(([id, card]) => { if (!removed.has(id)) drawer?.appendChild(card); });
       snapshot.pages.forEach((pageSnapshot, pageIndex) => {
@@ -22963,16 +23021,24 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         [...(indicator?.querySelectorAll('.page-dot') || [])].slice(snapshot.pages.length).forEach(dot => dot.remove());
       }
       pages.slice(0, snapshot.pages.length).forEach(checkDesktopEmpty);
+      ensureProtectedDesktopAppsVisible();
       if (viewport) {
         currentPageIndex = Math.min(currentPageIndex, Math.max(0, snapshot.pages.length - 1));
         viewport.scrollLeft = currentPageIndex * viewport.offsetWidth;
       }
+      rebuildDesktopPagination();
       clearDesktopCardSelection();
       renderDesktopWidgetData();
       lucide.createIcons();
       restoringDesktopLayout = false;
-      if (persist) saveDesktopLayoutState(snapshot);
+      if (persist) saveDesktopLayoutState(captureDesktopLayout());
       updateDesktopLayoutHistoryButtons();
+    }
+
+    function ensureProtectedDesktopAppsVisible() {
+      ensureDesktopLayoutIds();const firstPage=document.querySelector('#desktopViewport .desktop-page');if(!firstPage)return;
+      const positions={'app-chat':[16,10],'app-moon':[94,10],'app-tarot':[172,10],'app-mail':[16,95],'app-box':[94,95],'app-invite':[172,95]};
+      PROTECTED_DESKTOP_APP_IDS.forEach(id=>{const card=desktopCardCatalog.get(id);if(!card||card.closest('.desktop-page'))return;firstPage.appendChild(card);const pos=positions[id]||[16,10];card.style.left=`${pos[0]}px`;card.style.top=`${pos[1]}px`;delete card.dataset.layoutX;delete card.dataset.layoutY;resolveDesktopCardCollision(card,firstPage);});checkDesktopEmpty(firstPage);
     }
 
     function ensureTipsDesktopIconInstalled() {
@@ -22997,6 +23063,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       let saved = readDreamJSON(DESKTOP_LAYOUT_V2_STORAGE_KEY, null);
       if (!saved?.pages?.length) saved = migrateDesktopLayoutV1(readDreamJSON(DESKTOP_LAYOUT_STORAGE_KEY, null));
       if (saved?.pages?.length) restoreDesktopLayoutSnapshot(saved, false);
+      ensureProtectedDesktopAppsVisible();
       // 新功能只在首次升级时自动放到桌面；之后用户若主动移除，不会被重复恢复。
       ensureTipsDesktopIconInstalled();
       saveDesktopLayoutState(captureDesktopLayout());
@@ -23022,6 +23089,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     function removeAppIcon(badge) {
       const card = badge.closest('.draggable-card');
       if (!card) return;
+      ensureDesktopLayoutIds();
+      if(PROTECTED_DESKTOP_APP_IDS.has(card.dataset.layoutId)){showChatToast('系统初始 App 不能删除');return;}
       const before = captureDesktopLayout();
       card.remove();
       const pages = document.querySelectorAll('.desktop-page');
@@ -23123,13 +23192,20 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 
     function updatePageDots() {
       const dots = document.querySelectorAll('.page-dot');
-      dots.forEach((dot, index) => {
-        if (index === currentPageIndex) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
+      dots.forEach((dot, index) => dot.classList.toggle('active', index === currentPageIndex));
+      const pageCount=document.querySelectorAll('#desktopViewport .desktop-page').length;
+      const deleteBtn=document.getElementById('desktopDeletePageButton');
+      if(deleteBtn){const disabled=pageCount<=1;deleteBtn.classList.toggle('is-disabled',disabled);deleteBtn.setAttribute('aria-disabled',disabled?'true':'false');deleteBtn.title=disabled?'桌面至少保留一页':'删除当前页（页内内容会迁移）';}
+    }
+
+    function rebuildDesktopPagination() {
+      const viewport=document.getElementById('desktopViewport');const pages=[...viewport.querySelectorAll('.desktop-page')];
+      pages.forEach((page,index)=>page.dataset.page=String(index));
+      currentPageIndex=Math.max(0,Math.min(currentPageIndex,pages.length-1));
+      const bar=document.getElementById('pageIndicatorBar');const addBtn=bar?.querySelector('.add-page-btn');
+      bar?.querySelectorAll('.page-dot').forEach(dot=>dot.remove());
+      pages.forEach((page,index)=>{const dot=document.createElement('div');dot.className='page-dot';dot.setAttribute('aria-label',`第 ${index+1} 页`);dot.onclick=()=>scrollToPage(index);bar?.insertBefore(dot,addBtn||null);});
+      updatePageDots();
     }
 
     function scrollToPage(index) {
@@ -23157,15 +23233,23 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       bindPageDropEvents(newPage);
       viewport.appendChild(newPage);
 
-      const indicatorBar = document.getElementById('pageIndicatorBar');
-      const addBtn = indicatorBar.querySelector('.add-page-btn');
-      const newDot = document.createElement('div');
-      newDot.className = 'page-dot';
-      newDot.onclick = () => scrollToPage(newPageIndex);
-      indicatorBar.insertBefore(newDot, addBtn);
-
+      rebuildDesktopPagination();
       if (!options.skipScroll) scrollToPage(newPageIndex);
       if (!options.skipHistory) commitDesktopLayoutChange(before);
+    }
+
+    function deleteCurrentDesktopPage() {
+      const viewport=document.getElementById('desktopViewport');const pages=[...viewport.querySelectorAll('.desktop-page')];
+      if(pages.length<=1){showChatToast('桌面至少保留一页');updatePageDots();return;}
+      const before=captureDesktopLayout();const index=Math.max(0,Math.min(currentPageIndex,pages.length-1));
+      const removedPage=pages[index];const targetPage=index>0?pages[index-1]:pages[1];
+      const cards=[...removedPage.querySelectorAll(':scope > .draggable-card')];
+      cards.forEach(card=>{targetPage.appendChild(card);resolveDesktopCardCollision(card,targetPage);});
+      removedPage.remove();checkDesktopEmpty(targetPage);
+      currentPageIndex=index>0?index-1:0;rebuildDesktopPagination();
+      viewport.scrollTo({left:currentPageIndex*viewport.offsetWidth,behavior:'auto'});
+      updateDesktopWidgetPageActivity();commitDesktopLayoutChange(before);
+      showChatToast(cards.length?`页面已删除，${cards.length} 个项目已迁移`:'页面已删除');
     }
 
     /* ==================== 自由拖拽与绝对坐标放置逻辑 ==================== */
@@ -30521,5 +30605,5 @@ window.KomoStore={version:'6.0.0',load:loadKomoState,exportData:()=>JSON.parse(J
 let komoLocalCatchUpTimer=null;const catchUpKomoLocalTasks=()=>{if(document.hidden)return;clearTimeout(komoLocalCatchUpTimer);komoLocalCatchUpTimer=setTimeout(()=>{komoLocalCatchUpTimer=null;processKomoGiftTasks();processKomoShoppingRequests();processKomoPayTasks();window.renderDesktopKomoWidget?.();},80);};document.addEventListener('visibilitychange',catchUpKomoLocalTasks);document.addEventListener('dream:local-scheduler-catchup',catchUpKomoLocalTasks);window.addEventListener('pageshow',catchUpKomoLocalTasks);scheduleKomoGiftTasks();scheduleKomoShoppingRequests();scheduleKomoPayTasks();window.renderDesktopKomoWidget?.();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e83e5adc9902be',t:'MTc4NzMwMDY4OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
