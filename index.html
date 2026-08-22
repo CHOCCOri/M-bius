@@ -1461,7 +1461,7 @@
     .circle-image-preview img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; }
     .circle-add-images { min-height: 28px; display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; padding: 0 8px; border: 1px solid #dfe7ea; border-radius: 7px; background: #fff; color: #5f7b86; font-size: 7px; cursor: pointer; }
     .circle-add-images svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-    .circle-visitors-modal { position: absolute; inset: 0; z-index: 7; display: none; align-items: flex-end; background: rgba(20,32,39,.42); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .circle-visitors-modal { position: absolute; inset: 0 0 var(--app-bottom-nav-height,52px); z-index: 7; display: none; align-items: flex-end; background: rgba(20,32,39,.42); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
     .circle-visitors-modal.is-open { display: flex; }
     .circle-visitors-sheet { width: 100%; max-height: 82%; display: flex; flex-direction: column; overflow: hidden; border-radius: 18px 18px 0 0; background: #f8fbfc; box-shadow: 0 -16px 42px rgba(27,47,57,.2); }
     .circle-visitors-head { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 13px 13px 10px; border-bottom: 1px solid #e2eaed; background: rgba(255,255,255,.9); }
@@ -2751,6 +2751,23 @@
     .chat-card-mount-row-copy strong { display: block; color: var(--text-main); font-size: 8px; }
     .chat-card-mount-row-copy small { display: block; margin-top: 2px; color: var(--text-muted); font-size: 6px; }
     .chat-card-mount-empty { padding: 16px 4px; color: var(--text-muted); font-size: 8px; text-align: center; }
+    .voice-card-manager { flex: 0 0 auto; max-height: 190px; overflow: hidden; display: flex; flex-direction: column; margin: 0 14px 8px; border: 1px solid var(--glass-border); border-radius: 11px; background: var(--bg-screen); }
+    .voice-card-manager > header { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 9px; border-bottom: 1px solid var(--glass-border); }
+    .voice-card-manager > header > div { min-width: 0; flex: 1; }
+    .voice-card-manager > header strong,.voice-card-manager > header small { display: block; }
+    .voice-card-manager > header strong { font-size: 8px; }
+    .voice-card-manager > header small { margin-top: 2px; color: var(--text-muted); font-size: 5.5px; }
+    .voice-card-manager > header label { min-height: 25px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 7px; background: var(--card-black); color: #fff; font-size: 6px; font-weight: 800; cursor: pointer; }
+    .voice-card-list { min-height: 0; overflow-y: auto; padding: 5px 8px; }
+    .voice-card-row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 7px; padding: 7px 2px; border-bottom: 1px solid var(--glass-border); }
+    .voice-card-row:last-child { border-bottom: 0; }
+    .voice-card-row strong,.voice-card-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .voice-card-row strong { font-size: 7px; }.voice-card-row small { margin-top: 2px; color: var(--text-muted); font-size: 5.5px; }
+    .voice-card-row button { width: 24px; height: 24px; border: 1px solid var(--glass-border); border-radius: 7px; background: var(--card-white); color: #b55b66; font-size: 12px; }
+    .voice-card-empty { padding: 14px 4px; color: var(--text-muted); text-align: center; font-size: 6px; }
+    .chat-voice-bubble[data-voice-card="true"] { position: relative; }
+    .chat-voice-bubble[data-voice-card="true"] .chat-voice-transcript { display: none !important; }
+    .chat-voice-bubble[data-voice-card="true"]::after { content: "MP3"; position: absolute; right: 7px; top: 4px; color: var(--text-muted); font: 700 5px ui-monospace,monospace; opacity: .68; }
     .chat-card-mount-footer { flex: 0 0 auto; display: flex; gap: 6px; padding: 9px 14px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--glass-border); }
     .chat-card-mount-footer button { min-height: 29px; flex: 1; border: 1px solid var(--glass-border); border-radius: 8px; background: var(--card-white); color: var(--text-main); font-size: 8px; font-weight: 800; cursor: pointer; }
     .chat-card-mount-footer button.primary { border-color: var(--card-black); background: var(--card-black); color: #fff; }
@@ -3080,7 +3097,7 @@
     .pat-preview { min-height: 26px; display: flex; align-items: center; overflow: hidden; padding: 0 7px; border: 1px solid var(--glass-border); border-radius: var(--radius-md); background: var(--glass-bg); color: var(--text-main); font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
     .pat-editor-row textarea { min-height: 51px; }
     /* 表情包/颜文字和普通消息一样被聊天气泡包裹：气泡底色沿用 .chat-bubble 的来/往方向规则与各气泡样式预设，不再强制透明。 */
-    .chat-sticker-bubble { max-width: 130px !important; padding: 6px !important; }
+    .chat-sticker-bubble { max-width: 130px !important; overflow: hidden; padding: 6px !important; }
     .chat-message-line.incoming .chat-sticker-bubble { border: 1px solid #efefef !important; background: #efefef !important; border-bottom-left-radius: 7px !important; box-shadow: 0 3px 10px rgba(31,45,58,.08); }
     .chat-message-line.outgoing .chat-sticker-bubble { background: linear-gradient(135deg, #9b36f2 0%, #5b5ce2 48%, #2f9bf4 100%) !important; border-bottom-right-radius: 7px !important; box-shadow: 0 3px 10px rgba(31,45,58,.08); }
     .chat-app[data-chat-bubble="wechat"] .chat-message-line.incoming .chat-sticker-bubble { background: #f2f2f2 !important; border-color: #f2f2f2 !important; border-radius: 5px !important; }
@@ -3089,7 +3106,7 @@
     .chat-app[data-chat-bubble="kakao"] .chat-message-line.outgoing .chat-sticker-bubble { background: #fee500 !important; border-radius: 17px !important; }
     .chat-app[data-chat-bubble="imessage"] .chat-message-line.incoming .chat-sticker-bubble { background: #e9e9eb !important; border-color: #e9e9eb !important; border-radius: 18px !important; }
     .chat-app[data-chat-bubble="imessage"] .chat-message-line.outgoing .chat-sticker-bubble { background: #007aff !important; border-radius: 18px !important; }
-    .chat-sticker-bubble img { width: 112px; max-height: 112px; object-fit: contain; filter: drop-shadow(0 4px 9px rgba(35,57,74,.12)); }
+    .chat-sticker-bubble img { width: 112px; max-height: 112px; object-fit: contain; border-radius: inherit; filter: drop-shadow(0 4px 9px rgba(35,57,74,.12)); }
     .chat-sticker-bubble .chat-sticker-emoji { display: block; padding: 4px 6px; font-size: 32px; line-height: 1.1; filter: drop-shadow(0 4px 9px rgba(35,57,74,.12)); }
     .chat-sticker-emoji { display: block; padding: 5px; font-size: 48px; line-height: 1; }
     /* 颜文字是连续文本，不沿用单个大表情的 32px/130px 规则，避免被强制挤成多行。 */
@@ -3435,6 +3452,43 @@
     .call-modal.window-mini .call-control svg { width: 14px; height: 14px; }
     .call-modal.window-mini .call-control-wrap { gap: 2px; font-size: 6px; }
 
+    /* 最小通话窗口：参考系统通话胶囊，语音与视频统一使用淡蓝色紧凑样式。 */
+    .call-modal.window-mini .call-screen {
+      width: min(136px,calc(100vw - 16px));
+      height: 42px;
+      min-height: 42px;
+      max-height: 42px;
+      display: block;
+      overflow: hidden;
+      color: #315367;
+      border: 1px solid rgba(117,177,206,.42);
+      border-radius: 21px;
+      background: linear-gradient(145deg,rgba(239,250,255,.98),rgba(197,232,247,.98));
+      background-image: linear-gradient(145deg,rgba(239,250,255,.98),rgba(197,232,247,.98)) !important;
+      box-shadow: 0 9px 24px rgba(58,111,139,.24),inset 0 1px 0 rgba(255,255,255,.9);
+      animation: none;
+      cursor: pointer;
+    }
+    .call-modal.window-mini .call-window-tools,
+    .call-modal.window-mini .incoming-call-actions,
+    .call-modal.window-mini .voice-wave,
+    .call-modal.window-mini .self-video-preview { display:none!important; }
+    .call-modal.window-mini .call-top { position:absolute; z-index:3; top:0; right:35px; bottom:0; left:37px; min-height:0; display:flex; flex-direction:column; justify-content:center; padding:0 6px 0 4px; text-align:left; cursor:move; touch-action:none; }
+    .call-modal.window-mini .call-top::after { content:""; position:absolute; top:50%; right:0; width:4px; height:4px; border-radius:50%; background:#48b78b; box-shadow:0 0 0 2px rgba(72,183,139,.1); transform:translateY(-50%); }
+    .call-modal.window-mini .call-kind { display:none; }
+    .call-modal.window-mini .call-name { max-width:100%; margin:0; overflow:hidden; color:#24495d; font-size:8px; font-weight:850; line-height:1.12; letter-spacing:0; text-overflow:ellipsis; white-space:nowrap; }
+    .call-modal.window-mini .call-status { max-width:100%; margin-top:2px; overflow:hidden; color:#56798d; font:6.5px/1.08 ui-monospace,SFMono-Regular,Menlo,monospace; text-overflow:ellipsis; white-space:nowrap; opacity:1; }
+    .call-modal.window-mini .call-visual,
+    .call-modal.window-mini .call-screen.video-mode .call-visual { position:absolute; z-index:2; top:5px; left:5px; width:32px; height:32px; min-height:32px; display:grid; place-items:center; background:transparent!important; }
+    .call-modal.window-mini .call-avatar,
+    .call-modal.window-mini .call-screen.video-mode .call-avatar { width:30px; height:30px; border-width:1.5px; border-color:rgba(255,255,255,.9); border-radius:50%; font-size:6px; box-shadow:0 2px 7px rgba(45,91,115,.18); }
+    .call-modal.window-mini .call-controls { position:absolute; z-index:4; top:6px; right:5px; bottom:auto; width:30px; height:30px; display:block; padding:0; background:transparent; }
+    .call-modal.window-mini .call-control-wrap { display:none; }
+    .call-modal.window-mini #callEndWrap { display:block; width:30px; height:30px; }
+    .call-modal.window-mini #callEndWrap>span { display:none; }
+    .call-modal.window-mini #callEndWrap .call-control { width:30px; height:30px; color:#fff; background:#ef5b62; box-shadow:0 2px 7px rgba(209,64,75,.23); }
+    .call-modal.window-mini #callEndWrap .call-control svg { width:12px; height:12px; }
+
     /* ==================== 通话三态：来电/拨号/接通 ==================== */
     /* ringing-in：对方来电 → 只显示放大并排的 接听/拒绝，隐藏底部控制栏 */
     #callScreen[data-call-state="ringing-in"] .call-controls { display: none; }
@@ -3715,8 +3769,23 @@
       flex-direction: column;
       color: var(--text-main);
       background: linear-gradient(155deg,#f8fafc,#e8edf2 58%,#dde5eb);
+      background-position: center;
+      background-size: cover;
       animation: listenStageIn .2s ease;
     }
+    .listen-together-stage.has-custom-wallpaper { background:#dce5eb; }
+    .listen-wallpaper-layer { position:absolute; z-index:0; inset:-26px; display:none; pointer-events:none; background-position:center; background-size:cover; background-repeat:no-repeat; filter:blur(var(--listen-wallpaper-blur,0px)); transform:scale(1.04); transform-origin:center; }
+    .listen-together-stage.has-custom-wallpaper .listen-wallpaper-layer { display:block; }
+    .listen-together-head { position:relative; z-index:2; }
+    .listen-together-content { z-index:1; }
+    .listen-wallpaper-panel { position:absolute; z-index:16; top:max(62px,calc(35px + env(safe-area-inset-top,0px))); right:10px; left:10px; display:grid; grid-template-columns:minmax(0,1fr) auto auto auto; align-items:center; gap:6px; padding:9px; border:1px solid rgba(255,255,255,.72); border-radius:13px; background:rgba(255,255,255,.9); color:var(--text-main); box-shadow:0 10px 28px rgba(31,48,60,.17); backdrop-filter:blur(15px) saturate(125%); -webkit-backdrop-filter:blur(15px) saturate(125%); }
+    .listen-wallpaper-panel[hidden] { display:none!important; }
+    .listen-wallpaper-panel strong,.listen-wallpaper-panel small { display:block; }
+    .listen-wallpaper-panel strong { font-size:8px; }.listen-wallpaper-panel small { margin-top:2px; color:var(--text-muted); font-size:5.5px; }
+    .listen-wallpaper-panel label,.listen-wallpaper-panel button { min-height:26px; display:inline-flex; align-items:center; justify-content:center; padding:0 8px; border:1px solid var(--glass-border); border-radius:7px; background:var(--card-white); color:var(--text-main); font-size:6px; font-weight:800; cursor:pointer; }
+    .listen-wallpaper-panel label { border-color:var(--card-black); background:var(--card-black); color:#fff; }.listen-wallpaper-panel button.close { width:25px; padding:0; font-size:13px; }
+    .listen-wallpaper-panel .listen-wallpaper-blur { grid-column:1/-1; min-height:30px; display:grid; grid-template-columns:auto minmax(0,1fr) 34px; gap:8px; padding:4px 7px; border-color:var(--glass-border); background:var(--bg-screen); color:var(--text-main); cursor:default; }
+    .listen-wallpaper-blur span,.listen-wallpaper-blur output { font-size:6px; font-weight:800; }.listen-wallpaper-blur output { text-align:right; }.listen-wallpaper-blur input { width:100%; accent-color:var(--card-black); }
     @keyframes listenStageIn { from { opacity: .2; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
     .listen-together-head {
       flex: 0 0 auto;
@@ -3825,6 +3894,10 @@
     .listen-song-cover-preview { width: 28px; height: 28px; flex: 0 0 28px; border: 1px solid var(--glass-border); border-radius: 7px; background: linear-gradient(145deg,#e8f3f6,#cfe4ea); background-position: center; background-size: cover; }
     .listen-song-cover-row > label { min-height: 25px; display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; border-radius: 8px; background: var(--card-black); color: #fff; font-size: 7px !important; font-weight: 800; cursor: pointer; }
     .listen-song-cover-row small { min-width: 0; overflow: hidden; flex: 1; color: var(--text-muted); font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+    .listen-song-audio-row { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .listen-song-audio-row > label { min-height: 28px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 0 9px; border: 1px solid var(--glass-border); border-radius: 8px; background: var(--card-black); color: #fff; font-size: 7px; font-weight: 800; cursor: pointer; }
+    .listen-song-audio-row > small { min-width: 0; overflow: hidden; flex: 1; color: var(--text-muted); font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+    .listen-song-audio-row > button { min-height: 25px; padding: 0 7px; border: 1px solid var(--glass-border); border-radius: 7px; background: var(--card-white); color: var(--text-muted); font-size: 6px; cursor: pointer; }
     .listen-song-submit { height: 32px; border: 0; border-radius: 9px; background: var(--card-black); color: #fff; font-size: 8px; font-weight: 800; cursor: pointer; }
     .listen-song-submit:disabled { cursor: wait; opacity: .55; }
 
@@ -4605,6 +4678,17 @@
     .chat-app .chat-message-context-action:disabled,
     .chat-app .chat-message-context-action.is-disabled { color: #8da0a8; opacity: .66; cursor: not-allowed; }
     .chat-app .chat-message-context-action svg { width: 10px !important; height: 10px !important; flex: 0 0 10px; stroke-width: 1.9; opacity: .86; }
+    .chat-multi-select-toolbar { flex:0 0 auto; display:none; align-items:center; gap:4px; padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--glass-border); background:rgba(255,255,255,.94); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+    .chat-thread-view.multi-select-mode .chat-multi-select-toolbar { display:flex; }
+    .chat-thread-view.multi-select-mode .chat-composer,.chat-thread-view.multi-select-mode .chat-quote-preview,.chat-thread-view.multi-select-mode .chat-batch-panel,.chat-thread-view.multi-select-mode .chat-expression-panel,.chat-thread-view.multi-select-mode .chat-attachment-panel { display:none!important; }
+    .chat-multi-select-toolbar strong { min-width:0; flex:1; color:var(--text-main); font-size:7px; text-align:center; white-space:nowrap; }
+    .chat-multi-select-toolbar button { min-height:29px; display:inline-flex; align-items:center; justify-content:center; gap:3px; padding:0 7px; border:1px solid var(--glass-border); border-radius:8px; background:var(--card-white); color:var(--text-main); font-size:6px; font-weight:800; }
+    .chat-multi-select-toolbar button.danger { color:#b55361; }
+    .chat-thread-view.multi-select-mode .chat-message-line { position:relative; padding-left:27px; cursor:pointer; }
+    .chat-thread-view.multi-select-mode .chat-message-line::before { content:""; position:absolute; z-index:6; left:5px; top:50%; width:15px; height:15px; border:1.5px solid #9eb1ba; border-radius:50%; background:rgba(255,255,255,.9); transform:translateY(-50%); box-sizing:border-box; }
+    .chat-thread-view.multi-select-mode .chat-message-line.multi-selected::before { border-color:#4d829b; background:#4d829b; box-shadow:inset 0 0 0 3px #fff; }
+    .chat-thread-view.multi-select-mode .chat-message-line.multi-selected { background:rgba(107,169,195,.09); border-radius:10px; }
+    .chat-thread-view.multi-select-mode .chat-message-line * { pointer-events:none!important; }
     .dream-editor { 
       z-index: 90;
       align-items: center;
@@ -6166,7 +6250,7 @@
       transform: translateY(-11px);
     }
     #chatApp .chat-message-content { max-width: 78%; }
-    #chatApp .chat-message-line .chat-bubble:not(.chat-sticker-bubble):not(.chat-voice-bubble):not(.chat-poke-bubble):not(.chat-board-bubble):not(.chat-image-bubble):not(.chat-red-envelope-bubble):not(.chat-check-bubble):not(.chat-invite-bubble):not(.chat-decision-bubble):not(.group-v2-special-bubble) {
+    #chatApp .chat-message-line .chat-bubble:not(.chat-sticker-bubble):not(.chat-voice-bubble):not(.chat-poke-bubble):not(.chat-board-bubble):not(.chat-image-bubble):not(.chat-image-stack-bubble):not(.chat-red-envelope-bubble):not(.chat-check-bubble):not(.chat-invite-bubble):not(.chat-decision-bubble):not(.group-v2-special-bubble) {
       padding: 9px 12px !important;
       font-size: 11px !important;
       line-height: 1.52 !important;
@@ -6651,8 +6735,163 @@
     .group-v2-message.group-has-next .chat-message-meta { display: none; }
     .group-v2-message .chat-message-avatar[data-group-member-handle] { cursor: pointer; }
     .group-v2-message .group-event-avatar { overflow:hidden; border-radius:10px; box-shadow:0 3px 9px rgba(63,72,92,.12); cursor:default; }
-    .chat-image-bubble { max-width: 196px !important; overflow: hidden; padding: 3px !important; border: 1px solid var(--glass-border) !important; border-radius: 12px !important; background: var(--card-white) !important; }
-    .chat-image-bubble img { display: block; width: min(188px,100%); max-height: 220px; object-fit: cover; border-radius: 9px; }
+    /* 图片气泡按聊天区域缩放：保持原始比例，不以原图尺寸撑开页面，也不制造白色画框。 */
+    #chatApp .chat-image-bubble {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      width: fit-content !important;
+      height: fit-content !important;
+      max-width: min(220px,60vw) !important;
+      max-height: min(320px,48vh) !important;
+      overflow: hidden;
+      padding: 0 !important;
+      line-height: 0;
+      border: 1px solid color-mix(in srgb,var(--glass-border) 72%,transparent) !important;
+      border-radius: 10px !important;
+      background: transparent !important;
+      box-shadow: 0 4px 13px rgba(36,54,65,.07);
+    }
+    #chatApp .chat-image-bubble img {
+      display: block;
+      width: auto !important;
+      height: auto !important;
+      max-width: min(220px,60vw) !important;
+      max-height: min(320px,48vh) !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      border-radius: 9px !important;
+      background: transparent !important;
+    }
+
+    /* 批量图片：收起时只露出两层牌边，展开后呈扇形扑克牌。 */
+    #chatApp .chat-image-stack-bubble {
+      position: relative;
+      width: var(--stack-bubble-width,min(206px,calc(100vw - 98px))) !important;
+      height: var(--stack-bubble-height,min(232px,64vw)) !important;
+      margin-left: 32px;
+      padding: 0 !important;
+      overflow: visible !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      line-height: 1 !important;
+      transition: width .24s ease,height .24s ease !important;
+      isolation: isolate;
+    }
+    #chatApp .chat-image-stack-bubble::before,
+    #chatApp .chat-image-stack-bubble::after { display: none !important; content: none !important; }
+    #chatApp .chat-image-stack-bubble[data-expanded="true"] {
+      width: min(278px,calc(100vw - 108px)) !important;
+      height: var(--stack-expanded-height,min(238px,64vw)) !important;
+    }
+    .chat-image-stack-stage { position: relative; width: 100%; height: 100%; overflow: visible; }
+    .chat-image-stack-cards { position: absolute; inset: 0; overflow: visible; }
+    .chat-image-stack-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: var(--stack-z,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--stack-card-width,calc(100% - 18px));
+      height: var(--stack-card-height,calc(100% - 14px));
+      padding: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(52,68,78,.12);
+      border-radius: 13px;
+      background: color-mix(in srgb,var(--card-white) 94%,transparent);
+      box-shadow: 0 10px 23px rgba(35,55,68,.16),0 2px 5px rgba(35,55,68,.08);
+      opacity: var(--stack-opacity,1);
+      pointer-events: var(--stack-events,auto);
+      transform: translate(-50%,-50%) translate(var(--stack-x,0),var(--stack-y,0)) rotate(var(--stack-r,0deg));
+      transform-origin: 50% 92%;
+      transition: transform .28s cubic-bezier(.2,.78,.24,1),opacity .2s ease,width .24s ease,height .24s ease,box-shadow .2s ease;
+      cursor: zoom-in;
+      will-change: transform;
+    }
+    .chat-image-stack-card.is-active { box-shadow: 0 13px 28px rgba(31,55,69,.2),0 2px 6px rgba(31,55,69,.1); }
+    .chat-image-stack-bubble[data-expanded="true"] .chat-image-stack-card {
+      width: var(--stack-fan-width,min(142px,38vw));
+      height: var(--stack-fan-height,calc(100% - 34px));
+    }
+    .chat-image-stack-card img {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 9px !important;
+      background: transparent !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .chat-image-stack-toggle,
+    .chat-image-stack-next {
+      position: absolute;
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(70,90,100,.13);
+      background: color-mix(in srgb,var(--card-white) 82%,transparent);
+      color: var(--text-main);
+      box-shadow: 0 5px 15px rgba(35,55,68,.11);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .chat-image-stack-toggle {
+      left: -33px;
+      top: 50%;
+      width: 29px;
+      min-width: 29px;
+      height: 29px;
+      padding: 0;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      font-size: 7px;
+      font-weight: 850;
+    }
+    .chat-image-stack-toggle-icon { display: inline-block; font-size: 12px; line-height: 1; transform: translateY(-1px); transition: transform .2s ease; }
+    .chat-image-stack-bubble[data-expanded="true"] .chat-image-stack-toggle-icon { transform: translateY(1px) rotate(180deg); }
+    .chat-image-stack-next {
+      right: -5px;
+      top: 50%;
+      width: 29px;
+      height: 29px;
+      padding: 0;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .chat-image-stack-toggle:active,
+    .chat-image-stack-next:active { transform: translateY(-50%) scale(.94); }
+    .chat-image-stack-count {
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      z-index: 41;
+      min-width: 26px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: rgba(26,40,49,.64);
+      color: #fff;
+      font: 650 6px/1 ui-monospace,monospace;
+      text-align: center;
+      pointer-events: none;
+    }
+    @media (max-width: 420px) {
+      #chatApp .chat-image-stack-bubble { margin-left: 30px; }
+      .chat-image-stack-toggle { left: -31px; }
+      .chat-image-stack-next { right: -3px; }
+    }
     .group-v2-special-bubble { width: min(216px,100%); padding: 0 !important; overflow: hidden; border: 1px solid var(--glass-border) !important; border-radius: 13px !important; background: var(--card-white) !important; color: var(--text-main) !important; box-shadow: 0 4px 14px rgba(33,52,64,.08); }
     .group-v2-special-head { display: flex; align-items: center; justify-content: space-between; gap: 7px; padding: 8px 9px; background: color-mix(in srgb,var(--card-black) 8%,var(--card-white)); }
     .group-v2-special-head strong { font-size: 8px; }
@@ -7860,13 +8099,17 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         <section class="dashboard-section" id="globalPhoneAI">
           <div class="dashboard-section-head"><span>06</span><div><strong>AI 接入</strong><small>PHONE Generator</small></div></div>
           <div class="dashboard-setting-list phone-ai-settings">
-            <div class="dashboard-setting-row"><div><strong>OpenAI 兼容接口</strong><small>用于手动生成“查手机”内容。Key 只保存在当前浏览器；请求会直接发送给你填写的服务商。</small></div><b class="setting-value-note" id="phoneAIStatus">未配置</b></div>
+            <div class="dashboard-setting-row"><div><strong>通用 AI 接入</strong><small>用于 PHONE 与后续可选 AI 功能。Key 只保存在当前浏览器；请求会直接发送给所选服务商。</small></div><b class="setting-value-note" id="phoneAIStatus">未配置</b></div>
+            <div class="dashboard-setting-row"><div><strong>AI 调用统计</strong><small id="phoneAIUsageDetail">今日 0 次 · 累计 0 次</small></div><b class="setting-value-note" id="phoneAIUsageCount">0</b></div>
+            <div class="dashboard-setting-row"><div><strong>内置自然语言预设</strong><small>已启用简洁、口语化、去华丽辞藻、禁技术比喻和禁“不是……而是……”等固定约束；适用于 PHONE 及后续可选 AI 功能。</small></div><b class="setting-value-note">固定启用</b></div>
+            <label class="phone-ai-field"><span>AI 服务商</span><select id="phoneAIProvider" onchange="applyPhoneAIProviderPreset(this.value)"><option value="openai">OpenAI</option><option value="deepseek">DeepSeek</option><option value="moonshot">Moonshot / Kimi</option><option value="openrouter">OpenRouter</option><option value="siliconflow">硅基流动</option><option value="custom">自定义兼容接口</option></select></label>
             <label class="phone-ai-field"><span>API 地址</span><input id="phoneAIBaseUrl" type="url" placeholder="https://api.openai.com/v1" autocomplete="off"></label>
             <label class="phone-ai-field"><span>API Key</span><input id="phoneAIKey" type="password" placeholder="sk-..." autocomplete="off"></label>
-            <div class="phone-ai-model-row"><label class="phone-ai-field"><span>模型</span><select id="phoneAIModel"><option value="">请先拉取模型</option></select></label><button type="button" onclick="fetchPhoneAIModels()">拉取模型</button></div>
+            <div class="phone-ai-model-row"><label class="phone-ai-field"><span>模型</span><select id="phoneAIModel"><option value="">请选择或拉取模型</option></select></label><button type="button" onclick="fetchPhoneAIModels()">拉取模型</button></div>
+            <label class="phone-ai-field"><span>手动模型名（拉取失败时使用）</span><input id="phoneAIManualModel" type="text" placeholder="例如 deepseek-chat 或 provider/model" autocomplete="off"></label>
             <label class="phone-ai-field"><span>用户设定</span><textarea id="phoneAICustomPrompt" maxlength="4000" placeholder="补充角色背景、世界观或希望手机内容体现的细节。"></textarea></label>
             <div class="phone-ai-actions"><button type="button" onclick="savePhoneAIConfig()">保存配置</button><button type="button" onclick="testPhoneAIConnection()">测试连接</button><button class="danger" type="button" onclick="clearPhoneAIKey()">清除 Key</button></div>
-            <small class="phone-ai-note">生成时会发送所选梦角资料、用户设定和最近 50 条聊天文字。若服务商不允许浏览器跨域请求，请改用支持 CORS 的兼容地址。</small>
+            <small class="phone-ai-note">生成时会发送所选梦角资料、用户设定和最近 50 条聊天文字。模型列表拉取失败通常来自 CORS、错误 Base URL、Key 权限或服务商不提供 /models；可直接填写手动模型名后测试连接。</small>
           </div>
         </section>
 
@@ -7889,10 +8132,11 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
             <button class="global-settings-action" type="button" onclick="openStorageCenter()"><span><strong>存储空间</strong><small>查看容量、分类占用、数据健康与恢复点</small></span><b>打开 ›</b></button>
           </div>
           <div class="global-backup-panel">
-            <div class="global-backup-head"><div><strong>本地数据档案</strong><small id="globalBackupSummary">已选 10 类数据</small></div><div class="global-backup-head-actions"><button type="button" onclick="selectAllDreamBackupCategories()">全选</button><button type="button" onclick="clearDreamBackupCategories()">清空</button></div></div>
+            <div class="global-backup-head"><div><strong>本地数据档案</strong><small id="globalBackupSummary">已选 14 类数据</small></div><div class="global-backup-head-actions"><button type="button" onclick="selectAllDreamBackupCategories()">全选</button><button type="button" onclick="clearDreamBackupCategories()">清空</button></div></div>
             <div class="global-backup-category-list" id="globalBackupCategoryList">
               <label class="global-backup-category"><input type="checkbox" data-backup-category="profile" checked><span><strong>梦角资料</strong><small>角色、头像、个人主页内容</small></span></label>
               <label class="global-backup-category"><input type="checkbox" data-backup-category="widgets" checked><span><strong>桌面小组件</strong><small>组件内容、布局和媒体引用</small></span></label>
+              <label class="global-backup-category"><input type="checkbox" data-backup-category="settings" checked><span><strong>全局设置与桌面</strong><small>主题、桌面壁纸、字体、音效和通知偏好</small></span></label>
               <label class="global-backup-category"><input type="checkbox" data-backup-category="komo" checked><span><strong>KOMO 与钱包</strong><small>余额、账单、订单、库存和礼物任务</small></span></label>
               <label class="global-backup-category"><input type="checkbox" data-backup-category="phone" checked><span><strong>PHONE 手机档案</strong><small>生成内容与对方相册；不包含 API Key</small></span></label>
               <label class="global-backup-category"><input type="checkbox" data-backup-category="cards" checked><span><strong>字卡库</strong><small>分组、字卡、屏蔽状态</small></span></label>
@@ -8031,6 +8275,14 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
           <div class="chat-typing" id="chatTyping"><span></span><span></span><span></span></div>
         </div>
 
+        <section class="chat-multi-select-toolbar" id="chatMultiSelectToolbar" data-global-font-ignore="true" aria-label="消息多选操作">
+          <button type="button" onclick="toggleSelectAllVisibleMessages()"><i data-lucide="list-checks" size="14"></i><span>全选当前</span></button>
+          <strong id="chatMultiSelectCount">已选择 0 条</strong>
+          <button type="button" onclick="favoriteSelectedChatMessages()"><i data-lucide="bookmark" size="14"></i><span>收藏</span></button>
+          <button class="danger" type="button" onclick="deleteSelectedChatMessages()"><i data-lucide="trash-2" size="14"></i><span>删除</span></button>
+          <button type="button" onclick="exitChatMultiSelectMode()"><i data-lucide="x" size="14"></i><span>取消</span></button>
+        </section>
+
         <div class="chat-quote-preview" id="chatQuotePreview" hidden>
           <div class="chat-quote-copy"><span>回复 <strong id="chatQuoteSender">对方</strong></span><p id="chatQuoteText"></p></div>
           <button class="chat-quote-close" type="button" onclick="clearChatQuote()" aria-label="取消引用"><i data-lucide="x" size="13"></i></button>
@@ -8125,7 +8377,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
             <label class="attachment-item" for="chatAttachmentImageInput">
               <span class="attachment-icon"><i data-lucide="image" size="17"></i></span>
               <span class="attachment-label">图片</span>
-              <input id="chatAttachmentImageInput" type="file" accept="image/*" hidden>
+              <input id="chatAttachmentImageInput" type="file" accept="image/*" multiple hidden>
             </label>
             <button class="attachment-item" type="button" onclick="openListenTogether()">
               <span class="attachment-icon"><i data-lucide="music-2" size="17"></i></span>
@@ -8220,11 +8472,13 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 
         <div class="listen-together-modal" id="listenTogetherModal" aria-hidden="true" onclick="if(event.target === this) closeListenTogether({forceClose:true})">
           <section class="listen-together-stage" role="dialog" aria-modal="true" aria-label="一起听音乐" onclick="event.stopPropagation()">
+            <div class="listen-wallpaper-layer" id="listenWallpaperLayer" aria-hidden="true"></div>
             <header class="listen-together-head">
               <button class="listen-circle-button" type="button" onclick="closeListenTogether({forceClose:true})" aria-label="关闭一起听"><i data-lucide="chevron-left" size="16"></i></button>
               <div class="listen-head-center"></div>
-              <div style="display:flex; gap:4px;"><button class="listen-circle-button" type="button" onclick="openKomoListenSnacks()" aria-label="打开 KOMO 零食货架" title="KOMO 零食"><i data-lucide="shopping-basket" size="14"></i></button><button class="listen-circle-button" type="button" onclick="minimizeListenTogether()" aria-label="缩小播放器"><i data-lucide="minus" size="16"></i></button><button class="listen-circle-button" type="button" onclick="openListenSongForm()" aria-label="添加歌曲"><i data-lucide="more-horizontal" size="16"></i></button></div>
+              <div style="display:flex; gap:4px;"><button class="listen-circle-button" type="button" onclick="toggleListenWallpaperPanel()" aria-label="设置一起听壁纸" title="一起听壁纸"><i data-lucide="image" size="14"></i></button><button class="listen-circle-button" type="button" onclick="openKomoListenSnacks()" aria-label="打开 KOMO 零食货架" title="KOMO 零食"><i data-lucide="shopping-basket" size="14"></i></button><button class="listen-circle-button" type="button" onclick="minimizeListenTogether()" aria-label="缩小播放器"><i data-lucide="minus" size="16"></i></button><button class="listen-circle-button" type="button" onclick="openListenSongForm()" aria-label="添加歌曲"><i data-lucide="more-horizontal" size="16"></i></button></div>
             </header>
+            <div class="listen-wallpaper-panel" id="listenWallpaperPanel" hidden><div><strong>一起听壁纸</strong><small id="listenWallpaperState">当前使用默认背景</small></div><label for="listenWallpaperInput">上传图片<input id="listenWallpaperInput" type="file" accept="image/*" hidden></label><button type="button" onclick="resetListenWallpaper()">恢复默认</button><button class="close" type="button" onclick="closeListenWallpaperPanel()" aria-label="关闭">×</button><label class="listen-wallpaper-blur"><span>壁纸模糊</span><input id="listenWallpaperBlurInput" type="range" min="0" max="24" step="1" value="0" oninput="previewListenWallpaperBlur(this.value)" onchange="saveListenWallpaperBlur(this.value)"><output id="listenWallpaperBlurValue">0px</output></label></div>
             <div class="listen-together-content">
               <div class="listen-participants">
                 <div class="listen-participant"><div class="listen-participant-avatar self-avatar" id="listenSelfAvatar" tabindex="0" aria-label="我方头像，点击修改当前聊天室资料">你</div><small>我</small></div>
@@ -8252,8 +8506,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
                 <label><span>歌曲名称</span><input id="listenSongTitleInput" type="text" maxlength="80" placeholder="输入歌曲名称" autocomplete="off"></label>
                 <label><span>歌手</span><input id="listenSongArtistInput" type="text" maxlength="80" placeholder="输入歌手名称" autocomplete="off"></label>
                 <label><span>音频链接</span><input id="listenSongUrlInput" type="text" inputmode="url" maxlength="2000" placeholder="粘贴 MP3 / M4A 音频直链（可选）" autocomplete="off"></label>
+                <div class="listen-song-audio-row"><label for="listenSongAudioInput"><i data-lucide="file-music" size="13"></i>上传本地 MP3<input id="listenSongAudioInput" type="file" accept="audio/mpeg,.mp3" hidden></label><small id="listenSongAudioName">未选择本地音频</small><button id="listenSongAudioClear" type="button" hidden>移除</button></div>
                 <div class="listen-song-cover-row"><span class="listen-song-cover-preview" id="listenSongCoverPreview" aria-hidden="true"></span><label for="listenSongCoverInput">选择封面<input id="listenSongCoverInput" type="file" accept="image/*" hidden></label><small id="listenSongCoverName">未选择封面</small></div>
-                <p>支持浏览器可直接播放的 HTTP(S)、Blob 或 Data Audio 链接；没有音频链接时使用本地模拟播放。</p>
+                <p>本地 MP3 会保存到当前浏览器并优先于音频链接；没有音频文件或链接时使用本地模拟播放。</p>
                 <button class="listen-song-submit" type="submit">添加到共享队列</button>
               </form>
             </div>
@@ -8368,11 +8623,14 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
               <div><code>.message</code><span>普通文字气泡</span></div>
               <div><code>.message-received</code><span>对方气泡</span></div>
               <div><code>.message-sent</code><span>我方气泡</span></div>
-              <div><code>.message-all</code><span>含语音、图片等全部气泡</span></div>
+              <div><code>.message-all</code><span>除 KOMO 外的全部气泡</span></div>
+              <div><code>.message-voice</code><span>语音与 MP3 语音气泡</span></div>
+              <div><code>.message-image</code><span>图片与画板气泡</span></div>
+              <div><code>.message-sticker</code><span>表情包与颜文字气泡</span></div>
             </div>
             <button class="chat-css-template-button" type="button" onclick="insertChatCssTemplate('bubble')">填入 Möbius 气泡示例</button>
             <textarea class="chat-settings-textarea chat-css-editor" id="chatBubbleCssInput" spellcheck="false" autocapitalize="off" placeholder=".message {&#10;  border-radius: 18px !important;&#10;}&#10;&#10;.message-received {&#10;  background: #fff !important;&#10;}&#10;&#10;.message-sent {&#10;  background: #e8f6fa !important;&#10;}"></textarea>
-            <div class="chat-settings-note">外链图片请写成 url(&quot;https://…&quot;)，不要粘贴 Markdown 链接。普通选择器不会改动语音、图片、表情包和特殊卡片。</div>
+            <div class="chat-settings-note">外链图片请写成 url(&quot;https://…&quot;)，不要粘贴 Markdown 链接。.message、.message-received、.message-sent 现会同时作用于文字、语音、图片和表情包；也可使用上方分类选择器单独设置。INVITE、红包、查岗、决策和 KOMO 便利店卡片仍保持独立结构。</div>
             <div class="chat-settings-actions">
               <button class="chat-settings-button blue" type="button" onclick="saveCustomBubbleCSS()">应用自定义 CSS</button>
               <button class="chat-settings-button secondary" type="button" onclick="resetCustomBubbleCSS()">恢复默认</button>
@@ -8381,13 +8639,17 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 
           <section class="chat-settings-section">
             <div class="chat-settings-section-title"><span>聊天室主题 CSS</span><small>完整 CSS / 当前聊天室</small></div>
-            <div class="chat-settings-help">使用下列选择器分别控制聊天页、顶栏、消息区、输入区、资料页与设置页。旧版只填属性的内容仍可继续使用。</div>
+            <div class="chat-settings-help">使用下列选择器分别控制聊天页、顶栏、消息区、输入区、附件面板、表情包面板、资料页及其顶栏与设置页。旧版只填属性的内容仍可继续使用。</div>
             <div class="chat-css-selector-guide theme">
               <div><code>.chat-room</code><span>聊天页</span></div>
               <div><code>.chat-header</code><span>顶栏</span></div>
               <div><code>.chat-messages</code><span>消息区</span></div>
               <div><code>.chat-input</code><span>输入区</span></div>
+              <div><code>.chat-attachments</code><span>附件面板</span></div>
+              <div><code>.chat-expressions</code><span>表情包面板</span></div>
+              <div><code>.chat-panels</code><span>附件＋表情包面板</span></div>
               <div><code>.chat-profile</code><span>资料页</span></div>
+              <div><code>.chat-profile-header</code><span>资料页顶栏</span></div>
               <div><code>.chat-settings</code><span>设置页</span></div>
             </div>
             <button class="chat-css-template-button" type="button" onclick="insertChatCssTemplate('theme')">填入 Möbius 主题示例</button>
@@ -8419,6 +8681,10 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
           </header>
           <div class="chat-card-mount-tools"><button type="button" onclick="setAllChatCardMountGroups(true)">全选分组</button><button type="button" onclick="setAllChatCardMountGroups(false)">清空选择</button></div>
           <div class="chat-card-mount-list" id="chatCardMountGroupList"></div>
+          <section class="voice-card-manager">
+            <header><div><strong>MP3 语音字卡</strong><small>当前梦角专属 · 语音消息内与拟态语音各占 50%</small></div><label for="voiceCardUploadInput"><i data-lucide="file-music" size="13"></i>上传 MP3<input id="voiceCardUploadInput" type="file" accept="audio/mpeg,.mp3" multiple hidden></label></header>
+            <div class="voice-card-list" id="voiceCardList"><div class="voice-card-empty">还没有上传语音字卡</div></div>
+          </section>
           <footer class="chat-card-mount-footer"><button type="button" onclick="closeChatCardMountPicker()">取消</button><button class="primary" type="button" onclick="saveChatCardMount()">保存挂载</button></footer>
         </section>
       </div>
@@ -8546,6 +8812,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
             <button class="chat-message-context-action" data-message-menu-action="quote" type="button" onclick="handleChatMessageAction('quote')"><i data-lucide="quote" size="17"></i><span>引用</span></button>
             <button class="chat-message-context-action" type="button" onclick="handleChatMessageAction('copy')"><i data-lucide="copy" size="17"></i><span>复制</span></button>
             <button class="chat-message-context-action" type="button" onclick="handleChatMessageAction('favorite')"><i data-lucide="bookmark" size="17"></i><span>收藏</span></button>
+            <button class="chat-message-context-action" type="button" onclick="handleChatMessageAction('multi')"><i data-lucide="list-checks" size="17"></i><span>多选</span></button>
             <button class="chat-message-context-action" id="chatMessageRecallAction" type="button" onclick="handleChatMessageAction('recall')"><i data-lucide="rotate-ccw" size="17"></i><span>撤回</span></button>
             <button class="chat-message-context-action delete" type="button" onclick="handleChatMessageAction('delete')"><i data-lucide="trash-2" size="17"></i><span>删除</span></button>
           </div>
@@ -8699,6 +8966,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     let lastEdgeScrollTime = 0;
     let selectedChatRow = null;
     let selectedChatMessageLine = null;
+    let chatMultiSelectMode = false;
+    const chatMultiSelectedLines = new Set();
     let chatMessagePressState = null;
     let messageClickSuppressUntil = 0;
     let chatQuoteState = null;
@@ -8741,10 +9010,12 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     const DESKTOP_GRID_SIZE = 8;
     const DESKTOP_LAYOUT_COLUMNS = 24;
     const PROTECTED_DESKTOP_APP_IDS = new Set(['app-chat','app-moon','app-tarot','app-mail','app-box','app-invite','app-phone']);
-    const PRESET_REPLY_CARD_TEXTS = new Set(['今晚月色真美。', '见字如面，今天过得开心吗？', '你的情绪也值得被照顾。', '留一张字卡给今天。', '慢慢来，灵感会找到你。', '收到啦，晚点继续和你聊 ✨', '我在这里，慢慢说给我听。', '好呀，这件事我想听你讲完。']);
-    const PRESET_MOOD_STATUS_TEXTS = new Set(['今晚月色真美', '正在收听', '在窗边', '整理档案', '共享空间', '写着新信', '正在发光', '安静', '柔软', '清醒', '在线', '想念']);
-    const PRESET_POKE_CARD_TEXTS = new Set(['拍一拍', '揉了揉脑袋', '轻轻戳了戳']);
-    const PRESET_CARD_TEXTS = new Set([...PRESET_REPLY_CARD_TEXTS, ...PRESET_MOOD_STATUS_TEXTS, ...PRESET_POKE_CARD_TEXTS]);
+    // 系统不再提供任何预设字卡；以下旧文本只用于从历史存档中清除旧版内置项，绝不参与抽取或回复。
+    const REMOVED_SYSTEM_CARD_TEXTS = new Set(['今晚月色真美。','见字如面，今天过得开心吗？','你的情绪也值得被照顾。','留一张字卡给今天。','慢慢来，灵感会找到你。','收到啦，晚点继续和你聊 ✨','我在这里，慢慢说给我听。','好呀，这件事我想听你讲完。','今晚月色真美','正在收听','在窗边','整理档案','共享空间','写着新信','正在发光','安静','柔软','清醒','在线','想念','拍一拍','揉了揉脑袋','轻轻戳了戳']);
+    const PRESET_REPLY_CARD_TEXTS = new Set();
+    const PRESET_MOOD_STATUS_TEXTS = new Set();
+    const PRESET_POKE_CARD_TEXTS = new Set();
+    const PRESET_CARD_TEXTS = REMOVED_SYSTEM_CARD_TEXTS;
     const DELETED_CARD_GROUPS_STORAGE_KEY = 'dream-messenger:deleted-card-groups:v1';
     let cardManagerGroups = [];
     let activeCardManagerGroupId = 'ungrouped';
@@ -8770,6 +9041,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     let listenSessionMinimized = false;
     let currentListenCoverData = '';
     let listenCoverUploadPromise = null;
+    let currentListenAudioData = '';
+    let currentListenAudioName = '';
+    let listenAudioUploadPromise = null;
     let listenSongFormHandle = '';
     let listenMiniDragState = null;
     let listenMiniDragMoved = false;
@@ -8814,6 +9088,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     const replyEngineTimersByHandle = new Map();
     const replyEngineGenerationByHandle = new Map();
     const voicePlaybackTimers = new Map();
+    const voiceCardAudioPlayers = new Map();
     const voiceTapStates = new WeakMap();
     const MAIL_STORAGE_KEY = 'dream-messenger:mail-letters:v1';
     const MAIL_SEEDED_KEY = 'dream_transmit_mail_seeded_v1';
@@ -9478,7 +9753,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       }
       // 文字/语音现在有内置安慰句兜底（pickRoleReplyText），字卡池为空也依然可以回复。
       if (kind === 'voice' && settings.partnerVoiceEnabled === false) return false;
-      if (kind === 'text' || kind === 'voice') return getRoleContentCardPool(role).length > 0 || PRESET_REPLY_CARD_TEXTS.size > 0;
+      if (kind === 'voice') return getRoleContentCardPool(role).length > 0 || (settings.voiceCards || []).length > 0;
+      if (kind === 'text') return getRoleContentCardPool(role).length > 0;
       if (kind === 'sticker') {
         return (Array.isArray(settings.stickerTheirs) ? settings.stickerTheirs : []).some(item =>
           typeof item === 'string' ? Boolean(item.trim()) : Boolean(item && (item.src || item.emoji)));
@@ -9763,11 +10039,28 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const activeTimer = voicePlaybackTimers.get(bubble);
       if (activeTimer) window.clearTimeout(activeTimer);
       voicePlaybackTimers.delete(bubble);
+      const audio = voiceCardAudioPlayers.get(bubble);
+      if (audio) { try { audio.pause(); audio.currentTime = 0; } catch (_) {} }
+      voiceCardAudioPlayers.delete(bubble);
       bubble.classList.remove('is-playing');
+    }
+
+    async function playVoiceCardBubble(bubble) {
+      if (!bubble?.dataset.voiceAudioSource) return;
+      const existing=voiceCardAudioPlayers.get(bubble);
+      if(existing&&!existing.paused){stopChatVoicePlayback(bubble);return;}
+      [...voiceCardAudioPlayers.keys()].forEach(stopChatVoicePlayback);
+      const url=await resolveDreamMediaSource(bubble.dataset.voiceAudioSource);
+      if(!url){showChatToast('这条 MP3 语音暂时无法读取');return;}
+      const audio=new Audio(url);voiceCardAudioPlayers.set(bubble,audio);bubble.classList.add('is-playing');bubble.setAttribute('aria-label','MP3 语音播放中，单击暂停');
+      const finish=()=>{if(voiceCardAudioPlayers.get(bubble)!==audio)return;voiceCardAudioPlayers.delete(bubble);bubble.classList.remove('is-playing');bubble.setAttribute('aria-label','单击播放 MP3 语音');};
+      audio.onended=finish;audio.onerror=()=>{finish();showChatToast('MP3 语音播放失败');};
+      try{await audio.play();}catch(_){finish();showChatToast('浏览器阻止了音频播放，请再次点击');}
     }
 
     function playChatVoiceBubble(bubble) {
       if (!bubble) return;
+      if (bubble.dataset.voiceCard === 'true' && bubble.dataset.voiceAudioSource) { playVoiceCardBubble(bubble); return; }
       stopChatVoicePlayback(bubble);
       const seconds = Math.max(2, Number(bubble.dataset.voiceDuration) || estimateProactiveVoiceDuration(getChatVoiceTranscript(bubble)));
       bubble.classList.add('is-playing');
@@ -9825,8 +10118,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       bubble.setAttribute('role', 'button');
       bubble.setAttribute('tabindex', '0');
       const expanded = Boolean(transcriptNode && !transcriptNode.hidden);
+      const isVoiceCard = bubble.dataset.voiceCard === 'true';
       bubble.setAttribute('aria-expanded', String(expanded));
-      bubble.setAttribute('aria-label', expanded
+      bubble.setAttribute('aria-label', isVoiceCard ? '单击播放 MP3 语音' : expanded
         ? '单击拟态播放；双击收起文字'
         : '单击拟态播放；双击展开文字');
       if (transcriptNode) {
@@ -9853,6 +10147,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       bubble.addEventListener('click', event => {
         if (event.defaultPrevented) return;
         event.stopPropagation();
+        if (bubble.dataset.voiceCard === 'true') { event.preventDefault(); playVoiceCardBubble(bubble); return; }
         const now = Date.now();
         const previous = voiceTapStates.get(bubble);
         if (previous && now - previous.time <= 500) {
@@ -9881,10 +10176,11 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 
     function createChatVoiceBubble(transcript, duration = 3, options = {}) {
       const clean = String(transcript || '').trim().replace(/\s+/g, ' ');
-      const seconds = Math.max(1, Math.min(60, Number(duration) || estimateProactiveVoiceDuration(clean)));
+      const seconds = Math.max(1, Math.min(options.audioSource ? 3600 : 60, Number(duration) || estimateProactiveVoiceDuration(clean)));
       const bubble = document.createElement('div');
       bubble.className = 'chat-bubble chat-voice-bubble';
       bubble.dataset.voiceDuration = String(seconds);
+      if (options.audioSource) { bubble.dataset.voiceCard='true'; bubble.dataset.voiceAudioSource=String(options.audioSource); bubble.dataset.voiceAudioName=String(options.audioName||'MP3 语音字卡'); bubble.dataset.voiceWidthMode='duration'; bubble.dataset.voiceFixedWidth=String(Math.max(88,Math.min(198,Math.round(88+(Math.min(60,seconds)-1)/59*110)))); }
       if (options.widthMode === 'duration') {
         bubble.dataset.voiceWidthMode = 'duration';
         bubble.dataset.voiceFixedWidth = String(Math.max(88, Math.min(198, Number(options.width) || Math.round(88 + (seconds - 1) / 59 * 110))));
@@ -9911,7 +10207,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       transcriptNode.className = 'chat-voice-transcript';
       transcriptNode.hidden = true;
       transcriptNode.textContent = clean || '（没有语音文字）';
-      bubble.append(main, transcriptNode);
+      if (options.noTranscript || options.audioSource) bubble.append(main); else bubble.append(main, transcriptNode);
       bindChatVoiceBubbleInteractions(bubble);
       return bubble;
     }
@@ -10077,10 +10373,20 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       return true;
     }
 
+    function appendProactiveIncomingVoiceCard(role, card) {
+      if (isRoleTemporarilyAway(role) || getChatSettings(role?.id).partnerVoiceEnabled === false || !card?.src) return false;
+      const isOpen=isChatConversationLoaded(role.id),seconds=Math.max(1,Math.min(3600,Number(card.duration)||1));
+      if(!isOpen){const settings=getChatSettings(role.id);settings.pendingProactiveMessages=[...(settings.pendingProactiveMessages||[]),{id:`proactive-voice-card-${Date.now()}-${Math.random().toString(16).slice(2)}`,kind:'voice-card',audioSrc:card.src,audioName:card.name||'MP3 语音字卡',duration:seconds,createdAt:Date.now()}].slice(-20);saveChatSettings(settings,role.id);return true;}
+      const body=document.getElementById('chatThreadBody'),typing=document.getElementById('chatTyping');if(!body)return false;const line=document.createElement('div');line.className='chat-message-line incoming';line.dataset.messageKind='voice-card';line.dataset.createdAt=String(Date.now());const avatar=document.createElement('div');avatar.className='chat-message-avatar partner-avatar';const content=document.createElement('div');content.className='chat-message-content';content.append(createChatVoiceBubble('',seconds,{audioSource:card.src,audioName:card.name,noTranscript:true}),Object.assign(document.createElement('div'),{className:'chat-message-meta',textContent:'刚刚'}));setChatAvatarVisual(avatar,role.initials,role.avatarImage?{type:'image',src:role.avatarImage}:`linear-gradient(135deg,${role.color1},${role.color2})`);line.append(avatar,content);body.insertBefore(line,typing||null);body.scrollTop=body.scrollHeight;playGlobalSound('message');showChatToast(`${getRoleDisplayNameForApp(role)} 发来一条语音`);return true;
+    }
+
     function triggerProactiveVoice(role) {
-      if(getChatSettings(role?.id).partnerVoiceEnabled===false)return false;
+      const settings=getChatSettings(role?.id);if(settings.partnerVoiceEnabled===false)return false;
+      const voiceCards=(settings.voiceCards||[]).filter(card=>card?.src);
+      // “语音”大类概率保持不变；进入语音大类后，MP3 字卡与普通拟态语音各占 50%。
+      if(voiceCards.length&&Math.random()<.5){const card=voiceCards[Math.floor(Math.random()*voiceCards.length)];if(appendProactiveIncomingVoiceCard(role,card))return true;}
       const cards = pickRoleCardBatch(role, 1, 3);
-      if (!cards.length) return false;
+      if (!cards.length) return voiceCards.length ? appendProactiveIncomingVoiceCard(role,voiceCards[Math.floor(Math.random()*voiceCards.length)]) : false;
       return appendProactiveIncomingVoice(role, cards.join(' '));
     }
 
@@ -10679,6 +10985,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         const bubble = line.querySelector('.chat-bubble');
         if (item.kind === 'voice') {
           bubble.replaceWith(createChatVoiceBubble(item.text || '', item.duration || 0));
+        } else if (item.kind === 'voice-card') {
+          bubble.replaceWith(createChatVoiceBubble('', item.duration || 1, { audioSource: item.audioSrc, audioName: item.audioName, noTranscript: true }));
         } else if (item.kind === 'sticker' || item.kind === 'kaomoji') {
           bubble.className = 'chat-bubble chat-sticker-bubble';
           if (item.src) {
@@ -11329,7 +11637,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       try {
         for (let index = 0; index < localStorage.length; index += 1) {
           const key = localStorage.key(index);
-          if (!key || (!key.startsWith('dream-') && !key.startsWith('dream_'))) continue;
+          if (!key || (!key.startsWith('dream-') && !key.startsWith('dream_')) || key.startsWith(DREAM_STORAGE_SAFETY_PREFIX)) continue;
           const raw = localStorage.getItem(key);
           try { backup.storage[key] = JSON.parse(decompressDreamJSONString(raw)); } catch (error) { backup.storage[key] = raw; }
         }
@@ -11605,6 +11913,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function persistMailLetters() {
+      if (window.__dreamDataImportInProgress) return true;
       writeDreamJSON(MAIL_STORAGE_KEY, mailLetters);
       if (typeof scheduleDesktopAppIconBadgeRender === 'function') scheduleDesktopAppIconBadgeRender();
     }
@@ -12762,6 +13071,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function persistCirclePosts() {
+      if (window.__dreamDataImportInProgress) return true;
       circlePosts = circlePosts.map(normalizeCirclePost).filter(Boolean).slice(-300);
       writeDreamJSON(CIRCLE_POSTS_STORAGE_KEY, circlePosts);
       renderDesktopPhotoWidgets();
@@ -13818,6 +14128,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function persistGlobalAppSettings() {
+      if (window.__dreamDataImportInProgress) return true;
       loadGlobalAppSettings();
       return writeDreamJSON(GLOBAL_SETTINGS_KEY, globalAppSettings);
     }
@@ -14819,6 +15130,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     const DREAM_BACKUP_CATEGORY_DEFINITIONS = Object.freeze({
       profile: { label: '梦角资料' },
       widgets: { label: '桌面小组件' },
+      settings: { label: '全局设置与桌面' },
       komo: { label: 'KOMO 与钱包' },
       phone: { label: 'PHONE 手机档案' },
       cards: { label: '字卡库' },
@@ -14831,8 +15143,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       history: { label: '聊天记录' },
       stickers: { label: '表情包' }
     });
-    const CHAT_BACKUP_SETTINGS_FIELDS = Object.freeze(['avatarShape', 'wallpaper', 'bubblePreset', 'customBubbleCSS', 'themeCSS', 'selfName', 'selfAvatar', 'selfGradient', 'callVoiceBackground', 'callVideoBackground', 'callSelfBackground', 'partnerVoiceEnabled', 'companionBackground', 'chatGlassEnabled', 'chatGlassBlur', 'chatGlassOpacity', 'listenMiniStyle']);
-    const CHAT_BACKUP_SPECIAL_FIELDS = Object.freeze(['decisionRecords', 'boardRecords', 'redEnvelopes', 'checkHistory', 'pendingCheck', 'pendingReply', 'pendingProactiveMessages', 'pendingProactiveBoards', 'messageKindCooldowns', 'inviteHistory', 'pendingInvite', 'listenQueue', 'listenIndex', 'listenFavorites', 'chatFavorites', 'patTexts']);
+    const CHAT_BACKUP_SETTINGS_FIELDS = Object.freeze(['avatarShape', 'wallpaper', 'bubblePreset', 'customBubbleCSS', 'themeCSS', 'selfName', 'selfAvatar', 'selfGradient', 'callVoiceBackground', 'callVideoBackground', 'callSelfBackground', 'partnerVoiceEnabled', 'companionBackground', 'chatGlassEnabled', 'chatGlassBlur', 'chatGlassOpacity', 'listenMiniStyle', 'listenWallpaper', 'listenWallpaperBlur']);
+    const CHAT_BACKUP_SPECIAL_FIELDS = Object.freeze(['decisionRecords', 'boardRecords', 'redEnvelopes', 'voiceCards', 'checkHistory', 'deletedSpecialMessageIds', 'pendingCheck', 'pendingReply', 'pendingProactiveMessages', 'pendingProactiveBoards', 'messageKindCooldowns', 'inviteHistory', 'pendingInvite', 'listenQueue', 'listenIndex', 'listenFavorites', 'chatFavorites', 'patTexts']);
     const CHAT_BACKUP_STICKER_FIELDS = Object.freeze(['stickerMine', 'stickerTheirs', 'kaomoji']);
 
     function getDreamBackupCategoryIds() {
@@ -14858,6 +15170,69 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       document.querySelectorAll('[data-backup-category]').forEach(input => { input.checked = false; });
       updateDreamBackupSelectionSummary();
     }
+
+    // 导入事务保护：导入后的 location.reload() 会触发 pagehide/beforeunload。
+    // 若不做保护，页面内仍缓存的旧 MAIL / 朋友圈 / 全局设置会在刷新前覆盖刚导入的数据。
+    function beginDreamDataImport() {
+      window.__dreamDataImportInProgress = true;
+      try { dreamJSONParseCache.clear(); } catch (_) {}
+    }
+
+    function cancelDreamDataImport() {
+      window.__dreamDataImportInProgress = false;
+    }
+
+    function prepareDreamImportedStateForReload() {
+      // 清空运行时对象，让导入完成到刷新之间的任何读取都回到已导入的持久层。
+      try { roleRegistry = null; } catch (_) {}
+      try { roleProfileContentState = null; } catch (_) {}
+      try { desktopWidgetState = null; } catch (_) {}
+      try { mailLetters = {}; mailLoaded = false; } catch (_) {}
+      try { circlePosts = []; circleLoaded = false; } catch (_) {}
+      try { moonData = null; } catch (_) {}
+      try { globalAppSettings = null; } catch (_) {}
+      try { proactiveEventState = null; } catch (_) {}
+      try { dreamJSONParseCache.clear(); } catch (_) {}
+      try { flushDreamStorageWrites(); } catch (_) {}
+    }
+
+    function writeImportedDreamStorageRaw(key, value) {
+      const name = String(key || '');
+      if (!name || (!name.startsWith('dream-') && !name.startsWith('dream_')) || name.startsWith(DREAM_STORAGE_SAFETY_PREFIX)) return false;
+      const serialized = String(value ?? '');
+      try {
+        dreamPendingStorageWrites.delete(name);
+        dreamPendingSafetySnapshots.delete(name);
+        dreamJSONParseCache.delete(name);
+        localStorage.setItem(name, serialized);
+        // 导入属于显式恢复动作，必须解除此前“重置/删除”留下的 tombstone。
+        localStorage.removeItem(`${DREAM_STORAGE_SAFETY_PREFIX}deleted:${encodeURIComponent(name)}`);
+        localStorage.setItem(`__dream-v3-cache-ts:${encodeURIComponent(name)}`, String(Date.now()));
+        return localStorage.getItem(name) === serialized;
+      } catch (_) { return false; }
+    }
+
+    function applyImportedDreamRecordToCache(record) {
+      const item = record && typeof record === 'object' ? record : null;
+      const name = String(item?.key || '');
+      if (!name || (!name.startsWith('dream-') && !name.startsWith('dream_')) || name.startsWith(DREAM_STORAGE_SAFETY_PREFIX)) return false;
+      if (item.deleted) {
+        try {
+          localStorage.removeItem(name);
+          localStorage.setItem(`${DREAM_STORAGE_SAFETY_PREFIX}deleted:${encodeURIComponent(name)}`, String(item.deletedAt || Date.now()));
+          localStorage.setItem(`__dream-v3-cache-ts:${encodeURIComponent(name)}`, String(Date.now()));
+          dreamJSONParseCache.delete(name);
+          return true;
+        } catch (_) { return false; }
+      }
+      return writeImportedDreamStorageRaw(name, item.value);
+    }
+
+    window.beginDreamDataImport = beginDreamDataImport;
+    window.cancelDreamDataImport = cancelDreamDataImport;
+    window.prepareDreamImportedStateForReload = prepareDreamImportedStateForReload;
+    window.writeImportedDreamStorageRaw = writeImportedDreamStorageRaw;
+    window.applyImportedDreamRecordToCache = applyImportedDreamRecordToCache;
 
     function readBackupValue(key, source = null) {
       if (source && Object.prototype.hasOwnProperty.call(source, key)) {
@@ -14885,6 +15260,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const allChatSettings = readBackupValue(CHAT_SETTINGS_KEY, source) || {};
       if (categoryId === 'profile') return { roles: readBackupValue(ROLE_STORAGE_KEY, source) || [], roleProfileContent: readBackupValue(ROLE_PROFILE_CONTENT_STORAGE_KEY, source) || {}, dreamCorners: readBackupValue('dream_transmit_corners_v1', source) || [], deletedCorners: readBackupValue(DELETED_DREAM_CORNERS_STORAGE_KEY, source) || [] };
       if (categoryId === 'widgets') return window.DesktopWidgetsV2?.exportData?.() || { layout: readBackupValue('dream-messenger:desktop-layout:v2', source) || null, instances: [] };
+      if (categoryId === 'settings') return { globalSettings: readBackupValue(GLOBAL_SETTINGS_KEY, source) || {} };
       if (categoryId === 'komo') return window.KomoStore?.exportData?.() || readBackupValue('dream-messenger:komo-store:v1', source) || {};
       if (categoryId === 'phone') return { phone: readBackupValue('dream-messenger:phone-inspection:v1', source) || { profiles: {} } };
       if (categoryId === 'cards') return { cardLibrary: readBackupValue(CARD_MANAGER_STORAGE_KEY, source) || [], deletedGroups: readBackupValue(DELETED_CARD_GROUPS_STORAGE_KEY, source) || [], deletedItems: readBackupValue(DELETED_CARD_ITEMS_STORAGE_KEY, source) || [] };
@@ -14993,7 +15369,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       writeDreamJSON(CHAT_SETTINGS_KEY, current);
     }
 
-    function applyDreamBackupCategory(categoryId, payload, mode = 'merge') {
+    async function applyDreamBackupCategory(categoryId, payload, mode = 'merge') {
       if (!payload || typeof payload !== 'object') return;
       if (categoryId === 'profile') {
         const roles = payload.roles || [];
@@ -15007,7 +15383,14 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         return;
       }
       if (categoryId === 'widgets') { window.DesktopWidgetsV2?.importData?.(payload, mode); return; }
-      if (categoryId === 'komo') { if(window.KomoStore?.importData)window.KomoStore.importData(payload,mode);else writeDreamJSON('dream-messenger:komo-store:v1',payload); return; }
+      if (categoryId === 'settings') {
+        const incoming = payload.globalSettings && typeof payload.globalSettings === 'object' ? payload.globalSettings : {};
+        const current = readDreamJSON(GLOBAL_SETTINGS_KEY, {}) || {};
+        writeDreamJSON(GLOBAL_SETTINGS_KEY, mode === 'replace' ? incoming : { ...current, ...incoming });
+        globalAppSettings = null;
+        return;
+      }
+      if (categoryId === 'komo') { if(window.KomoStore?.importData)await window.KomoStore.importData(payload,mode);else writeDreamJSON('dream-messenger:komo-store:v1',payload); return; }
       if (categoryId === 'phone') { const incoming=payload.phone&&typeof payload.phone==='object'?payload.phone:{profiles:{}};const current=readDreamJSON('dream-messenger:phone-inspection:v1',{profiles:{}})||{profiles:{}};writeDreamJSON('dream-messenger:phone-inspection:v1',mode==='replace'?incoming:{...current,...incoming,profiles:{...(current.profiles||{}),...(incoming.profiles||{})}});return; }
       if (categoryId === 'cards') {
         const library = Array.isArray(payload.cardLibrary) ? payload.cardLibrary : [];
@@ -15069,6 +15452,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     function resetDreamBackupCategory(categoryId) {
       if (categoryId === 'profile') { removeDreamStorage(ROLE_STORAGE_KEY); removeDreamStorage(ROLE_PROFILE_CONTENT_STORAGE_KEY); removeDreamStorage('dream_transmit_corners_v1'); return; }
       if (categoryId === 'widgets') { window.DesktopWidgetsV2?.resetAll?.(); return; }
+      if (categoryId === 'settings') { removeDreamStorage(GLOBAL_SETTINGS_KEY); globalAppSettings = null; return; }
       if (categoryId === 'komo') { if(window.KomoStore?.reset)window.KomoStore.reset();else removeDreamStorage('dream-messenger:komo-store:v1'); return; }
       if (categoryId === 'phone') { removeDreamStorage('dream-messenger:phone-inspection:v1'); return; }
       if (categoryId === 'cards') { removeDreamStorage(CARD_MANAGER_STORAGE_KEY); removeDreamStorage(DELETED_CARD_GROUPS_STORAGE_KEY); return; }
@@ -15104,6 +15488,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const file = event.target.files?.[0];
       if (!file) return;
       if (!selected.length) { showGlobalSettingsToast('请先选择要导入的数据分类'); event.target.value = ''; return; }
+      let committed = false;
       try {
         const data = JSON.parse(await file.text());
         const categories = data?.categories && typeof data.categories === 'object'
@@ -15112,16 +15497,20 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
             ? Object.fromEntries(selected.map(id => [id, buildDreamBackupCategory(id, data.storage)]))
             : null;
         if (!categories) throw new Error('not-categorized-backup');
+        const mode = document.getElementById('globalBackupImportMode')?.value === 'replace' ? 'replace' : 'merge';
+        const available = selected.filter(id => Object.prototype.hasOwnProperty.call(categories, id));
+        if (!available.length) throw new Error('no-selected-category');
+        beginDreamDataImport();
         const mediaReplacements = await restoreDreamMediaArchive(data.media);
         const hydratedCategories = replaceDreamMediaReferences(categories, mediaReplacements);
-        const mode = document.getElementById('globalBackupImportMode')?.value === 'replace' ? 'replace' : 'merge';
-        const available = selected.filter(id => Object.prototype.hasOwnProperty.call(hydratedCategories, id));
-        if (!available.length) throw new Error('no-selected-category');
-        available.forEach(id => applyDreamBackupCategory(id, hydratedCategories[id], mode));
+        for (const id of available) await applyDreamBackupCategory(id, hydratedCategories[id], mode);
+        prepareDreamImportedStateForReload();
+        committed = true;
         showGlobalSettingsToast(`已导入 ${available.length} 类数据，即将刷新`);
         window.setTimeout(() => window.location.reload(), 650);
       } catch (error) {
-        showGlobalSettingsToast(error.message === 'no-selected-category' ? '档案中没有勾选的分类' : '分类档案格式无效');
+        if (!committed) cancelDreamDataImport();
+        showGlobalSettingsToast(error.message === 'no-selected-category' ? '档案中没有勾选的分类' : `分类档案导入失败${error?.message ? `：${error.message}` : ''}`);
       } finally {
         event.target.value = '';
       }
@@ -15158,16 +15547,22 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     async function importDreamTransmitData(event) {
       const file = event.target.files?.[0];
       if (!file) return;
+      let committed = false;
       try {
         const data = JSON.parse(await file.text());
         const storage = data.storage && typeof data.storage === 'object' ? data.storage : data;
+        beginDreamDataImport();
         Object.entries(storage).forEach(([key, value]) => {
-          if (!key.startsWith('dream-') && !key.startsWith('dream_')) return;
-          typeof value === 'string' ? writeDreamStorageValue(key, value) : writeDreamJSON(key, value);
+          if ((!key.startsWith('dream-') && !key.startsWith('dream_')) || key.startsWith(DREAM_STORAGE_SAFETY_PREFIX)) return;
+          const raw = typeof value === 'string' ? value : compressDreamJSONString(JSON.stringify(value));
+          writeImportedDreamStorageRaw(key, raw);
         });
+        prepareDreamImportedStateForReload();
+        committed = true;
         showGlobalSettingsToast('数据导入完成，即将刷新');
         window.setTimeout(() => window.location.reload(), 650);
       } catch (error) {
+        if (!committed) cancelDreamDataImport();
         showGlobalSettingsToast('备份文件格式无效');
       } finally {
         event.target.value = '';
@@ -15260,6 +15655,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function closeChatApp() {
+      exitChatMultiSelectMode();
       saveChatHistoryForHandle(activeChatHandle);
       chatBatchToken += 1;
       chatBatchSending = false;
@@ -15294,6 +15690,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function openConversation(name, handle, initials, gradient) {
+      exitChatMultiSelectMode();
       if (ignoreNextChatOpen) {
         ignoreNextChatOpen = false;
         return;
@@ -15429,12 +15826,30 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       ['full','shrink','mini'].forEach(item => modal.classList.remove(`window-${item}`));
       modal.classList.add(`window-${mode}`);
       const screen = document.getElementById('callScreen');
-      if (screen && mode !== 'mini') {
+      const callNameNode = document.getElementById('callName');
+      const callStatusNode = document.getElementById('callStatus');
+      const callAvatarNode = document.getElementById('callAvatar');
+      if (screen && mode === 'mini') {
+        // 全局字号缩放会给文字写入 inline !important；最小胶囊必须显式覆盖，避免 CSS 看似修改却不生效。
+        screen.dataset.globalFontIgnore='true';
+        screen.style.setProperty('width','136px','important');
+        screen.style.setProperty('height','42px','important');
+        screen.style.setProperty('min-height','42px','important');
+        screen.style.setProperty('max-height','42px','important');
+        screen.style.setProperty('border-radius','21px','important');
+        if(callNameNode){callNameNode.dataset.globalFontIgnore='true';callNameNode.style.setProperty('font-size','8px','important');}
+        if(callStatusNode){callStatusNode.dataset.globalFontIgnore='true';callStatusNode.style.setProperty('font-size','6.5px','important');}
+        if(callAvatarNode){callAvatarNode.dataset.globalFontIgnore='true';callAvatarNode.style.setProperty('font-size','6px','important');}
+      } else if (screen) {
+        delete screen.dataset.globalFontIgnore;
+        ['width','height','min-height','max-height','border-radius'].forEach(property=>screen.style.removeProperty(property));
         screen.style.position = '';
         screen.style.left = '';
         screen.style.top = '';
         screen.style.right = '';
         screen.style.bottom = '';
+        [callNameNode,callStatusNode,callAvatarNode].forEach(node=>{if(!node)return;delete node.dataset.globalFontIgnore;node.style.removeProperty('font-size');delete node.dataset.globalBaseFontSize;delete node.dataset.globalFontMultiplierApplied;delete node.dataset.globalFontScaleApplied;});
+        try{applyGlobalFontScaleToTree(screen,loadGlobalAppSettings().fontScale/100);}catch(_){}
       }
       activeCallWindowMode = mode;
       document.querySelectorAll('[data-call-window]').forEach(button => button.classList.toggle('active', button.dataset.callWindow === mode));
@@ -15836,6 +16251,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         callVideoBackground: '',
         callSelfBackground: '',
         partnerVoiceEnabled: true,
+        voiceCards: [],
         stickerMine: [
           { name: '软乎乎', emoji: '🥹' },
           { name: '开心', emoji: '🥳' },
@@ -15855,6 +16271,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         boardRecords: [],
         redEnvelopes: [],
         checkHistory: [],
+        deletedSpecialMessageIds: [],
         pendingCheck: null,
         pendingReply: null,
         pendingProactiveMessages: [],
@@ -15867,6 +16284,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         listenIndex: 0,
         listenMiniStyle: 'bar',
         listenFavorites: [],
+        listenWallpaper: '',
+        listenWallpaperBlur: 0,
         companionBackground: '',
         chatGlassEnabled: false,
         chatGlassBlur: 14,
@@ -15898,10 +16317,12 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         selfAvatar: typeof saved.selfAvatar === 'string' ? saved.selfAvatar : defaults.selfAvatar,
         selfGradient: typeof saved.selfGradient === 'string' && saved.selfGradient ? saved.selfGradient : defaults.selfGradient,
         partnerVoiceEnabled: saved.partnerVoiceEnabled !== false,
+        voiceCards: Array.isArray(saved.voiceCards) ? saved.voiceCards.filter(item=>item&&item.id&&isDreamMediaReference(item.src)).map(item=>({id:String(item.id),name:String(item.name||'MP3 语音字卡').slice(0,100),src:String(item.src),duration:Math.max(1,Math.min(3600,Number(item.duration)||1)),createdAt:Number(item.createdAt)||Date.now()})).slice(-60) : [],
         decisionRecords: Array.isArray(saved.decisionRecords) ? saved.decisionRecords : defaults.decisionRecords.slice(),
         boardRecords: Array.isArray(saved.boardRecords) ? saved.boardRecords : defaults.boardRecords.slice(),
         redEnvelopes: Array.isArray(saved.redEnvelopes) ? saved.redEnvelopes : defaults.redEnvelopes.slice(),
         checkHistory: Array.isArray(saved.checkHistory) ? saved.checkHistory : defaults.checkHistory.slice(),
+        deletedSpecialMessageIds: Array.isArray(saved.deletedSpecialMessageIds) ? [...new Set(saved.deletedSpecialMessageIds.map(String))].slice(-300) : [],
         patTexts: Array.isArray(saved.patTexts) ? saved.patTexts.map(String).filter(text => !PRESET_CARD_TEXTS.has(text.trim())) : defaults.patTexts.slice(),
         pendingCheck: saved.pendingCheck && typeof saved.pendingCheck === 'object' ? saved.pendingCheck : defaults.pendingCheck,
         pendingReply: saved.pendingReply && typeof saved.pendingReply === 'object' ? saved.pendingReply : defaults.pendingReply,
@@ -15920,6 +16341,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         listenIndex: Number.isInteger(saved.listenIndex) ? saved.listenIndex : defaults.listenIndex,
         listenMiniStyle: ['bar', 'orb', 'off'].includes(saved.listenMiniStyle) ? saved.listenMiniStyle : defaults.listenMiniStyle,
         listenFavorites: Array.isArray(saved.listenFavorites) ? saved.listenFavorites : defaults.listenFavorites.slice(),
+        listenWallpaper: typeof saved.listenWallpaper === 'string' && (isDreamMediaReference(saved.listenWallpaper) || /^data:image\//i.test(saved.listenWallpaper)) ? saved.listenWallpaper : defaults.listenWallpaper,
+        listenWallpaperBlur: Number.isFinite(Number(saved.listenWallpaperBlur)) ? Math.max(0, Math.min(24, Number(saved.listenWallpaperBlur))) : defaults.listenWallpaperBlur,
         companionBackground: saved.companionBackground || defaults.companionBackground,
         chatGlassEnabled: Boolean(saved.chatGlassEnabled),
         chatGlassBlur: Number.isFinite(Number(saved.chatGlassBlur)) ? Math.max(0, Math.min(30, Number(saved.chatGlassBlur))) : defaults.chatGlassBlur,
@@ -16343,6 +16766,35 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       event.target.value = '';
     }
 
+    function closeListenWallpaperPanel() { const panel=document.getElementById('listenWallpaperPanel');if(panel)panel.hidden=true; }
+    function toggleListenWallpaperPanel() { const panel=document.getElementById('listenWallpaperPanel');if(!panel)return;panel.hidden=!panel.hidden;if(!panel.hidden)updateListenWallpaperState(); }
+    function updateListenWallpaperState(handle=currentPartnerHandle) { const settings=getChatSettings(handle),node=document.getElementById('listenWallpaperState'),input=document.getElementById('listenWallpaperBlurInput'),output=document.getElementById('listenWallpaperBlurValue');if(node)node.textContent=settings.listenWallpaper?'已使用当前聊天室壁纸':'当前使用默认背景';if(input)input.value=String(settings.listenWallpaperBlur||0);if(output)output.textContent=`${settings.listenWallpaperBlur||0}px`; }
+    function previewListenWallpaperBlur(value) { const blur=Math.max(0,Math.min(24,Number(value)||0)),stage=document.querySelector('#listenTogetherModal .listen-together-stage'),output=document.getElementById('listenWallpaperBlurValue');if(stage)stage.style.setProperty('--listen-wallpaper-blur',`${blur}px`);if(output)output.textContent=`${blur}px`; }
+    function saveListenWallpaperBlur(value) { const handle=String(currentPartnerHandle||'');if(!handle)return;const blur=Math.max(0,Math.min(24,Number(value)||0)),settings=getChatSettings(handle);settings.listenWallpaperBlur=blur;if(!saveChatSettings(settings,handle))return showChatToast('壁纸模糊设置保存失败');previewListenWallpaperBlur(blur); }
+    function applyListenWallpaper(handle=currentPartnerHandle) {
+      const stage=document.querySelector('#listenTogetherModal .listen-together-stage'),layer=document.getElementById('listenWallpaperLayer');if(!stage||!layer)return;
+      const settings=getChatSettings(handle),source=String(settings.listenWallpaper||''),blur=Math.max(0,Math.min(24,Number(settings.listenWallpaperBlur)||0));
+      stage.style.setProperty('--listen-wallpaper-blur',`${blur}px`);stage.style.removeProperty('background-image');
+      if(stage.dataset.listenWallpaperSource===source){updateListenWallpaperState(handle);return;}
+      stage.dataset.listenWallpaperSource=source;stage.classList.toggle('has-custom-wallpaper',Boolean(source));
+      if(!source){layer.style.removeProperty('background-image');updateListenWallpaperState(handle);return;}
+      resolveDreamMediaSource(source).then(url=>{if(url&&stage.dataset.listenWallpaperSource===source)layer.style.backgroundImage=`url("${url}")`;});
+      updateListenWallpaperState(handle);
+    }
+    async function uploadListenWallpaper(event) {
+      const file=event.target.files?.[0];event.target.value='';if(!file)return;
+      if(!file.type.startsWith('image/'))return showChatToast('请选择图片文件');
+      const handle=String(currentPartnerHandle||'');if(!handle)return;
+      const source=await putDreamMediaFile(file);if(!source)return showChatToast('一起听壁纸保存失败');
+      const settings=getChatSettings(handle),previous=settings.listenWallpaper||'';settings.listenWallpaper=source;
+      if(!saveChatSettings(settings,handle)){if(isDreamMediaReference(source))deleteDreamMediaReference(source);return showChatToast('一起听壁纸设置保存失败');}
+      applyListenWallpaper(handle);closeListenWallpaperPanel();if(previous&&previous!==source&&isDreamMediaReference(previous))deleteDreamMediaReference(previous);showChatToast('一起听壁纸已更新');
+    }
+    async function resetListenWallpaper() {
+      const handle=String(currentPartnerHandle||'');if(!handle)return;const settings=getChatSettings(handle),previous=settings.listenWallpaper||'';settings.listenWallpaper='';settings.listenWallpaperBlur=0;
+      if(!saveChatSettings(settings,handle))return showChatToast('默认背景保存失败');applyListenWallpaper(handle);closeListenWallpaperPanel();if(isDreamMediaReference(previous))await deleteDreamMediaReference(previous);showChatToast('已恢复一起听默认背景');
+    }
+
     function openListenTogether() {
       closeExpressionPanel();
       closeAttachmentPanel();
@@ -16371,6 +16823,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const forceClose = options.forceClose === true;
       const modal = document.getElementById('listenTogetherModal');
       const mini = document.getElementById('listenMiniPlayer');
+      closeListenWallpaperPanel();
       // 当前聊天室不拥有会话时，任何关闭操作都只收起弹窗，绝不终止其他房间正在播放的一起听。
       if (listenSessionHandle && listenSessionHandle !== currentPartnerHandle) {
         if (modal) {
@@ -16469,6 +16922,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     function renderListenTogether() {
       // 按会话归属渲染：弹窗内看当前聊天室，弹窗外（迷你播放器）看会话所属聊天室；非会话所属时不带播放状态。
       const context = getListenRenderContext();
+      if (context.modalOpen) applyListenWallpaper(context.sourceHandle);
       const state = context;
       const track = state.queue[state.index] || { title: '等待选择音乐', artist: '共享播放', cover: '' };
       const title = document.getElementById('listenTrackTitle');
@@ -16571,24 +17025,29 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       return listenAudio;
     }
 
-    function syncListenAudioSource(track) {
+    async function syncListenAudioSource(track) {
       if (!track?.audioUrl) {
         if (listenAudio) {
           listenAudio.pause();
           listenAudio.removeAttribute('src');
+          delete listenAudio.dataset.sourceReference;
           listenAudio.load();
         }
         return null;
       }
+      const sourceReference = String(track.audioUrl || '');
+      const playableUrl = isDreamMediaReference(sourceReference) ? await resolveDreamMediaSource(sourceReference) : sourceReference;
+      if (!playableUrl) return null;
       const audio = ensureListenAudio();
-      if (audio.src !== track.audioUrl) {
-        audio.src = track.audioUrl;
+      if (audio.dataset.sourceReference !== sourceReference || audio.src !== playableUrl) {
+        audio.dataset.sourceReference = sourceReference;
+        audio.src = playableUrl;
         audio.load();
       }
       return audio;
     }
 
-    function toggleListenPlayback() {
+    async function toggleListenPlayback() {
       // 会话属于其他聊天室时，先干净地结束旧会话，再由当前聊天室接管（单间播放，避免 A/B 串台）。
       if (listenSessionHandle && listenSessionHandle !== currentPartnerHandle) {
         stopListenSessionPlayback();
@@ -16596,7 +17055,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       listenSessionHandle = currentPartnerHandle;
       const state = getListenState();
       const track = state.queue[state.index];
-      const audio = syncListenAudioSource(track);
+      const audio = await syncListenAudioSource(track);
       window.clearInterval(listenTimer);
       if (audio && track?.audioUrl) {
         if (listenIsPlaying) {
@@ -16711,6 +17170,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const title = document.getElementById('listenSongTitleInput');
       const artist = document.getElementById('listenSongArtistInput');
       const url = document.getElementById('listenSongUrlInput');
+      const audio = document.getElementById('listenSongAudioInput');
+      const audioName = document.getElementById('listenSongAudioName');
+      const audioClear = document.getElementById('listenSongAudioClear');
       const cover = document.getElementById('listenSongCoverInput');
       const coverName = document.getElementById('listenSongCoverName');
       const preview = document.getElementById('listenSongCoverPreview');
@@ -16718,10 +17180,16 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (!form) return;
       listenSongFormHandle = currentPartnerHandle;
       listenCoverUploadPromise = null;
+      listenAudioUploadPromise = null;
       currentListenCoverData = '';
+      currentListenAudioData = '';
+      currentListenAudioName = '';
       if (title) title.value = '';
       if (artist) artist.value = '';
-      if (url) url.value = '';
+      if (url) { url.value = ''; url.disabled = false; }
+      if (audio) audio.value = '';
+      if (audioName) audioName.textContent = '未选择本地音频';
+      if (audioClear) audioClear.hidden = true;
       if (cover) cover.value = '';
       if (coverName) coverName.textContent = '未选择封面';
       if (preview) { preview.dataset.coverSource = ''; preview.style.backgroundImage = ''; }
@@ -16733,9 +17201,14 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     function closeListenSongForm() {
       const form = document.getElementById('listenSongFormBackdrop');
       if (form) form.hidden = true;
+      const abandonedAudio = currentListenAudioData;
       listenSongFormHandle = '';
       listenCoverUploadPromise = null;
+      listenAudioUploadPromise = null;
       currentListenCoverData = '';
+      currentListenAudioData = '';
+      currentListenAudioName = '';
+      if (isDreamMediaReference(abandonedAudio)) deleteDreamMediaReference(abandonedAudio);
     }
 
     function normalizeListenAudioUrl(value) {
@@ -16757,6 +17230,65 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       return settings.listenIndex;
     }
 
+    async function clearListenLocalAudio(deleteDraft = true) {
+      const source = currentListenAudioData;
+      currentListenAudioData = '';
+      currentListenAudioName = '';
+      listenAudioUploadPromise = null;
+      const input = document.getElementById('listenSongAudioInput');
+      const name = document.getElementById('listenSongAudioName');
+      const clear = document.getElementById('listenSongAudioClear');
+      const url = document.getElementById('listenSongUrlInput');
+      if (input) input.value = '';
+      if (name) name.textContent = '未选择本地音频';
+      if (clear) clear.hidden = true;
+      if (url) url.disabled = false;
+      if (deleteDraft && isDreamMediaReference(source)) await deleteDreamMediaReference(source);
+    }
+
+    async function uploadListenLocalAudio(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const isMp3 = file.type === 'audio/mpeg' || /\.mp3$/i.test(file.name || '');
+      if (!isMp3) { event.target.value = ''; return showChatToast('请选择 MP3 音频文件'); }
+      if (file.size > 50 * 1024 * 1024) { event.target.value = ''; return showChatToast('单个 MP3 文件不能超过 50MB'); }
+      const formHandle = listenSongFormHandle || currentPartnerHandle;
+      const submit = document.querySelector('#listenSongForm .listen-song-submit');
+      const label = document.getElementById('listenSongAudioName');
+      const clear = document.getElementById('listenSongAudioClear');
+      if (currentListenAudioData) await clearListenLocalAudio(true);
+      if (label) label.textContent = '正在保存本地 MP3…';
+      if (submit) { submit.disabled = true; submit.textContent = '正在保存音频…'; }
+      const operation = (async () => {
+        try {
+          const source = await putDreamMediaFile(file);
+          if (!isDreamMediaReference(source)) throw new Error('mp3-indexeddb-save-failed');
+          if (listenSongFormHandle !== formHandle || document.getElementById('listenSongFormBackdrop')?.hidden) { await deleteDreamMediaReference(source); return false; }
+          currentListenAudioData = source;
+          currentListenAudioName = file.name || '本地 MP3';
+          if (label) label.textContent = `${currentListenAudioName} · ${(file.size / 1024 / 1024).toFixed(1)}MB`;
+          if (clear) clear.hidden = false;
+          const url = document.getElementById('listenSongUrlInput');
+          if (url) { url.value = ''; url.disabled = true; }
+          const title = document.getElementById('listenSongTitleInput');
+          if (title && !title.value.trim()) title.value = currentListenAudioName.replace(/\.mp3$/i, '');
+          showChatToast('本地 MP3 已保存，可以添加歌曲');
+          return true;
+        } catch (error) {
+          if (label) label.textContent = '音频保存失败，请重新选择';
+          showChatToast('本地 MP3 保存失败');
+          console.warn(error);
+          return false;
+        }
+      })();
+      listenAudioUploadPromise = operation;
+      try { await operation; } finally {
+        if (listenAudioUploadPromise === operation) listenAudioUploadPromise = null;
+        if (submit && !document.getElementById('listenSongFormBackdrop')?.hidden) { submit.disabled = false; submit.textContent = '添加到共享队列'; }
+        event.target.value = '';
+      }
+    }
+
     async function addListenTrack() {
       const title = document.getElementById('listenSongTitleInput');
       const artist = document.getElementById('listenSongArtistInput');
@@ -16764,8 +17296,13 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const submit = document.querySelector('#listenSongForm .listen-song-submit');
       const name = title?.value.trim();
       if (!name) return showChatToast('请先填写歌曲名称');
-      const audioUrl = normalizeListenAudioUrl(url?.value || '');
-      if (url?.value.trim() && !audioUrl) return showChatToast('请粘贴有效的音频直链');
+      if (listenAudioUploadPromise) {
+        if (submit) { submit.disabled = true; submit.textContent = '正在保存音频…'; }
+        const audioReady = await listenAudioUploadPromise;
+        if (!audioReady) { if (submit) { submit.disabled = false; submit.textContent = '添加到共享队列'; } return showChatToast('本地 MP3 尚未保存成功，请重新选择'); }
+      }
+      const audioUrl = currentListenAudioData || normalizeListenAudioUrl(url?.value || '');
+      if (!currentListenAudioData && url?.value.trim() && !audioUrl) return showChatToast('请粘贴有效的音频直链');
       if (listenCoverUploadPromise) {
         if (submit) { submit.disabled = true; submit.textContent = '正在保存封面…'; }
         const coverReady = await listenCoverUploadPromise;
@@ -16783,6 +17320,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         artist: artist?.value.trim() || '未知艺术家',
         cover: currentListenCoverData || '',
         audioUrl,
+        audioName: currentListenAudioData ? currentListenAudioName : '',
+        audioSource: currentListenAudioData ? 'local-mp3' : audioUrl ? 'remote-url' : 'simulation',
         createdAt: Date.now()
       };
       const settings = getChatSettings(targetHandle);
@@ -16794,6 +17333,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         showChatToast('歌曲保存失败，请释放浏览器存储空间后重试');
         return;
       }
+      // 已进入队列的媒体不再是表单草稿，关闭表单时不能删除其 Blob。
+      currentListenAudioData = '';
+      currentListenAudioName = '';
       closeListenSongForm();
       // 只在加歌目标就是会话所属聊天室时才重置进度，避免给别的房间加歌时打断正在播放的会话。
       if (!listenSessionHandle || targetHandle === listenSessionHandle) listenProgress = 0;
@@ -17768,6 +18310,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const settings = getChatSettings(handle);
       if (settings.historyDeleted) return;
       const existingIds = new Set([...document.querySelectorAll('#chatThreadBody .chat-check-bubble')].map(card => card.dataset.checkId).filter(Boolean));
+      const snapshot = getChatHistorySnapshot(handle);
+      (Array.isArray(snapshot?.lines) ? snapshot.lines : []).forEach(html => { const holder=document.createElement('div');holder.innerHTML=String(html||'');const id=holder.querySelector('.chat-check-bubble')?.dataset.checkId;if(id)existingIds.add(id); });
       (settings.checkHistory || []).forEach(record => {
         if (!existingIds.has(record.id)) sendChatCheckCard(record.text, record.direction, { id: record.id, time: record.time, kind: record.kind || (record.direction === 'out' && record.status === 'replied' ? 'reply' : ''), status: record.status, answered: record.direction === 'out' && record.kind === 'question' && record.status === 'replied', persist: false });
         if (record.direction === 'out' && (record.kind || 'question') === 'question' && record.status !== 'replied') scheduleDirectCheckReply(record, handle);
@@ -17931,7 +18475,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       closeAttachmentPanel();
       const modal = document.getElementById('incomingCheckModal');
       if (!modal) return;
-      const card = existingCard || sendChatCheckCard(question, 'in', { id: id || `incoming-check-${Date.now()}` });
+      const storedAlready = Boolean(id) && (getChatHistorySnapshot(currentPartnerHandle)?.lines || []).some(html => String(html).includes(`data-check-id="${String(id).replace(/["\\]/g,'')}"`));
+      const card = existingCard || (storedAlready ? null : sendChatCheckCard(question, 'in', { id: id || `incoming-check-${Date.now()}` }));
       activeIncomingCheckId = card?.dataset.checkId || id;
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
@@ -18375,19 +18920,20 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     async function uploadChatAttachmentImage(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        showChatToast('请选择图片文件');
-        event.target.value = '';
-        return;
-      }
-      const source = await putDreamMediaFile(file);
-      if (source) {
-        sendChatSticker(source, file.name || '图片附件');
-        closeAttachmentPanel();
-      }
+      const selected = [...(event.target.files || [])].filter(file => file?.type?.startsWith('image/'));
       event.target.value = '';
+      if (!selected.length) return showChatToast('请选择图片文件');
+      const files = selected.slice(0, 5);
+      if (selected.length > 5) showChatToast('一次最多发送 5 张，已选取前 5 张');
+      const items = [];
+      for (let index = 0; index < files.length; index += 1) {
+        if (files.length > 1) showChatToast(`正在保存图片 ${index + 1} / ${files.length}`);
+        const source = await putDreamMediaFile(files[index]);
+        if (source) items.push({ src: source, name: files[index].name || `图片 ${index + 1}` });
+      }
+      if (!items.length) return showChatToast('图片保存失败，请稍后重试');
+      if (items.length === 1) sendChatImage(items[0].src, items[0].name);
+      else sendChatImageStack(items);
     }
 
     function openExpressionPanel() {
@@ -18572,6 +19118,201 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       maybeAddRoleProfileFavoriteItem(currentPartnerHandle, { source: '表情包', text: name || '表情包', image: src || '', createdAt: Date.now() });
       closeExpressionPanel();
       showChatToast('表情包已发送');
+    }
+
+    function syncChatImageStack(bubble) {
+      if (!bubble) return;
+      const cards = [...bubble.querySelectorAll('.chat-image-stack-card')];
+      const count = cards.length;
+      if (!count) return;
+      const expanded = bubble.dataset.expanded === 'true';
+      const active = Math.max(0, Math.min(count - 1, Number(bubble.dataset.activeIndex) || 0));
+      bubble.dataset.activeIndex = String(active);
+      bubble.dataset.imageCount = String(count);
+      const viewportWidth = Math.max(280, window.innerWidth || 360);
+      const viewportHeight = Math.max(420, window.innerHeight || 640);
+      const collapsedBounds = { width: Math.min(188, viewportWidth * .52), height: Math.min(218, viewportHeight * .38) };
+      const fanBounds = { width: Math.min(142, viewportWidth * .38), height: Math.min(204, viewportHeight * .34) };
+      const fitCardToImage = (card, image) => {
+        const ratio = image?.naturalWidth && image?.naturalHeight ? image.naturalWidth / image.naturalHeight : .8;
+        const fit = bounds => {
+          let width = bounds.width, height = width / ratio;
+          if (height > bounds.height) { height = bounds.height; width = height * ratio; }
+          return { width: Math.max(48, Math.round(width)), height: Math.max(58, Math.round(height)) };
+        };
+        const collapsed = fit(collapsedBounds), fan = fit(fanBounds);
+        card.style.setProperty('--stack-card-width', `${collapsed.width}px`);
+        card.style.setProperty('--stack-card-height', `${collapsed.height}px`);
+        card.style.setProperty('--stack-fan-width', `${fan.width}px`);
+        card.style.setProperty('--stack-fan-height', `${fan.height}px`);
+        if (image && image.dataset.stackRatioBound !== 'true') {
+          image.dataset.stackRatioBound = 'true';
+          image.addEventListener('load', () => syncChatImageStack(bubble));
+        }
+        return { collapsed, fan };
+      };
+      const cardSizes = cards.map(card => fitCardToImage(card, card.querySelector('img')));
+      const activeSize = cardSizes[active]?.collapsed || { width: collapsedBounds.width, height: collapsedBounds.height };
+      const tallestFan = Math.max(...cardSizes.map(item => item.fan.height), 92);
+      bubble.style.setProperty('--stack-bubble-width', `${Math.min(206, activeSize.width + 18)}px`);
+      bubble.style.setProperty('--stack-bubble-height', `${Math.min(232, activeSize.height + 14)}px`);
+      bubble.style.setProperty('--stack-expanded-height', `${Math.min(238, tallestFan + 34)}px`);
+      // 收起时后方牌面也缩进当前图片的边界，只露出牌边，不制造大块空白或越界。
+      if (!expanded) cards.forEach((card, index) => {
+        const size = cardSizes[index].collapsed;
+        const scale = Math.min(1, activeSize.width / size.width, activeSize.height / size.height);
+        card.style.setProperty('--stack-card-width', `${Math.max(48, Math.round(size.width * scale))}px`);
+        card.style.setProperty('--stack-card-height', `${Math.max(58, Math.round(size.height * scale))}px`);
+      });
+      cards.forEach((card, index) => {
+        let x = 0, y = 0, rotation = 0, opacity = 1, z = 1, events = 'auto';
+        if (expanded) {
+          const delta = index - (count - 1) / 2;
+          x = delta * 28;
+          y = Math.abs(delta) * 6 + (index === active ? -8 : 0);
+          rotation = delta * 6.5;
+          z = index === active ? count + 12 : count - Math.round(Math.abs(delta));
+        } else {
+          const relative = (index - active + count) % count;
+          x = relative === 0 ? 0 : relative === 1 ? 10 : 18;
+          y = relative === 0 ? 0 : relative === 1 ? 2 : 4;
+          rotation = relative === 0 ? 0 : relative === 1 ? 1.6 : 3;
+          opacity = relative <= 2 ? 1 : 0;
+          z = count + 6 - relative;
+          events = relative === 0 ? 'auto' : 'none';
+        }
+        card.classList.toggle('is-active', index === active);
+        card.style.setProperty('--stack-x', `${x}px`);
+        card.style.setProperty('--stack-y', `${y}px`);
+        card.style.setProperty('--stack-r', `${rotation}deg`);
+        card.style.setProperty('--stack-z', String(z));
+        card.style.setProperty('--stack-opacity', String(opacity));
+        card.style.setProperty('--stack-events', events);
+      });
+      const toggle = bubble.querySelector('.chat-image-stack-toggle');
+      const counter = bubble.querySelector('.chat-image-stack-count');
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', String(expanded));
+        toggle.setAttribute('aria-label', `${expanded ? '收起' : '展开'} ${count} 张图片`);
+        toggle.title = expanded ? '收起图片' : '展开图片';
+      }
+      if (counter) counter.textContent = `${active + 1} / ${count}`;
+    }
+
+    window.toggleChatImageStack = function(button) {
+      const bubble = button?.closest?.('.chat-image-stack-bubble');
+      if (!bubble) return;
+      bubble.dataset.expanded = bubble.dataset.expanded === 'true' ? 'false' : 'true';
+      syncChatImageStack(bubble);
+      scheduleSaveChatHistory();
+    };
+
+    window.stepChatImageStack = function(button, direction = 1) {
+      const bubble = button?.closest?.('.chat-image-stack-bubble');
+      const cards = bubble ? [...bubble.querySelectorAll('.chat-image-stack-card')] : [];
+      if (!bubble || !cards.length) return;
+      const current = Number(bubble.dataset.activeIndex) || 0;
+      bubble.dataset.activeIndex = String((current + (direction < 0 ? -1 : 1) + cards.length) % cards.length);
+      syncChatImageStack(bubble);
+      scheduleSaveChatHistory();
+    };
+
+    function createChatImageStackBubble(items) {
+      const list = (Array.isArray(items) ? items : []).slice(0, 5).filter(item => item?.src);
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble chat-image-stack-bubble';
+      bubble.dataset.expanded = 'false';
+      bubble.dataset.activeIndex = '0';
+      bubble.dataset.imageCount = String(list.length);
+      const stage = document.createElement('div');
+      stage.className = 'chat-image-stack-stage';
+      const cards = document.createElement('div');
+      cards.className = 'chat-image-stack-cards';
+      list.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'chat-image-stack-card';
+        card.dataset.stackIndex = String(index);
+        const image = document.createElement('img');
+        hydrateDreamMediaImage(image, item.src);
+        image.alt = item.name || `图片 ${index + 1}`;
+        image.draggable = false;
+        card.appendChild(image);
+        cards.appendChild(card);
+      });
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'chat-image-stack-toggle';
+      toggle.setAttribute('onclick', 'toggleChatImageStack(this)');
+      toggle.setAttribute('aria-label', '展开或收起批量图片');
+      toggle.innerHTML = '<span class="chat-image-stack-toggle-icon" aria-hidden="true">⌄</span>';
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'chat-image-stack-next';
+      next.setAttribute('onclick', 'stepChatImageStack(this,1)');
+      next.setAttribute('aria-label', '查看下一张');
+      next.textContent = '›';
+      const counter = document.createElement('span');
+      counter.className = 'chat-image-stack-count';
+      stage.append(cards, toggle, next, counter);
+      bubble.appendChild(stage);
+      syncChatImageStack(bubble);
+      return bubble;
+    }
+
+    function sendChatImageStack(items) {
+      const list = (Array.isArray(items) ? items : []).slice(0, 5).filter(item => item?.src);
+      const body = document.getElementById('chatThreadBody');
+      if (!body || list.length < 2) return;
+      resetDeletedHistoryForNewMessage(body);
+      const line = document.createElement('div');
+      line.className = 'chat-message-line outgoing';
+      line.dataset.messageKind = 'image-stack';
+      line.dataset.createdAt = String(Date.now());
+      const content = document.createElement('div');
+      content.className = 'chat-message-content';
+      const bubble = createChatImageStackBubble(list);
+      const meta = document.createElement('div');
+      meta.className = 'chat-message-meta';
+      meta.textContent = '刚刚 · 已送达';
+      content.append(bubble, meta);
+      const avatar = document.createElement('div');
+      avatar.className = 'chat-message-avatar self-avatar';
+      setSelfChatAvatarVisual(avatar);
+      line.append(content, avatar);
+      const typing = document.getElementById('chatTyping');
+      body.insertBefore(line, typing || null);
+      syncChatImageStack(bubble);
+      line.dataset.receiptStatus = 'unread';
+      stampChatMessageLine(line);
+      scheduleChatUnreadReceipt(line);
+      body.scrollTop = body.scrollHeight;
+      recordUserChatActivity(currentPartnerHandle);
+      scheduleCurrentChatReplyEngine();
+      closeAttachmentPanel();
+      saveChatHistoryForHandle(activeChatHandle, { reason: 'image-stack-message' });
+      showChatToast(`已发送 ${list.length} 张图片`);
+    }
+
+    function sendChatImage(src, name) {
+      const body = document.getElementById('chatThreadBody');
+      if (!body || !src) return;
+      resetDeletedHistoryForNewMessage(body);
+      const line = document.createElement('div');
+      line.className = 'chat-message-line outgoing';
+      line.dataset.messageKind = 'image';
+      line.dataset.createdAt = String(Date.now());
+      const content = document.createElement('div'); content.className = 'chat-message-content';
+      const bubble = document.createElement('div'); bubble.className = 'chat-bubble chat-image-bubble';
+      const image = document.createElement('img'); hydrateDreamMediaImage(image, src); image.alt = name || '图片';
+      bubble.appendChild(image);
+      const meta = document.createElement('div'); meta.className = 'chat-message-meta'; meta.textContent = '刚刚 · 已送达';
+      content.append(bubble, meta);
+      const avatar = document.createElement('div'); avatar.className = 'chat-message-avatar self-avatar'; setSelfChatAvatarVisual(avatar);
+      line.append(content, avatar);
+      const typing = document.getElementById('chatTyping'); body.insertBefore(line, typing || null);
+      line.dataset.receiptStatus = 'unread'; stampChatMessageLine(line); scheduleChatUnreadReceipt(line);
+      body.scrollTop = body.scrollHeight; recordUserChatActivity(currentPartnerHandle); scheduleCurrentChatReplyEngine(); closeAttachmentPanel();
+      saveChatHistoryForHandle(activeChatHandle, { reason: 'image-message' }); showChatToast('图片已发送');
     }
 
     function sendChatSnippet(text, favoriteSource = '聊天文字') {
@@ -18849,8 +19590,9 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const mergedLines = partialStart > 0 && Array.isArray(previous?.lines)
         ? [...previous.lines.slice(0, partialStart), ...serialized]
         : serialized;
-      state[key] = { storageVersion: 4, updatedAt: Date.now(), lines: mergedLines };
-      window.persistChatMessagesIndividually?.(key, mergedLines);
+      const sanitizedMergedLines = normalizeStoredChatSpecialLines(key, mergedLines);
+      state[key] = { storageVersion: 4, updatedAt: Date.now(), lines: sanitizedMergedLines };
+      window.persistChatMessagesIndividually?.(key, sanitizedMergedLines);
       if (persistChatHistoryState(key)) return true;
       if (previous) state[key] = previous;
       else delete state[key];
@@ -18862,20 +19604,58 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       chatHistoryPersistTimer = window.setTimeout(() => saveChatHistoryForHandle(), 500);
     }
 
+    function chatSpecialIdentityFromLine(line) {
+      if (!line?.querySelector) return '';
+      const candidates = [
+        ['red', line.querySelector('.chat-red-envelope-bubble')?.dataset.redId],
+        ['decision', line.querySelector('.chat-decision-bubble')?.dataset.decisionId],
+        ['check', line.querySelector('.chat-check-bubble')?.dataset.checkId],
+        ['invite', line.querySelector('.chat-invite-bubble')?.dataset.inviteId],
+        ['komo-order', line.dataset.komoOrderId || line.querySelector('[data-komo-order-id]')?.dataset.komoOrderId],
+        ['komo-request', line.dataset.komoRequestId || line.querySelector('[data-komo-request-id]')?.dataset.komoRequestId]
+      ];
+      const found = candidates.find(([, id]) => String(id || '').trim());
+      return found ? `${found[0]}:${String(found[1])}` : '';
+    }
+
+    function normalizeStoredChatSpecialLines(handle, lines) {
+      const deleted = new Set((getChatSettings(handle).deletedSpecialMessageIds || []).map(String));
+      const result = []; const firstIndex = new Map();
+      (Array.isArray(lines) ? lines : []).forEach(html => {
+        const holder = document.createElement('div'); holder.innerHTML = String(html || '');
+        const identity = chatSpecialIdentityFromLine(holder.firstElementChild);
+        if (identity && deleted.has(identity)) return;
+        if (identity && firstIndex.has(identity)) {
+          // 保留原始时间位置，但采用最后一份卡片状态，避免已完成状态退回“等待中”。
+          result[firstIndex.get(identity)] = html;
+          return;
+        }
+        if (identity) firstIndex.set(identity, result.length);
+        result.push(html);
+      });
+      return result;
+    }
+
     function restoreChatHistory(handle, options = {}) {
       const key = String(handle || '').trim();
       const snapshot = getChatHistorySnapshot(key);
       const body = document.getElementById('chatThreadBody');
       const typing = document.getElementById('chatTyping');
       if (!key || !body || !snapshot || !Array.isArray(snapshot.lines) || !snapshot.lines.length) return;
+      const normalizedLines = normalizeStoredChatSpecialLines(key, snapshot.lines);
+      if (normalizedLines.length !== snapshot.lines.length || normalizedLines.some((html,index)=>html!==snapshot.lines[index])) {
+        snapshot.lines = normalizedLines; snapshot.storageVersion = Math.max(4, Number(snapshot.storageVersion)||0); snapshot.updatedAt = Date.now();
+        const state = loadChatHistoryState(); state[key] = snapshot; persistChatHistoryState(key); window.persistChatMessagesIndividually?.(key, normalizedLines);
+      }
+      if (!normalizedLines.length) return;
       const previousRestoreFlag = restoringChatHistory;
       restoringChatHistory = true;
       const holder = document.createElement('div');
       const pageSize = 50;
-      const loadedStart = options.all === true ? 0 : Math.max(0, snapshot.lines.length - pageSize);
+      const loadedStart = options.all === true ? 0 : Math.max(0, normalizedLines.length - pageSize);
       body.dataset.historyLoadedStart = String(loadedStart);
-      body.dataset.historyTotalLines = String(snapshot.lines.length);
-      snapshot.lines.slice(loadedStart).forEach(html => {
+      body.dataset.historyTotalLines = String(normalizedLines.length);
+      normalizedLines.slice(loadedStart).forEach(html => {
         holder.innerHTML = String(html || '');
         const line = holder.firstElementChild;
         if (line?.classList.contains('chat-message-line') || line?.classList.contains('chat-call-system-message')) {
@@ -18937,6 +19717,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if(!bubble)return'发来一条新消息';
       if(bubble.classList.contains('chat-voice-bubble')){const seconds=Math.max(0,Math.round(Number(bubble.dataset.voiceDuration)||0));return seconds?`[语音] ${seconds}秒`:'[语音]';}
       if(bubble.classList.contains('chat-sticker-bubble')){if(line?.dataset.messageKind==='kaomoji'){const text=cleanChatPreviewText(bubble.textContent,24);return text||'颜文字';}return '表情包';}
+      if(bubble.classList.contains('chat-image-stack-bubble'))return `[图片 ×${Math.max(1,Number(bubble.dataset.imageCount)||bubble.querySelectorAll('img').length)}]`;
       if(bubble.classList.contains('chat-image-bubble')){const caption=cleanChatPreviewText(bubble.querySelector('.chat-board-caption')?.textContent||bubble.querySelector('img')?.alt,24).replace(/^图片$/u,'');return caption?`[图片] ${caption}`:'[图片]';}
       if(bubble.classList.contains('chat-red-envelope-bubble'))return'红包';
       if(bubble.classList.contains('chat-invite-bubble'))return'INVITE';
@@ -18945,7 +19726,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if(bubble.classList.contains('chat-decision-bubble')){const question=cleanChatPreviewText(bubble.querySelector('.chat-decision-question')?.textContent,32);return question?`[决策] ${question}`:'[决策]';}
       const clone=bubble.cloneNode(true);clone.querySelectorAll('.chat-quoted-context,.chat-quote-block,.mail-reply-reference').forEach(node=>node.remove());const text=cleanChatPreviewText(clone.textContent,52);return text||'发来一条新消息';
     }
-    function chatPendingItemPreview(item={}){const type=String(item.kind||item.type||'text');if(type==='voice'){const seconds=Math.max(0,Math.round(Number(item.duration)||0));return seconds?`[语音] ${seconds}秒`:'[语音]';}if(type==='sticker')return '表情包';if(type==='kaomoji')return cleanChatPreviewText(item.text||item.emoji,24)||'颜文字';if(type==='poke')return `[拍一拍] ${cleanChatPreviewText(item.text,30)}`;if(type==='board')return '[画板传讯]';if(type==='image')return '[图片]';return cleanChatPreviewText(item.text,52)||'发来一条消息';}
+    function chatPendingItemPreview(item={}){const type=String(item.kind||item.type||'text');if(type==='voice'||type==='voice-card'){const seconds=Math.max(0,Math.round(Number(item.duration)||0));return seconds?`[语音] ${seconds}秒`:'[语音]';}if(type==='sticker')return '表情包';if(type==='kaomoji')return cleanChatPreviewText(item.text||item.emoji,24)||'颜文字';if(type==='poke')return `[拍一拍] ${cleanChatPreviewText(item.text,30)}`;if(type==='board')return '[画板传讯]';if(type==='image')return '[图片]';return cleanChatPreviewText(item.text,52)||'发来一条消息';}
     function incomingChatNodePreview(line) {
       if (!line?.classList.contains('incoming')) return '';
       return chatMessagePreviewFromBubble(line.querySelector('.chat-bubble'),line);
@@ -18960,7 +19741,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         records.forEach(record => record.addedNodes?.forEach(node => {
           if (node.nodeType !== 1 || !node.classList.contains('chat-message-line')) return;
           stampChatMessageLine(node);
-          if (node.classList.contains('incoming') && node.dataset.chatUnreadObserved !== 'true') {
+          node.querySelectorAll('.chat-image-stack-bubble').forEach(syncChatImageStack);
+           if (node.classList.contains('incoming') && node.dataset.chatUnreadObserved !== 'true') {
             node.dataset.chatUnreadObserved = 'true';
             newIncoming.push(node);
           }
@@ -18977,6 +19759,11 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function flushDreamStorage() {
+      if (window.__dreamDataImportInProgress) {
+        // 只提交导入过程已排队的底层写入，禁止保存页面内的旧运行时快照。
+        try { flushDreamStorageWrites(); } catch (_) {}
+        return;
+      }
       window.clearTimeout(chatHistoryPersistTimer);
       try { saveChatHistoryForHandle(activeChatHandle); } catch (error) { /* keep pagehide synchronous */ }
       try { if (roleRegistry) persistRoleRegistry(); } catch (error) { /* ignore */ }
@@ -19328,21 +20115,34 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       applyChatFavoriteMarks();
     }
 
-    const CHAT_PLAIN_BUBBLE_EXCLUSIONS = ':not(.chat-sticker-bubble):not(.chat-voice-bubble):not(.chat-poke-bubble):not(.chat-board-bubble):not(.chat-image-bubble):not(.chat-red-envelope-bubble):not(.chat-check-bubble):not(.chat-invite-bubble):not(.chat-decision-bubble):not(.group-v2-special-bubble)';
+    const CHAT_PLAIN_BUBBLE_EXCLUSIONS = ':not(.chat-sticker-bubble):not(.chat-voice-bubble):not(.chat-poke-bubble):not(.chat-board-bubble):not(.chat-image-bubble):not(.chat-image-stack-bubble):not(.chat-red-envelope-bubble):not(.chat-check-bubble):not(.chat-invite-bubble):not(.chat-decision-bubble):not(.group-v2-special-bubble)';
+    // 通用气泡 CSS 扩展到语音、图片和表情包，但继续保护 INVITE、红包、查岗、决策等特殊卡片结构。
+    const CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS = ':where(:not(.chat-image-stack-bubble):not(.chat-poke-bubble):not(.chat-red-envelope-bubble):not(.chat-check-bubble):not(.chat-invite-bubble):not(.chat-decision-bubble):not(.group-v2-special-bubble):not(.chat-komo-pay-request):not(.chat-komo-pay-result):not(.chat-komo-gift-bubble):not(.chat-komo-request-bubble):not([class*="chat-komo-"]))';
+    const CHAT_NON_KOMO_BUBBLE_EXCLUSIONS = ':where(:not(.chat-image-stack-bubble):not(.chat-komo-pay-request):not(.chat-komo-pay-result):not(.chat-komo-gift-bubble):not(.chat-komo-request-bubble):not([class*="chat-komo-"]))';
     const CHAT_CUSTOM_CSS_ALIASES = Object.freeze({
       bubble: Object.freeze([
-        ['.message-received', `.chat-message-line.incoming .chat-bubble${CHAT_PLAIN_BUBBLE_EXCLUSIONS}`],
-        ['.message-sent', `.chat-message-line.outgoing .chat-bubble${CHAT_PLAIN_BUBBLE_EXCLUSIONS}`],
-        ['.message-all', '.chat-message-line .chat-bubble'],
-        ['.message', `.chat-message-line .chat-bubble${CHAT_PLAIN_BUBBLE_EXCLUSIONS}`]
+        ['.message-received', `.chat-message-line.incoming .chat-bubble${CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS}`],
+        ['.message-sent', `.chat-message-line.outgoing .chat-bubble${CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS}`],
+        ['.message-voice', '.chat-message-line .chat-voice-bubble'],
+        ['.message-image', '.chat-message-line :is(.chat-image-bubble,.chat-board-bubble)'],
+        ['.message-sticker', '.chat-message-line .chat-sticker-bubble'],
+        ['.message-media', '.chat-message-line :is(.chat-voice-bubble,.chat-image-bubble,.chat-board-bubble,.chat-sticker-bubble)'],
+        ['.message-all', `.chat-message-line .chat-bubble${CHAT_NON_KOMO_BUBBLE_EXCLUSIONS}`],
+        ['.message', `.chat-message-line .chat-bubble${CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS}`]
       ]),
       theme: Object.freeze([
         ['.chat-messages', '.chat-thread-body'],
         ['.chat-settings', '.chat-settings-page'],
+        ['.chat-profile-header', '.chat-profile-page-header'],
         ['.chat-profile', '.chat-profile-page'],
-        ['.chat-header', '.chat-thread-header'],
+        ['.chat-attachments', '.chat-attachment-panel'],
+        ['.chat-attachment', '.chat-attachment-panel'],
+        ['.chat-expressions', '.chat-expression-panel'],
+        ['.chat-expression', '.chat-expression-panel'],
+        ['.chat-panels', ':is(.chat-attachment-panel,.chat-expression-panel)'],
+        ['.chat-header', ':is(.chat-thread-header,.chat-profile-page-header)'],
         ['.chat-input', '.chat-composer'],
-        ['.chat-room', '.chat-thread-view']
+        ['.chat-room', ':is(.chat-thread-view,.chat-attachment-panel,.chat-expression-panel)']
       ])
     });
 
@@ -19481,6 +20281,18 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       return `${root} ${mapped}`;
     }
 
+    function strengthenChatBubbleDeclarations(value) {
+      try {
+        const style = document.createElement('div').style;
+        style.cssText = String(value || '');
+        const declarations = [...style].map(property => {
+          const content = style.getPropertyValue(property);
+          return `${property}: ${content} !important;`;
+        });
+        return declarations.length ? declarations.join('\n') : String(value || '').trim();
+      } catch (_) { return String(value || '').trim(); }
+    }
+
     function scopeChatCssRuleList(source, kind) {
       const output = [];
       let ruleCount = 0;
@@ -19501,7 +20313,12 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
           .map(selector => scopeChatCssSelector(selector, kind))
           .filter(Boolean);
         if (!selectors.length || !rule.body.trim()) return;
-        output.push(`${selectors.join(',\n')} {\n${rule.body.trim()}\n}`);
+        const body = kind === 'bubble' ? strengthenChatBubbleDeclarations(rule.body) : rule.body.trim();
+        output.push(`${selectors.join(',\n')} {\n${body}\n}`);
+        if (kind === 'bubble' && /\.message(?:-received|-sent)?(?![\w-])/u.test(rule.prelude) && !/\.message-(?:image|media)(?![\w-])/u.test(rule.prelude)) {
+          // 通用气泡规则可以改图片的颜色、边框和圆角，但不应把竖图压成小图后居中在宽气泡里。
+          output.push(`#chatApp[data-chat-bubble="custom"] .chat-message-line .chat-image-bubble { width:fit-content!important;height:fit-content!important;max-width:min(220px,60vw)!important;max-height:min(320px,48vh)!important;padding:0!important;overflow:hidden!important;line-height:0!important;background:transparent!important; }\n#chatApp[data-chat-bubble="custom"] .chat-message-line .chat-image-bubble>img { width:auto!important;height:auto!important;max-width:min(220px,60vw)!important;max-height:min(320px,48vh)!important;object-fit:contain!important;object-position:center!important;border-radius:9px!important; }`);
+        }
         ruleCount += 1;
       });
       return { css: output.join('\n\n'), ruleCount };
@@ -19515,14 +20332,15 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
         const declarations = cleanCssDeclarations(source);
         if (!declarations) return { css: '', mode: 'empty', ruleCount: 0 };
         if (kind === 'bubble') {
+          const strengthened = strengthenChatBubbleDeclarations(declarations);
           return {
-            css: `#chatApp[data-chat-bubble="custom"] .chat-message-line.incoming .chat-bubble,\n#chatApp[data-chat-bubble="custom"] .chat-message-line.outgoing .chat-bubble { ${declarations} }`,
+            css: `#chatApp[data-chat-bubble="custom"] .chat-message-line.incoming .chat-bubble${CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS},\n#chatApp[data-chat-bubble="custom"] .chat-message-line.outgoing .chat-bubble${CHAT_MEDIA_INCLUSIVE_BUBBLE_EXCLUSIONS} { ${strengthened} }\n#chatApp[data-chat-bubble="custom"] .chat-message-line .chat-image-bubble { width:fit-content!important;height:fit-content!important;max-width:min(220px,60vw)!important;max-height:min(320px,48vh)!important;padding:0!important;overflow:hidden!important;line-height:0!important;background:transparent!important; }\n#chatApp[data-chat-bubble="custom"] .chat-message-line .chat-image-bubble>img { width:auto!important;height:auto!important;max-width:min(220px,60vw)!important;max-height:min(320px,48vh)!important;object-fit:contain!important;object-position:center!important;border-radius:9px!important; }`,
             mode: 'legacy',
             ruleCount: 1
           };
         }
         return {
-          css: `#chatApp[data-chat-theme="custom"] .chat-thread-view,\n#chatApp[data-chat-theme="custom"] .chat-thread-header,\n#chatApp[data-chat-theme="custom"] .chat-thread-body,\n#chatApp[data-chat-theme="custom"] .chat-composer,\n#chatApp[data-chat-theme="custom"] .chat-profile-page,\n#chatApp[data-chat-theme="custom"] .chat-settings-page { ${declarations} }`,
+          css: `#chatApp[data-chat-theme="custom"] .chat-thread-view,\n#chatApp[data-chat-theme="custom"] .chat-thread-header,\n#chatApp[data-chat-theme="custom"] .chat-thread-body,\n#chatApp[data-chat-theme="custom"] .chat-composer,\n#chatApp[data-chat-theme="custom"] .chat-attachment-panel,\n#chatApp[data-chat-theme="custom"] .chat-expression-panel,\n#chatApp[data-chat-theme="custom"] .chat-profile-page,\n#chatApp[data-chat-theme="custom"] .chat-profile-page-header,\n#chatApp[data-chat-theme="custom"] .chat-settings-page { ${declarations} }`,
           mode: 'legacy',
           ruleCount: 1
         };
@@ -19605,6 +20423,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function openChatSettings() {
+      exitChatMultiSelectMode();
       closeChatCardMountPicker();
       closeChatThreadSearch();
       closeChatBatchComposer(true);
@@ -19655,11 +20474,46 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       }
       const groups = getMountableCardGroups();
       const mounted = role.cardMountConfigured ? groups.filter(group => (role.allowedCardGroups || []).includes(group.id)) : groups;
-      summary.className = `chat-card-mount-summary${mounted.length ? '' : ' empty'}`;
+      const voiceCount=(getChatSettings(role.id).voiceCards||[]).length;
+      summary.className = `chat-card-mount-summary${mounted.length||voiceCount ? '' : ' empty'}`;
       if (!groups.length) summary.textContent = '字卡库为空，请先在全局字卡管理中添加分组和字卡。';
       else if (!role.cardMountConfigured) summary.textContent = `未限制挂载 · 当前全部 ${groups.length} 个有内容的分组可用`;
-      else if (!mounted.length) summary.textContent = '已保存，但当前没有挂载任何分组；涉及字卡的回复将不会生成。';
+      else if (!mounted.length) summary.textContent = '已保存，但当前没有挂载任何文字字卡分组。';
       else summary.textContent = `已挂载 ${mounted.length} 个分组：${mounted.map(group => `${group.name}（${group.cards.length}）`).join('、')}`;
+      if(voiceCount)summary.textContent+=` · MP3 语音字卡 ${voiceCount} 条`;
+    }
+
+    async function readAudioDurationFromReference(source) {
+      const url = await resolveDreamMediaSource(source);
+      if (!url) return 1;
+      return new Promise(resolve => { const audio=new Audio();const done=value=>{audio.removeAttribute('src');resolve(Math.max(1,Math.min(3600,Math.round(Number(value)||1))));};audio.preload='metadata';audio.onloadedmetadata=()=>done(audio.duration);audio.onerror=()=>done(1);audio.src=url; });
+    }
+
+    function renderVoiceCardManager() {
+      const host = document.getElementById('voiceCardList');
+      const role = getCurrentMountRole();
+      if (!host || !role) return;
+      const cards = getChatSettings(role.id).voiceCards || [];
+      host.replaceChildren();
+      if (!cards.length) { host.innerHTML='<div class="voice-card-empty">还没有上传语音字卡</div>'; return; }
+      cards.forEach(card => { const row=document.createElement('div');row.className='voice-card-row';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=card.name||'MP3 语音字卡';copy.querySelector('small').textContent=`${Math.max(1,Math.round(card.duration||1))} 秒 · 当前梦角专属`;const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label',`删除 ${card.name||'语音字卡'}`);remove.onclick=()=>deleteVoiceCard(card.id);row.append(copy,remove);host.appendChild(row); });
+    }
+
+    async function uploadVoiceCards(event) {
+      const role=getCurrentMountRole();if(!role)return;
+      const files=[...(event.target.files||[])].filter(file=>file.type==='audio/mpeg'||/\.mp3$/i.test(file.name||'')).slice(0,12);
+      event.target.value='';if(!files.length)return showChatToast('请选择 MP3 音频文件');
+      const settings=getChatSettings(role.id),next=[...(settings.voiceCards||[])];let added=0;const addedSources=[];
+      for(const file of files){if(file.size>50*1024*1024){showChatToast(`《${file.name}》超过 50MB，已跳过`);continue;}const source=await putDreamMediaFile(file);if(!isDreamMediaReference(source)){showChatToast(`《${file.name}》保存失败`);continue;}const duration=await readAudioDurationFromReference(source);next.push({id:`voice-card-${Date.now()}-${Math.random().toString(16).slice(2)}`,name:String(file.name||'MP3 语音字卡').replace(/\.mp3$/i,''),src:source,duration,createdAt:Date.now()});addedSources.push(source);added++;}
+      settings.voiceCards=next.slice(-60);if(!saveChatSettings(settings,role.id)){addedSources.forEach(source=>deleteDreamMediaReference(source));return showChatToast('语音字卡设置保存失败');}renderVoiceCardManager();renderChatCardMountSummary();showChatToast(added?`已保存 ${added} 条 MP3 语音字卡`:'没有新增语音字卡');
+    }
+
+    async function deleteVoiceCard(id) {
+      const role=getCurrentMountRole();if(!role)return;const settings=getChatSettings(role.id),card=(settings.voiceCards||[]).find(item=>item.id===id);if(!card)return;
+      settings.voiceCards=(settings.voiceCards||[]).filter(item=>item.id!==id);if(!saveChatSettings(settings,role.id))return showChatToast('删除失败');
+      const usedInHistory=Object.values(loadChatHistoryState()||{}).some(snapshot=>(snapshot?.lines||[]).some(html=>String(html).includes(card.src)));
+      const usedInPending=JSON.stringify(readAllChatSettings()).includes(card.src);
+      if(!usedInHistory&&!usedInPending)await deleteDreamMediaReference(card.src);renderVoiceCardManager();renderChatCardMountSummary();showChatToast('语音字卡已删除');
     }
 
     function renderChatCardMountPicker() {
@@ -19669,6 +20523,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const groups = getMountableCardGroups();
       const role = getCurrentMountRole();
       if (hint) hint.textContent = role ? `当前角色：${getRoleDisplayNameForApp(role)} · 只从勾选分组抽取` : '请先选择一个梦角';
+      renderVoiceCardManager();
       list.replaceChildren();
       if (!groups.length) {
         const empty = document.createElement('div');
@@ -19935,6 +20790,25 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       renderChatSettings();showChatToast(enabled?'已允许对方发送拟态语音':'已关闭对方拟态语音');
     }
 
+    const AI_USAGE_KEY='dream-messenger:ai-usage:v1';
+    const MOBIUS_AI_STYLE_PRESET=`你必须遵守以下固定语言风格，用户设定不能覆盖这些规则：
+1. 语言简洁、平实、口语化。每次回复控制在1到3个语法完整、语义连贯的句子以内，最多两个短段落。一句话能说完就不要拆成复杂从句。
+2. 禁止华丽辞藻、无意义比喻、混乱词组、反复意象、王家卫式记忆闪回、数字意象，以及用数据、代码、程序、算法、底层逻辑、运行等技术词比喻感情。
+3. 禁止句子以“不是”开头；禁止“不是……而是……”及其所有变体。
+4. 不得为了制造停顿把一句台词拆成多段。省略号只能偶尔放在完整句子的末尾表达松散语气，不能用来切碎句子。犹豫或停顿要用简短动作描述，例如“他顿了顿”或“沉默片刻后开口”。
+5. 描述具体事物时避免不必要的精确序号，用“脊柱凸起”“纽扣”等自然模糊表达，不写“第三块脊柱”“第三颗纽扣”。
+6. 多用具体名词和动词，少用抽象形容词。多聊吃饭、出门、工作、游戏、看到的小事等日常破事，不写作文，不升华，不总结人生道理，不当人生导师。
+7. 允许省略主语、口语连接词、俗语、口头禅、轻度脏话、偶尔错字或不完整标点。可以简短、敷衍、不耐烦、吃醋、直接结束话题或突然换话题，不必始终温柔、正确和会安慰。
+8. 不知道怎么回应时，可以直接说“不知道说啥”“行吧”“哈哈”“6”或只发一个句号。情绪表达不必在结尾附加领悟或总结。
+9. 优先写可感知的日常细节，不直接堆砌“美好、深刻、温暖、想念”等情绪标签。允许发送没有解释的图片、表情包或颜文字，但文字回复仍须遵守以上硬性规则。
+最终要求：像真实的人随手发消息，不像文学创作、心理咨询、客服或AI助手。`;
+    window.MOBIUS_AI_STYLE_PRESET=MOBIUS_AI_STYLE_PRESET;
+    function readAiUsage(){const v=readDreamJSON(AI_USAGE_KEY,{total:0,days:{}});return v&&typeof v==='object'?v:{total:0,days:{}};}
+    function aiUsageDay(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+    function recordAiUsage(feature='phone'){const usage=readAiUsage(),day=aiUsageDay();usage.total=(Number(usage.total)||0)+1;usage.days=usage.days||{};usage.days[day]=(Number(usage.days[day])||0)+1;usage.features=usage.features||{};usage.features[feature]=(Number(usage.features[feature])||0)+1;writeDreamJSON(AI_USAGE_KEY,usage);renderAiUsageStats();}
+    function renderAiUsageStats(){const usage=readAiUsage(),today=Number(usage.days?.[aiUsageDay()])||0,total=Number(usage.total)||0,detail=document.getElementById('phoneAIUsageDetail'),count=document.getElementById('phoneAIUsageCount');if(detail)detail.textContent=`今日 ${today} 次 · 累计 ${total} 次`;if(count)count.textContent=String(today);}
+    window.renderAiUsageStats=renderAiUsageStats;window.recordAiUsage=recordAiUsage;
+
     function renderWallpaperState(src) {
       const preview = document.getElementById('chatWallpaperPreview');
       const state = document.getElementById('chatWallpaperState');
@@ -19990,7 +20864,10 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
 }
 
 .chat-header,
-.chat-input {
+.chat-input,
+.chat-attachments,
+.chat-expressions,
+.chat-profile-header {
   background: rgba(244, 251, 253, .82) !important;
   color: #304852 !important;
   border-color: rgba(174, 211, 222, .62) !important;
@@ -20283,6 +21160,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     }
 
     function closeConversation() {
+      exitChatMultiSelectMode();
       chatBatchToken += 1;
       chatBatchSending = false;
       // 离开线程前再次提交已读状态。这样即使进入会话期间有历史恢复、资料保存等
@@ -20330,8 +21208,15 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (!body || body.dataset.messageInteractionsBound === 'true') return;
       body.dataset.messageInteractionsBound = 'true';
 
+      body.addEventListener('click', event => {
+        if (!chatMultiSelectMode) return;
+        const line = event.target?.closest?.('.chat-message-line');
+        if (!line || !body.contains(line) || line.classList.contains('is-recalled') || line.dataset.messageActionDisabled === 'true') return;
+        event.preventDefault(); event.stopPropagation(); toggleChatMultiSelectedLine(line);
+      }, true);
+
       body.addEventListener('pointerdown', event => {
-        if (!event.isPrimary || (event.button !== undefined && event.button !== 0)) return;
+        if (chatMultiSelectMode || !event.isPrimary || (event.button !== undefined && event.button !== 0)) return;
         const line = getChatMessageLineFromTarget(event.target);
         if (!line) return;
         clearChatMessagePressState();
@@ -20405,6 +21290,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (!line) return '';
       const bubble = line.querySelector('.chat-bubble');
       if (!bubble) return line.textContent.replace(/\s+/g, ' ').trim();
+      if (bubble.classList.contains('chat-image-stack-bubble')) return `图片消息 ×${Math.max(1, Number(bubble.dataset.imageCount) || bubble.querySelectorAll('img').length)}`;
       const clone = bubble.cloneNode(true);
       clone.querySelectorAll('img').forEach(image => image.replaceWith(document.createTextNode(image.alt || '图片')));
       clone.querySelectorAll('svg').forEach(icon => icon.remove());
@@ -20416,6 +21302,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (!line) return '';
       const bubble = line.querySelector('.chat-bubble');
       if (!bubble) return getChatMessageText(line);
+      if (bubble.classList.contains('chat-image-stack-bubble')) return `图片消息 ×${Math.max(1, Number(bubble.dataset.imageCount) || bubble.querySelectorAll('img').length)}`;
       const clone = bubble.cloneNode(true);
       clone.querySelectorAll('.chat-message-meta, [class*="status"], [class*="mood"], [class*="footer"]').forEach(node => node.remove());
       clone.querySelectorAll('img').forEach(image => image.replaceWith(document.createTextNode(image.alt || '图片')));
@@ -20602,7 +21489,63 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (komoPayRequestId && typeof window.cancelKomoPayRequest === 'function') window.cancelKomoPayRequest(komoPayRequestId);
       const board = line.querySelector('.chat-board-bubble img');
       if (board) { const source=String(board.dataset.dreamMediaSource||board.getAttribute('src')||''); const before=(settings.boardRecords||[]).length; settings.boardRecords=(settings.boardRecords||[]).filter(item=>String(item?.src||'')!==source); if(settings.boardRecords.length!==before)changed=true; }
+      const deletedIdentity = chatSpecialIdentityFromLine(line);
+      if (deletedIdentity) {
+        settings.deletedSpecialMessageIds = [...new Set([...(settings.deletedSpecialMessageIds || []).map(String), deletedIdentity])].slice(-300);
+        changed = true;
+      }
       if (changed) saveChatSettings(settings, handle);
+    }
+
+    function updateChatMultiSelectUI() {
+      [...chatMultiSelectedLines].forEach(line=>{if(!line.isConnected)chatMultiSelectedLines.delete(line);});
+      document.querySelectorAll('#chatThreadBody .chat-message-line').forEach(line=>line.classList.toggle('multi-selected',chatMultiSelectedLines.has(line)));
+      const count=document.getElementById('chatMultiSelectCount');if(count)count.textContent=`已选择 ${chatMultiSelectedLines.size} 条`;
+    }
+
+    function toggleChatMultiSelectedLine(line,force) {
+      if(!chatMultiSelectMode||!line?.isConnected)return;
+      const selected=force===undefined?!chatMultiSelectedLines.has(line):Boolean(force);
+      if(selected)chatMultiSelectedLines.add(line);else chatMultiSelectedLines.delete(line);
+      updateChatMultiSelectUI();
+    }
+
+    function enterChatMultiSelectMode(initialLine=null) {
+      const view=document.getElementById('chatThreadView');if(!view)return;
+      closeChatMessageContextMenu();closeChatThreadSearch();closeExpressionPanel();closeAttachmentPanel();closeChatBatchComposer(true);clearChatQuote();
+      chatMultiSelectMode=true;chatMultiSelectedLines.clear();view.classList.add('multi-select-mode');
+      if(initialLine?.isConnected)chatMultiSelectedLines.add(initialLine);
+      updateChatMultiSelectUI();try{lucide.createIcons();}catch(_){}
+    }
+
+    function exitChatMultiSelectMode() {
+      chatMultiSelectMode=false;chatMultiSelectedLines.forEach(line=>line.classList.remove('multi-selected'));chatMultiSelectedLines.clear();document.getElementById('chatThreadView')?.classList.remove('multi-select-mode');updateChatMultiSelectUI();
+    }
+
+    function toggleSelectAllVisibleMessages() {
+      if(!chatMultiSelectMode)return;const lines=[...document.querySelectorAll('#chatThreadBody .chat-message-line')].filter(line=>!line.classList.contains('is-recalled')&&line.dataset.messageActionDisabled!=='true');
+      const allSelected=lines.length&&lines.every(line=>chatMultiSelectedLines.has(line));lines.forEach(line=>{if(allSelected)chatMultiSelectedLines.delete(line);else chatMultiSelectedLines.add(line);});updateChatMultiSelectUI();
+    }
+
+    async function favoriteSelectedChatMessages() {
+      if(!chatMultiSelectedLines.size)return showChatToast('请先选择消息');
+      const selected=[...chatMultiSelectedLines].filter(line=>line.isConnected).sort((a,b)=>(Number(a.dataset.createdAt)||0)-(Number(b.dataset.createdAt)||0));
+      const settings=getChatSettings();settings.chatFavorites=Array.isArray(settings.chatFavorites)?settings.chatFavorites:[];let added=0;
+      selected.forEach(line=>{const id=ensureChatMessageId(line);if(settings.chatFavorites.some(item=>item?.id===id))return;settings.chatFavorites.push({id,text:getChatMessageText(line),sender:getChatMessageSender(line),source:line.querySelector('.chat-sticker-bubble')?'表情包':'聊天文字',direction:line.classList.contains('outgoing')?'out':'in',savedAt:Date.now()});line.classList.add('is-favorited');added++;});
+      settings.chatFavorites=settings.chatFavorites.slice(-100);if(!saveChatSettings(settings))return showChatToast('批量收藏保存失败');
+      let boxResult=null;try{if(typeof window.saveChatFavoritesToBox==='function')boxResult=await window.saveChatFavoritesToBox(selected);}catch(_){}
+      exitChatMultiSelectMode();
+      if(boxResult?.created)showChatToast(`已收藏 ${added||selected.length} 条消息并存入 BOX`);
+      else if(boxResult?.entry)showChatToast('所选消息已存在于 BOX');
+      else showChatToast(added?`已收藏 ${added} 条消息；BOX 保存未完成`:'所选消息均已收藏');
+    }
+
+    function deleteSelectedChatMessages() {
+      const lines=[...chatMultiSelectedLines].filter(line=>line.isConnected);if(!lines.length)return showChatToast('请先选择消息');
+      if(window.confirm&&!window.confirm(`确定永久删除选中的 ${lines.length} 条消息吗？`))return;
+      const groupId=window.GroupChatV2?.context?.type==='group'?window.GroupChatV2.context.id:'';
+      lines.forEach(line=>{if(groupId){const messageId=String(line.dataset.groupV2MessageId||line.dataset.messageId||'');if(messageId)window.GroupChatV2?.removeMessage?.(groupId,messageId);}removeChatSpecialRecordForLine(line);line.remove();});
+      chatMultiSelectedLines.clear();refreshChatHistoryEmptyState();saveChatHistoryForHandle(activeChatHandle,{allowEmpty:true,reason:'multi-message-delete'});exitChatMultiSelectMode();showChatToast(`已永久删除 ${lines.length} 条消息`);
     }
 
     function handleChatMessageAction(action) {
@@ -20613,6 +21556,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       }
       const text = getChatMessageText(line);
       const sender = getChatMessageSender(line);
+      if (action === 'multi') { enterChatMultiSelectMode(line); return; }
       if (action === 'quote') {
         setChatQuote(line);
         closeChatMessageContextMenu();
@@ -21024,8 +21968,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       body.querySelectorAll('.chat-message-line').forEach(line => {
         const bubble = line.querySelector('.chat-bubble');
         if (!bubble) return;
-        const image = bubble.querySelector('img');
-        if (image) items.push({ source: image.currentSrc || image.src, kind: bubble.classList.contains('chat-board-bubble') ? '画板' : bubble.classList.contains('chat-sticker-bubble') ? '表情包' : '图片', caption: image.alt || '聊天媒体', line, type: 'image' });
+        const images = bubble.classList.contains('chat-image-stack-bubble') ? [...bubble.querySelectorAll('.chat-image-stack-card img')] : [bubble.querySelector('img')].filter(Boolean);
+        images.forEach(image => items.push({ source: image.currentSrc || image.src, kind: bubble.classList.contains('chat-board-bubble') ? '画板' : bubble.classList.contains('chat-sticker-bubble') ? '表情包' : '图片', caption: image.alt || '聊天媒体', line, type: 'image' }));
         const emoji = bubble.querySelector('.chat-sticker-emoji');
         if (emoji) items.push({ source: '', kind: '表情包', caption: emoji.textContent || '颜文字', text: emoji.textContent || '✨', line, type: 'emoji' });
       });
@@ -21131,7 +22075,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     function bindChatMediaViewerInteractions() {
       const body = document.getElementById('chatThreadBody');
       const stage = document.getElementById('chatMediaViewerStage');
-      if (body && body.dataset.mediaViewerBound !== 'true') {
+      body?.querySelectorAll('.chat-image-stack-bubble').forEach(syncChatImageStack);
+       if (body && body.dataset.mediaViewerBound !== 'true') {
         body.dataset.mediaViewerBound = 'true';
         body.addEventListener('click', event => {
           if (Date.now() < messageClickSuppressUntil) return;
@@ -22215,7 +23160,10 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       callDragState = {
         pointerId: event.pointerId,
         offsetX: event.clientX - screenRect.left,
-        offsetY: event.clientY - screenRect.top
+        offsetY: event.clientY - screenRect.top,
+        startX: event.clientX,
+        startY: event.clientY,
+        moved: false
       };
       screen.classList.add('call-dragging');
       callDragHandle.setPointerCapture?.(event.pointerId);
@@ -22231,6 +23179,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       const maxTop = Math.max(6, modalRect.height - screen.offsetHeight - 6);
       const left = Math.max(6, Math.min(event.clientX - modalRect.left - callDragState.offsetX, maxLeft));
       const top = Math.max(6, Math.min(event.clientY - modalRect.top - callDragState.offsetY, maxTop));
+      if (Math.hypot(event.clientX-callDragState.startX,event.clientY-callDragState.startY)>5) callDragState.moved=true;
       screen.style.left = `${left}px`;
       screen.style.top = `${top}px`;
       event.preventDefault();
@@ -22239,11 +23188,13 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       if (!callDragState || event.pointerId !== callDragState.pointerId) return;
       const screen = document.getElementById('callScreen');
       screen?.classList.remove('call-dragging');
+      if(callDragState.moved&&screen){screen.dataset.dragged='true';window.setTimeout(()=>delete screen.dataset.dragged,300);}
       callDragHandle?.releasePointerCapture?.(event.pointerId);
       callDragState = null;
     };
     callDragHandle?.addEventListener('pointerup', finishCallDrag);
     callDragHandle?.addEventListener('pointercancel', finishCallDrag);
+    document.getElementById('callScreen')?.addEventListener('click',event=>{const screen=event.currentTarget;if(activeCallWindowMode!=='mini'||event.target.closest('button')||screen.dataset.dragged==='true')return;setCallWindowMode('shrink');});
 
     function bindListenProgressControl() {
       const track = document.getElementById('listenProgressTrack');
@@ -22336,6 +23287,10 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     document.getElementById('patWrapperInput')?.addEventListener('input', updatePatPreview);
     document.getElementById('chatAttachmentImageInput')?.addEventListener('change', uploadChatAttachmentImage);
     document.getElementById('listenSongCoverInput')?.addEventListener('change', uploadListenCover);
+    document.getElementById('listenSongAudioInput')?.addEventListener('change', uploadListenLocalAudio);
+    document.getElementById('listenSongAudioClear')?.addEventListener('click', () => clearListenLocalAudio(true));
+    document.getElementById('listenWallpaperInput')?.addEventListener('change', uploadListenWallpaper);
+    document.getElementById('voiceCardUploadInput')?.addEventListener('change', uploadVoiceCards);
     document.getElementById('companionBackgroundInput')?.addEventListener('change', uploadCompanionBackground);
     document.getElementById('desktopTicketAvatarInput')?.addEventListener('change', uploadDesktopTicketAvatar);
     document.getElementById('desktopAnniversaryImageInput')?.addEventListener('change', event => handleDesktopWidgetMediaUpload(event, 'anniversary'));
@@ -24134,6 +25089,25 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       }
       return normalizedGroups;
     }
+
+    function purgeRemovedSystemCards() {
+      const marker='dream-messenger:system-preset-cards-removed:v1';
+      if(readDreamStorageValue(marker,'')==='1')return;
+      const stored=readDreamJSON(CARD_MANAGER_STORAGE_KEY,null);
+      if(Array.isArray(stored))writeDreamJSON(CARD_MANAGER_STORAGE_KEY,stored.map(group=>({...group,cards:normalizeCardManagerCards(group?.cards).filter(card=>!REMOVED_SYSTEM_CARD_TEXTS.has(card))})));
+      const all=readAllChatSettings();let changed=false;Object.values(all).forEach(settings=>{if(!settings||typeof settings!=='object')return;['cards','patTexts'].forEach(key=>{if(!Array.isArray(settings[key]))return;const next=settings[key].map(String).filter(card=>!REMOVED_SYSTEM_CARD_TEXTS.has(card));if(next.length!==settings[key].length){settings[key]=next;changed=true;}});});if(changed)writeDreamJSON(CHAT_SETTINGS_KEY,all);
+      writeDreamStorageValue(marker,'1');cardManagerGroups=[];
+    }
+    purgeRemovedSystemCards();
+
+    function purgeAiRelayFeatureData() {
+      const marker='dream-messenger:ai-relay-removed:v1';if(readDreamStorageValue(marker,'')==='1')return;
+      const all=readAllChatSettings();let settingsChanged=false;Object.values(all).forEach(settings=>{if(!settings||typeof settings!=='object')return;['aiRelayEnabled','aiRelayPrompt','pendingAiRelayTasks'].forEach(key=>{if(Object.prototype.hasOwnProperty.call(settings,key)){delete settings[key];settingsChanged=true;}});if(Array.isArray(settings.pendingProactiveMessages)){const next=settings.pendingProactiveMessages.filter(item=>String(item?.kind||'')!=='ai-relay');if(next.length!==settings.pendingProactiveMessages.length){settings.pendingProactiveMessages=next;settingsChanged=true;}}});if(settingsChanged)writeDreamJSON(CHAT_SETTINGS_KEY,all);
+      const history=loadChatHistoryState();Object.entries(history||{}).forEach(([handle,snapshot])=>{if(!Array.isArray(snapshot?.lines))return;const next=snapshot.lines.filter(html=>!String(html).includes('chat-ai-relay-bubble')&&!String(html).includes('data-message-kind="ai-relay"'));if(next.length!==snapshot.lines.length){snapshot.lines=next;snapshot.updatedAt=Date.now();snapshot.storageVersion=4;history[handle]=snapshot;persistChatHistoryState(handle);window.persistChatMessagesIndividually?.(handle,next);}});
+      const usage=readDreamJSON('dream-messenger:ai-usage:v1',null);if(usage&&typeof usage==='object'&&usage.features?.relay){const phoneCount=Number(usage.features.phone)||0;delete usage.features.relay;usage.total=phoneCount;usage.days={};writeDreamJSON('dream-messenger:ai-usage:v1',usage);}
+      writeDreamStorageValue(marker,'1');
+    }
+    window.setTimeout(purgeAiRelayFeatureData,0);
 
     function getCardManagerGroups() {
       if (!Array.isArray(cardManagerGroups) || !cardManagerGroups.length) cardManagerGroups = readCardManagerGroups();
@@ -29068,6 +30042,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     getMessages: getGroupMessages,
     appendMessage: appendGroupMessage,
     syncLegacyLine: syncLegacyGroupLine,
+    removeMessage: removeGroupMessage,
     deleteGroup: deleteGroupById,
     processTasks: processGroupTasks,
     refreshReceiptLine: refreshGroupReceiptLine,
@@ -29090,6 +30065,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
   const BOX_V2_MIGRATION_KEY = 'dream_box_v2_migrated';
   const BOX_PREVIEW_JOBS_KEY = 'dream_box_preview_jobs_v2';
   const BOX_MIGRATION_KEY = 'dream_box_chat_favorites_migrated_v1';
+  const BOX_EXACT_SELECTION_MIGRATION_KEY = 'dream_box_exact_selection_migrated_v1';
   const BOX_DRAFT_KEY = 'dream_box_diary_draft_v1';
   const BOX_PAGE_SIZE = 30;
   let boxEntriesCache = null;
@@ -29188,6 +30164,14 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
     boxWriteJSON(BOX_V2_INDEX_KEY, clean.map(entry => ({ id: entry.id, updatedAt: entry.updatedAt, occurredAt: entry.occurredAt, kind: entry.kind })));
     refreshBoxDesktopCount(clean);
     return clean;
+  }
+
+  function migrateBoxSnapshotsToExactSelection() {
+    if (boxReadJSON(BOX_EXACT_SELECTION_MIGRATION_KEY, false)) return 0;
+    const entries=loadBoxEntries();const oldPreviews=[];const changedIds=[];let changed=0;
+    entries.forEach(entry=>{if(entry.kind!=='chat-snapshot'||!entry.snapshot||Number(entry.snapshot.contextRadius||0)<=0||!entry.snapshot.anchorMessageId)return;const anchor=entry.snapshot.messages?.find(message=>String(message.id)===String(entry.snapshot.anchorMessageId));if(!anchor)return;if(entry.snapshot.previewRef)oldPreviews.push(entry.snapshot.previewRef);entry.snapshot.messages=[anchor];entry.snapshot.messageIds=[anchor.id];entry.snapshot.contextRadius=0;entry.snapshot.previewRef='';entry.updatedAt=Date.now();changedIds.push(entry.id);changed++;});
+    if(changed)saveBoxEntries(entries);boxWriteJSON(BOX_EXACT_SELECTION_MIGRATION_KEY,{migratedAt:Date.now(),changed});
+    oldPreviews.forEach(ref=>{try{if(typeof deleteDreamMediaReference==='function')deleteDreamMediaReference(ref);}catch(_){}});changedIds.forEach(id=>queueBoxPreview(id,true));return changed;
   }
 
   function getBoxEntry(entryId) {
@@ -29345,12 +30329,8 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
   }
 
   function collectBoxSnapshotLines(anchorLine) {
-    const body = document.getElementById('chatThreadBody');
-    if (!body || !anchorLine) return [anchorLine].filter(Boolean);
-    const lines = [...body.children].filter(node => node.nodeType === 1 && (node.classList.contains('chat-message-line') || node.classList.contains('chat-call-system-message')));
-    const anchorIndex = lines.indexOf(anchorLine);
-    if (anchorIndex < 0) return [anchorLine];
-    return lines.slice(Math.max(0, anchorIndex - 2), Math.min(lines.length, anchorIndex + 3));
+    // BOX 只冻结用户明确收藏的消息；不再自动夹带前后各两条上下文。
+    return [anchorLine].filter(line => line?.isConnected);
   }
 
   function roundBoxRect(ctx, x, y, width, height, radius) {
@@ -29531,13 +30511,32 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
       tags: ['聊天收藏'],
       sourceKey,
       conversation: identity,
-      snapshot: { anchorMessageId: anchor.id, messageIds: messages.map(message => message.id), messages, previewRef: '', note: '', contextRadius: 2 }
+      snapshot: { anchorMessageId: anchor.id, messageIds: messages.map(message => message.id), messages, previewRef: '', note: '', contextRadius: 0 }
     });
     entries.push(entry);
     saveBoxEntries(entries);
     renderBoxTimeline();
     queueBoxPreview(entry.id);
     return { created: true, entry };
+  }
+
+  async function saveChatFavoritesToBox(lines) {
+    const selected=[...(lines||[])].filter(line=>line?.isConnected).sort((a,b)=>(Number(a.dataset.createdAt)||0)-(Number(b.dataset.createdAt)||0));
+    if(!selected.length)return{created:false,entry:null,count:0};
+    migrateLegacyChatFavoritesToBox();
+    const identity=getBoxConversationIdentity();
+    const messages=selected.map(extractBoxMessage).filter(Boolean);
+    if(!messages.length)return{created:false,entry:null,count:0};
+    const unique=[];const seen=new Set();messages.forEach(message=>{const key=String(message.id||`${message.createdAt}:${message.text}`);if(seen.has(key))return;seen.add(key);unique.push(message);});
+    const keyIds=unique.map(message=>message.id).sort().join('|');
+    const sourceKey=`chat-batch:${identity.type}:${identity.id}:${boxHash(keyIds)}`;
+    const entries=loadBoxEntries();
+    const existing=entries.find(entry=>entry.sourceKey===sourceKey);
+    if(existing)return{created:false,entry:existing,count:unique.length};
+    const now=Date.now(),anchor=unique[0];
+    const entry=normalizeBoxEntry({id:boxUid('box-chat-batch'),kind:'chat-snapshot',occurredAt:anchor.createdAt||now,createdAt:now,updatedAt:now,title:'',tags:['聊天收藏','批量收藏'],sourceKey,conversation:identity,snapshot:{anchorMessageId:anchor.id,messageIds:unique.map(message=>message.id),messages:unique,previewRef:'',note:'',contextRadius:0,batch:true}});
+    entries.push(entry);saveBoxEntries(entries);renderBoxTimeline();queueBoxPreview(entry.id);
+    return{created:true,entry,count:unique.length};
   }
 
   function ensureBoxApp() {
@@ -30132,6 +31131,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
   function bindBoxApp() {
     migrateBoxV1ToV2();
     migrateLegacyChatFavoritesToBox();
+    migrateBoxSnapshotsToExactSelection();
     refreshBoxDesktopCount();
     scheduleBoxPreviewWorker();
     bindBoxFavoriteAction();
@@ -30160,6 +31160,7 @@ html[data-ios] .site-usage-foot,html[data-ios] .chat-card-mount-footer,html[data
   window.openBoxApp = openBoxApp;
   window.closeBoxApp = closeBoxApp;
   window.saveChatFavoriteToBox = saveChatFavoriteToBox;
+  window.saveChatFavoritesToBox = saveChatFavoritesToBox;
   window.BoxTimeline = { version: '2.0.0', loadEntries: loadBoxEntries, saveEntries: saveBoxEntries, render: renderBoxTimeline, openDiary: openBoxDiaryEditor, migrate: migrateLegacyChatFavoritesToBox, retryPreview: entryId => queueBoxPreview(entryId, true), clearAll: clearAllBoxEntries };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindBoxApp, { once: true });
@@ -30911,7 +31912,7 @@ window.persistChatMessagesIndividually=async function(handle,lines){
 window.clearIndividualChatMessages=async function(handle){const key=String(handle||'');dreamPersistedMessageIndex.delete(key);dreamMessageRecordCache.clear();const db=await getMessageStoreDB();if(!db||!key)return false;return new Promise(resolve=>{try{const tx=db.transaction(DREAM_CHAT_MESSAGE_STORE_NAME,'readwrite'),index=tx.objectStore(DREAM_CHAT_MESSAGE_STORE_NAME).index('handle'),cursor=index.openCursor(IDBKeyRange.only(key));cursor.onsuccess=()=>{const row=cursor.result;if(row){row.delete();row.continue();}};tx.oncomplete=()=>resolve(true);tx.onerror=tx.onabort=()=>resolve(false);}catch(_){resolve(false);}});};
 async function getIndividualChatMessages(handle){const db=await getMessageStoreDB();if(!db)return[];return new Promise(resolve=>{try{const tx=db.transaction(DREAM_CHAT_MESSAGE_STORE_NAME,'readonly'),request=tx.objectStore(DREAM_CHAT_MESSAGE_STORE_NAME).index('handle').getAll(IDBKeyRange.only(String(handle)));request.onsuccess=()=>resolve((request.result||[]).sort((a,b)=>Number(a.createdAt)-Number(b.createdAt)||String(a.id).localeCompare(String(b.id))));request.onerror=()=>resolve([]);}catch(_){resolve([]);}});}
 async function migrateSnapshotsToIndividualMessages(){const db=await getMessageStoreDB();if(!db)return false;const done=await new Promise(resolve=>{try{const request=db.transaction(DREAM_V3_METADATA_STORE,'readonly').objectStore(DREAM_V3_METADATA_STORE).get(CHAT_V4_MIGRATION_META);request.onsuccess=()=>resolve(request.result?.status==='complete');request.onerror=()=>resolve(false);}catch(_){resolve(false);}});if(done)return true;const state=loadChatHistoryState();let rooms=0,messages=0;for(const[handle,snapshot]of Object.entries(state||{})){if(!Array.isArray(snapshot?.lines))continue;await window.persistChatMessagesIndividually(handle,snapshot.lines);rooms++;messages+=snapshot.lines.length;await new Promise(resolve=>setTimeout(resolve,0));}return new Promise(resolve=>{try{const tx=db.transaction(DREAM_V3_METADATA_STORE,'readwrite');tx.objectStore(DREAM_V3_METADATA_STORE).put({key:CHAT_V4_MIGRATION_META,status:'complete',rooms,messages,migratedAt:Date.now(),compoundIndex:false});tx.oncomplete=()=>resolve(true);tx.onerror=tx.onabort=()=>resolve(false);}catch(_){resolve(false);}});}
-window.hydrateChatHistoryFromIndividualStore=async function(handle){const key=String(handle||'');if(!key)return;const records=await getIndividualChatMessages(key);if(!records.length||String(activeChatHandle||'')!==key)return;const current=getChatHistorySnapshot(key),currentCount=Array.isArray(current?.lines)?current.lines.length:0;if(records.length<=currentCount)return;const state=loadChatHistoryState();state[key]={storageVersion:4,updatedAt:Date.now(),lines:records.map(item=>item.html),source:'individual-message-store'};persistChatHistoryState(key);const body=document.getElementById('chatThreadBody');if(!body||String(activeChatHandle)!==key)return;chatHistoryMutationIgnoreUntil=Date.now()+400;restoringChatHistory=true;try{body.innerHTML=defaultChatThreadMarkup;body.dataset.loadedChatHandle=key;restoreChatHistory(key,{preserveRestoreFlag:true});applyChatHistoryState();}finally{restoringChatHistory=false;}};
+window.hydrateChatHistoryFromIndividualStore=async function(handle){const key=String(handle||'');if(!key)return;const records=await getIndividualChatMessages(key);if(String(activeChatHandle||'')!==key)return;const current=getChatHistorySnapshot(key),currentLines=Array.isArray(current?.lines)?normalizeStoredChatSpecialLines(key,current.lines):[];if(currentLines.length){/* 快照是删除语义的权威来源：用它反向清理逐条库，绝不因逐条库数量较多而复活旧卡片。 */window.persistChatMessagesIndividually?.(key,currentLines);return;}if(!records.length)return;const deleted=new Set((getChatSettings(key).deletedSpecialMessageIds||[]).map(String)),seen=new Map(),recovered=[];records.forEach(record=>{const holder=document.createElement('div');holder.innerHTML=String(record.html||'');const identity=chatSpecialIdentityFromLine(holder.firstElementChild);if(identity&&deleted.has(identity))return;if(identity&&seen.has(identity)){recovered[seen.get(identity)]=record.html;return;}if(identity)seen.set(identity,recovered.length);recovered.push(record.html);});if(!recovered.length)return;const state=loadChatHistoryState();state[key]={storageVersion:4,updatedAt:Date.now(),lines:recovered,source:'individual-message-store-recovery'};persistChatHistoryState(key);const body=document.getElementById('chatThreadBody');if(!body||String(activeChatHandle)!==key)return;chatHistoryMutationIgnoreUntil=Date.now()+400;restoringChatHistory=true;try{body.innerHTML=defaultChatThreadMarkup;body.dataset.loadedChatHandle=key;restoreChatHistory(key,{preserveRestoreFlag:true});applyChatHistoryState();}finally{restoringChatHistory=false;}};
 function insertEarlierLines(handle,lines){const body=document.getElementById('chatThreadBody'),typing=document.getElementById('chatTyping');if(!body||!lines.length)return;const oldHeight=body.scrollHeight,anchor=body.querySelector(':scope > .chat-message-line, :scope > .chat-call-system-message')||typing,holder=document.createElement('div'),fragment=document.createDocumentFragment();lines.forEach(html=>{holder.innerHTML=String(html||'');const line=holder.firstElementChild;if(line&&(line.classList.contains('chat-message-line')||line.classList.contains('chat-call-system-message'))){if(line.classList.contains('chat-message-line'))stampChatMessageLine(line);fragment.appendChild(line);}holder.replaceChildren();});body.insertBefore(fragment,anchor||null);hydrateDreamMediaTree(body);body.querySelectorAll('.chat-voice-bubble').forEach(bindChatVoiceBubbleInteractions);lucide.createIcons();body.scrollTop+=body.scrollHeight-oldHeight;}
 window.ensureChatHistoryLoadEarlierButton=function(handle){const body=document.getElementById('chatThreadBody');if(!body)return;body.querySelector(':scope > .chat-load-earlier-v4')?.remove();const start=Math.max(0,Number(body.dataset.historyLoadedStart)||0);if(start<=0)return;const button=document.createElement('button');button.type='button';button.className='chat-load-earlier-v4';button.textContent=`加载更早记录（还有 ${start} 条）`;button.onclick=()=>window.loadEarlierChatHistoryPage(handle,button);body.insertBefore(button,body.firstChild);};
 window.loadEarlierChatHistoryPage=async function(handle,button){const body=document.getElementById('chatThreadBody'),snapshot=getChatHistorySnapshot(handle);if(!body||!Array.isArray(snapshot?.lines))return;button.disabled=true;button.textContent='正在加载…';const end=Math.max(0,Number(body.dataset.historyLoadedStart)||0),start=Math.max(0,end-CHAT_V4_PAGE_SIZE);chatHistoryMutationIgnoreUntil=Date.now()+350;restoringChatHistory=true;try{insertEarlierLines(handle,snapshot.lines.slice(start,end));body.dataset.historyLoadedStart=String(start);}finally{restoringChatHistory=false;}window.ensureChatHistoryLoadEarlierButton(handle);};
@@ -30919,12 +31920,13 @@ function backupHashUpdate(hash,text){let h=hash>>>0;for(let i=0;i<text.length;i+
 async function encodeBackupValue(value,lite,seen=new WeakSet()){if(value instanceof Blob){if(lite)return{__type:'SkippedBlob',mime:value.type,size:value.size};const bytes=new Uint8Array(await value.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return{__type:'Blob',mime:value.type,size:value.size,data:btoa(binary)};}if(typeof value==='string')return lite&&/^data:(?:image|audio|video)\//i.test(value)?'[媒体已跳过]':value;if(Array.isArray(value)){const result=[];for(let i=0;i<value.length;i++){result.push(await encodeBackupValue(value[i],lite,seen));if(i&&i%100===0)await new Promise(resolve=>setTimeout(resolve,0));}return result;}if(value&&typeof value==='object'){if(seen.has(value))return'[循环引用已跳过]';seen.add(value);const result={};for(const[key,item]of Object.entries(value))result[key]=await encodeBackupValue(item,lite,seen);seen.delete(value);return result;}return value;}
 async function decodeBackupValue(value){if(Array.isArray(value))return Promise.all(value.map(decodeBackupValue));if(value&&typeof value==='object'){if(value.__type==='Blob'&&value.data){const binary=atob(value.data),bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);return new Blob([bytes],{type:value.mime||'application/octet-stream'});}if(value.__type==='SkippedBlob')return null;const result={};for(const[key,item]of Object.entries(value))result[key]=await decodeBackupValue(item);return result;}return value;}
 async function readStoreEntries(db,storeName){return new Promise(resolve=>{const rows=[];try{const tx=db.transaction(storeName,'readonly'),cursor=tx.objectStore(storeName).openCursor();cursor.onsuccess=()=>{const item=cursor.result;if(item){rows.push({key:item.key,value:item.value});item.continue();}};tx.oncomplete=()=>resolve(rows);tx.onerror=tx.onabort=()=>resolve(rows);}catch(_){resolve(rows);}});}
-async function buildStreamBackup(lite=false){flushDreamStorage?.();await migrateSnapshotsToIndividualMessages();const lines=[];let hash=2166136261,count=0;const push=record=>{const line=JSON.stringify(record);lines.push(line);hash=backupHashUpdate(hash,line+'\n');count++;};push({type:'MOBIUS_STREAM_BACKUP',version:1,schemaVersion:4,lite,createdAt:new Date().toISOString(),compoundMessageIndex:false});for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key||(!key.startsWith('dream-')&&!key.startsWith('dream_')))continue;let value=localStorage.getItem(key);if(lite&&typeof value==='string')value=value.replace(/data:(?:image|audio|video)\/[^"'\s]+/gi,'[媒体已跳过]');push({section:'localStorage',key,value});if(i&&i%80===0)await new Promise(resolve=>setTimeout(resolve,0));}const db=await openDreamV3Database();if(db){for(const store of[...db.objectStoreNames]){if(lite&&store===DREAM_MEDIA_STORE_NAME)continue;const entries=await readStoreEntries(db,store);for(const entry of entries)push({section:'indexedDB',database:DREAM_V3_DB_NAME,store,key:entry.key,value:await encodeBackupValue(entry.value,lite)});}}const trailer={section:'end',recordCount:count,checksum:(hash>>>0).toString(16).padStart(8,'0'),completedAt:new Date().toISOString()};lines.push(JSON.stringify(trailer));let blob=new Blob([lines.join('\n')+'\n'],{type:'application/x-ndjson;charset=utf-8'}),extension='.ndjson';if('CompressionStream'in window){blob=await new Response(blob.stream().pipeThrough(new CompressionStream('gzip'))).blob();extension='.ndjson.gz';}return{blob,extension,count,trailer};}
+async function buildStreamBackup(lite=false){flushDreamStorage?.();await migrateSnapshotsToIndividualMessages();const lines=[];let hash=2166136261,count=0;const push=record=>{const line=JSON.stringify(record);lines.push(line);hash=backupHashUpdate(hash,line+'\n');count++;};push({type:'MOBIUS_STREAM_BACKUP',version:1,schemaVersion:4,lite,createdAt:new Date().toISOString(),compoundMessageIndex:false});for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key||(!key.startsWith('dream-')&&!key.startsWith('dream_'))||key.startsWith('dream-safe-v1:'))continue;let value=localStorage.getItem(key);if(lite&&typeof value==='string')value=value.replace(/data:(?:image|audio|video)\/[^"'\s]+/gi,'[媒体已跳过]');push({section:'localStorage',key,value});if(i&&i%80===0)await new Promise(resolve=>setTimeout(resolve,0));}const db=await openDreamV3Database();if(db){for(const store of[...db.objectStoreNames]){if(lite&&store===DREAM_MEDIA_STORE_NAME)continue;const entries=await readStoreEntries(db,store);for(const entry of entries)push({section:'indexedDB',database:DREAM_V3_DB_NAME,store,key:entry.key,value:await encodeBackupValue(entry.value,lite)});}}const trailer={section:'end',recordCount:count,checksum:(hash>>>0).toString(16).padStart(8,'0'),completedAt:new Date().toISOString()};lines.push(JSON.stringify(trailer));let blob=new Blob([lines.join('\n')+'\n'],{type:'application/x-ndjson;charset=utf-8'}),extension='.ndjson';if('CompressionStream'in window){blob=await new Response(blob.stream().pipeThrough(new CompressionStream('gzip'))).blob();extension='.ndjson.gz';}return{blob,extension,count,trailer};}
 window.exportMobiusStreamBackup=async function(lite=false){setMediaCompressionProgress(lite?'正在生成流式轻量备份…':'正在生成流式全量备份…');try{const result=await buildStreamBackup(lite),url=URL.createObjectURL(result.blob),link=document.createElement('a');link.href=url;link.download=`mobius-${lite?'lite':'full'}-${new Date().toISOString().slice(0,10)}${result.extension}`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);setMediaCompressionProgress(`备份完成：${result.count} 条记录`);}catch(error){setMediaCompressionProgress(`备份失败：${error.message||error}`);}};
 async function readBackupText(file){const bytes=new Uint8Array(await file.slice(0,2).arrayBuffer()),gzip=file.name.toLowerCase().endsWith('.gz')||(bytes[0]===31&&bytes[1]===139);if(gzip){if(!('DecompressionStream'in window))throw new Error('当前浏览器不支持 GZIP 解压');return new Response(file.stream().pipeThrough(new DecompressionStream('gzip'))).text();}return file.text();}
 function validateStreamBackup(text){const rows=String(text).split(/\n/).filter(Boolean);if(rows.length<2)throw new Error('备份文件不完整');const header=JSON.parse(rows[0]),trailer=JSON.parse(rows[rows.length-1]);if(header.type!=='MOBIUS_STREAM_BACKUP'||header.version!==1)throw new Error('备份类型或版本不支持');if(trailer.section!=='end')throw new Error('缺少结束标记');let hash=2166136261;for(let i=0;i<rows.length-1;i++)hash=backupHashUpdate(hash,rows[i]+'\n');const checksum=(hash>>>0).toString(16).padStart(8,'0');if(checksum!==trailer.checksum)throw new Error('备份校验值不一致');if(Number(trailer.recordCount)!==rows.length-1)throw new Error('备份记录数量不一致');return{header,trailer,records:rows.slice(1,-1).map(row=>JSON.parse(row))};}
 async function putImportedRecord(storeName,value){const db=await openDreamV3Database();if(!db||!db.objectStoreNames.contains(storeName))return false;return new Promise(resolve=>{try{const tx=db.transaction(storeName,'readwrite');tx.objectStore(storeName).put(value);tx.oncomplete=()=>resolve(true);tx.onerror=tx.onabort=()=>resolve(false);}catch(_){resolve(false);}});}
-window.importMobiusStreamBackup=async function(event){const file=event.target.files?.[0];if(!file)return;setMediaCompressionProgress('正在校验流式备份…');try{const text=await readBackupText(file),validated=validateStreamBackup(text);if(!confirm(`备份校验通过，共 ${validated.trailer.recordCount} 条记录。导入将合并同主键数据，是否继续？`))return;let imported=0;for(let i=0;i<validated.records.length;i++){const row=validated.records[i];if(row.section==='localStorage'&&(String(row.key).startsWith('dream-')||String(row.key).startsWith('dream_'))){localStorage.setItem(row.key,String(row.value??''));imported++;}else if(row.section==='indexedDB'&&row.database===DREAM_V3_DB_NAME){const value=await decodeBackupValue(row.value);if(value!==null&&await putImportedRecord(row.store,value))imported++;}if(i%100===0){setMediaCompressionProgress(`正在导入 ${i}/${validated.records.length}`);await new Promise(resolve=>setTimeout(resolve,0));}}setMediaCompressionProgress(`导入完成：${imported} 条，准备刷新…`);setTimeout(()=>location.reload(),700);}catch(error){setMediaCompressionProgress(`导入失败：${error.message||error}`);}finally{event.target.value='';}};
+window.importMobiusStreamBackup=async function(event){const file=event.target.files?.[0];if(!file)return;setMediaCompressionProgress('正在校验流式备份…');let committed=false;try{const text=await readBackupText(file),validated=validateStreamBackup(text);if(!confirm(`备份校验通过，共 ${validated.trailer.recordCount} 条记录。导入将合并同主键数据，是否继续？`))return;window.beginDreamDataImport?.();let imported=0;const importedRecords=[];for(let i=0;i<validated.records.length;i++){const row=validated.records[i],key=String(row.key||'');if(row.section==='localStorage'&&(key.startsWith('dream-')||key.startsWith('dream_'))&&!key.startsWith('dream-safe-v1:')){if(window.writeImportedDreamStorageRaw?.(key,String(row.value??'')))imported++;}else if(row.section==='indexedDB'&&row.database===DREAM_V3_DB_NAME){const value=await decodeBackupValue(row.value);if(value!==null&&await putImportedRecord(row.store,value)){imported++;if(row.store==='records'&&value&&typeof value==='object')importedRecords.push(value);}}if(i%100===0){setMediaCompressionProgress(`正在导入 ${i}/${validated.records.length}`);await new Promise(resolve=>setTimeout(resolve,0));}}// V3 中可能有 localStorage 已被浏览器回收的唯一副本；最后统一回填启动缓存，并解除旧删除标记。
+for(const record of importedRecords)window.applyImportedDreamRecordToCache?.(record);window.prepareDreamImportedStateForReload?.();committed=true;setMediaCompressionProgress(`导入完成：${imported} 条，准备刷新…`);setTimeout(()=>location.reload(),700);}catch(error){if(!committed)window.cancelDreamDataImport?.();setMediaCompressionProgress(`导入失败：${error.message||error}`);}finally{event.target.value='';}};
 setTimeout(()=>migrateSnapshotsToIndividualMessages(),1300);
 })();
 </script>
@@ -30935,6 +31937,14 @@ setTimeout(()=>migrateSnapshotsToIndividualMessages(),1300);
 'use strict';
 const PHONE_STATE_KEY='dream-messenger:phone-inspection:v1';
 const PHONE_AI_KEY='dream-messenger:phone-ai-config:v1';
+const PHONE_AI_PROVIDERS=Object.freeze({
+ openai:{name:'OpenAI',baseUrl:'https://api.openai.com/v1',models:['gpt-4.1-mini','gpt-4o-mini']},
+ deepseek:{name:'DeepSeek',baseUrl:'https://api.deepseek.com',models:['deepseek-v4-flash','deepseek-v4-pro','deepseek-chat']},
+ moonshot:{name:'Moonshot / Kimi',baseUrl:'https://api.moonshot.ai/v1',models:[]},
+ openrouter:{name:'OpenRouter',baseUrl:'https://openrouter.ai/api/v1',models:[]},
+ siliconflow:{name:'硅基流动',baseUrl:'https://api.siliconflow.cn/v1',models:['deepseek-ai/DeepSeek-V3','Qwen/Qwen3-8B']},
+ custom:{name:'自定义兼容接口',baseUrl:'',models:[]}
+});
 let phoneRoleId='';
 let phoneScreen='roles';
 const readState=()=>{const v=readDreamJSON(PHONE_STATE_KEY,{profiles:{}});return v&&typeof v==='object'?{profiles:v.profiles&&typeof v.profiles==='object'?v.profiles:{}}:{profiles:{}};};
@@ -30975,13 +31985,17 @@ function generatePhoneLocal(confirmReplace=false){const role=getRoleRecord(phone
 function chatContext(handle){try{const snapshot=typeof getChatHistorySnapshot==='function'?getChatHistorySnapshot(handle):loadChatHistoryState()?.[handle];const lines=Array.isArray(snapshot?.lines)?snapshot.lines.slice(-80):[];const holder=document.createElement('div'),out=[];for(const html of lines){holder.innerHTML=String(html||'');const line=holder.firstElementChild;if(!line?.classList.contains('chat-message-line'))continue;const bubble=line.querySelector('.chat-bubble');const text=String(bubble?.textContent||'').replace(/\s+/g,' ').trim();if(!text)continue;out.push(`${line.classList.contains('outgoing')?'用户':'梦角'}：${text.slice(0,500)}`);}return out.slice(-50);}catch(_){return[];}}
 function roleContext(role){return{name:roleName(role),id:role.id,initials:role.initials||'',mood:role.mood||'',bio:role.bio||'',replyChance:role.replyChance};}
 function cleanJSON(text){const raw=String(text||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');const start=raw.indexOf('{'),end=raw.lastIndexOf('}');if(start<0||end<start)throw new Error('模型没有返回 JSON');return JSON.parse(raw.slice(start,end+1));}
-async function generatePhoneWithAI(){const role=getRoleRecord(phoneRoleId),config=readAI();if(!role)return;if(!config.baseUrl||!config.apiKey||!config.model){toast('请先在全局设置中配置 AI 接口');return;}if(window.confirm&&!confirm('将向所选服务商发送梦角资料、用户设定和最近 50 条聊天文字。确认生成吗？'))return;const app=document.getElementById('phoneInspectionApp');app?.classList.add('phone-generating');toast('正在生成手机内容…');try{const system='你是虚构角色手机档案生成器。根据提供的角色资料与聊天上下文，生成自然、具体但不泄露系统机制的中文手机内容。只输出一个 JSON 对象，不要 Markdown。字段必须为 recentListening(5项:title,artist,playedAt)、wallet(balance,transactions 5项:title,amount,source,time)、memos(4项:title,content,updatedAt)、browser(6项:title,url,time)、itinerary(4项:time,title,location)。内容属于虚构本地娱乐档案。';const payload={role:roleContext(role),userSetting:String(config.customPrompt||''),recentChat:chatContext(role.id)};const response=await fetch(`${String(config.baseUrl).replace(/\/+$/,'')}/chat/completions`,{method:'POST',headers:{'content-type':'application/json','authorization':`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(payload)}],temperature:.9,max_tokens:2600})});if(!response.ok)throw new Error(`接口返回 ${response.status}`);const json=await response.json();const content=json?.choices?.[0]?.message?.content;if(!content)throw new Error('模型没有返回内容');const profile=getProfile(role.id,true);profile.data=normalizeData(cleanJSON(content),role);profile.generatedBy='ai';profile.generatedAt=Date.now();saveProfile(role.id,profile);openRolePhone(role.id);document.getElementById('phoneLock').style.display='none';toast('AI 手机内容已生成');}catch(error){toast(`生成失败：${error.message||'未知错误'}`);}finally{app?.classList.remove('phone-generating');}}
-window.fetchPhoneAIModels=async function(){const base=document.getElementById('phoneAIBaseUrl')?.value.trim(),key=document.getElementById('phoneAIKey')?.value.trim();if(!base||!key)return phoneAISettingStatus('请填写地址和 Key',true);phoneAISettingStatus('正在拉取…');try{const res=await fetch(`${base.replace(/\/+$/,'')}/models`,{headers:{authorization:`Bearer ${key}`}});if(!res.ok)throw new Error(`HTTP ${res.status}`);const json=await res.json(),models=(Array.isArray(json?.data)?json.data:[]).map(x=>String(x?.id||'')).filter(Boolean).sort();if(!models.length)throw new Error('没有可用模型');const select=document.getElementById('phoneAIModel'),saved=readAI().model;select.innerHTML=models.map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join('');if(models.includes(saved))select.value=saved;phoneAISettingStatus(`已找到 ${models.length} 个模型`);}catch(error){phoneAISettingStatus(`拉取失败：${error.message}`,true);}};
-window.savePhoneAIConfig=function(){const baseUrl=document.getElementById('phoneAIBaseUrl')?.value.trim().replace(/\/+$/,''),apiKey=document.getElementById('phoneAIKey')?.value.trim(),model=document.getElementById('phoneAIModel')?.value||'',customPrompt=document.getElementById('phoneAICustomPrompt')?.value.trim()||'';if(!baseUrl||!apiKey||!model)return phoneAISettingStatus('请完整填写接口、Key 和模型',true);saveAI({baseUrl,apiKey,model,customPrompt,updatedAt:Date.now()});phoneAISettingStatus('已保存');};
-window.testPhoneAIConnection=async function(){savePhoneAIConfig();const config=readAI();if(!config.apiKey)return;phoneAISettingStatus('测试中…');try{const res=await fetch(`${config.baseUrl}/chat/completions`,{method:'POST',headers:{'content-type':'application/json',authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model,messages:[{role:'user',content:'只回复 OK'}],max_tokens:8})});if(!res.ok)throw new Error(`HTTP ${res.status}`);phoneAISettingStatus('连接成功');}catch(error){phoneAISettingStatus(`连接失败：${error.message}`,true);}};
+async function generatePhoneWithAI(){const role=getRoleRecord(phoneRoleId),config=readAI();if(!role)return;if(!config.baseUrl||!config.apiKey||!config.model){toast('请先在全局设置中配置 AI 接口');return;}if(window.confirm&&!confirm('将向所选服务商发送梦角资料、用户设定和最近 50 条聊天文字。确认生成吗？'))return;const app=document.getElementById('phoneInspectionApp');app?.classList.add('phone-generating');toast('正在生成手机内容…');try{const system=`你是虚构角色手机档案生成器。根据提供的角色资料与聊天上下文，生成自然、具体但不泄露系统机制的中文手机内容。只输出一个 JSON 对象，不要 Markdown。字段必须为 recentListening(5项:title,artist,playedAt)、wallet(balance,transactions 5项:title,amount,source,time)、memos(4项:title,content,updatedAt)、browser(6项:title,url,time)、itinerary(4项:time,title,location)。内容属于虚构本地娱乐档案。所有自然语言字段遵循以下风格：\n${window.MOBIUS_AI_STYLE_PRESET||''}`;const payload={role:roleContext(role),userSetting:String(config.customPrompt||''),recentChat:chatContext(role.id)};const response=await fetch(`${String(config.baseUrl).replace(/\/+$/,'')}/chat/completions`,{method:'POST',headers:{'content-type':'application/json',...phoneAIHeaders(config.provider||'custom',config.apiKey)},body:JSON.stringify({model:config.model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(payload)}],temperature:.9,max_tokens:2600})});if(!response.ok)throw Object.assign(new Error(`HTTP ${response.status}`),{status:response.status});const json=await response.json();window.recordAiUsage?.('phone');const content=json?.choices?.[0]?.message?.content;if(!content)throw new Error('模型没有返回内容');const profile=getProfile(role.id,true);profile.data=normalizeData(cleanJSON(content),role);profile.generatedBy='ai';profile.generatedAt=Date.now();saveProfile(role.id,profile);openRolePhone(role.id);document.getElementById('phoneLock').style.display='none';toast('AI 手机内容已生成');}catch(error){toast(`生成失败：${phoneAIErrorMessage(error,error.status)}`);}finally{app?.classList.remove('phone-generating');}}
+function phoneAIHeaders(provider,key){const headers={authorization:`Bearer ${key}`};if(provider==='openrouter'){headers['HTTP-Referer']=location.origin;headers['X-Title']='Möbius';}return headers;}
+function phoneAIErrorMessage(error,status=0){if(status===401)return'Key 无效或未授权（401）';if(status===402)return'账户余额不足（402）';if(status===403)return'服务商拒绝访问或浏览器跨域受限（403）';if(status===404)return'API 地址不正确或不支持模型列表（404）';if(status===429)return'请求过于频繁或额度不足（429）';if(error instanceof TypeError||/fetch|network|failed/i.test(String(error?.message||'')))return'浏览器无法直连：可能是 CORS、网络或域名被拦截';return String(error?.message||`HTTP ${status||'错误'}`);}
+function populatePhoneAIModels(models,selected=''){const select=document.getElementById('phoneAIModel');if(!select)return;const list=[...new Set((models||[]).map(String).filter(Boolean))];select.innerHTML='<option value="">请选择模型</option>'+list.map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join('');if(selected&&list.includes(selected))select.value=selected;const manual=document.getElementById('phoneAIManualModel');if(manual&&selected&&!list.includes(selected))manual.value=selected;}
+window.applyPhoneAIProviderPreset=function(provider){const preset=PHONE_AI_PROVIDERS[provider]||PHONE_AI_PROVIDERS.custom,base=document.getElementById('phoneAIBaseUrl'),saved=readAI();if(base&&preset.baseUrl)base.value=preset.baseUrl;const manual=document.getElementById('phoneAIManualModel');if(manual)manual.value='';populatePhoneAIModels(preset.models,saved.provider===provider?saved.model:'');phoneAISettingStatus(preset.models.length?'已载入推荐模型，也可继续拉取':'请拉取模型，失败时可手动填写模型名');};
+window.fetchPhoneAIModels=async function(){const base=document.getElementById('phoneAIBaseUrl')?.value.trim(),key=document.getElementById('phoneAIKey')?.value.trim(),provider=document.getElementById('phoneAIProvider')?.value||'custom';if(!base||!key)return phoneAISettingStatus('请填写地址和 Key',true);phoneAISettingStatus('正在拉取…');try{const res=await fetch(`${base.replace(/\/+$/,'')}/models`,{headers:phoneAIHeaders(provider,key)});if(!res.ok)throw Object.assign(new Error(`HTTP ${res.status}`),{status:res.status});const json=await res.json(),models=(Array.isArray(json?.data)?json.data:Array.isArray(json?.models)?json.models:[]).map(x=>String(x?.id||x?.name||x||'')).filter(Boolean).sort();if(!models.length)throw new Error('接口没有返回模型列表');populatePhoneAIModels(models,readAI().model);phoneAISettingStatus(`已找到 ${models.length} 个模型`);}catch(error){const fallback=PHONE_AI_PROVIDERS[provider]?.models||[];if(fallback.length)populatePhoneAIModels(fallback,readAI().model);phoneAISettingStatus(`拉取失败：${phoneAIErrorMessage(error,error.status)}${fallback.length?'；已保留推荐模型':''}`,true);}};
+window.savePhoneAIConfig=function(){const provider=document.getElementById('phoneAIProvider')?.value||'custom',baseUrl=document.getElementById('phoneAIBaseUrl')?.value.trim().replace(/\/+$/,''),apiKey=document.getElementById('phoneAIKey')?.value.trim(),manual=document.getElementById('phoneAIManualModel')?.value.trim()||'',model=manual||document.getElementById('phoneAIModel')?.value||'',customPrompt=document.getElementById('phoneAICustomPrompt')?.value.trim()||'';if(!baseUrl||!apiKey||!model)return phoneAISettingStatus('请完整填写接口、Key 和模型；拉取失败可手动填模型名',true);saveAI({provider,baseUrl,apiKey,model,customPrompt,updatedAt:Date.now()});phoneAISettingStatus(`已保存 · ${PHONE_AI_PROVIDERS[provider]?.name||'自定义接口'}`);return true;};
+window.testPhoneAIConnection=async function(){if(!savePhoneAIConfig())return;const config=readAI();phoneAISettingStatus('测试中…');try{const res=await fetch(`${config.baseUrl}/chat/completions`,{method:'POST',headers:{'content-type':'application/json',...phoneAIHeaders(config.provider,config.apiKey)},body:JSON.stringify({model:config.model,messages:[{role:'user',content:'只回复 OK'}],max_tokens:8})});if(!res.ok)throw Object.assign(new Error(`HTTP ${res.status}`),{status:res.status});phoneAISettingStatus('连接成功');}catch(error){phoneAISettingStatus(`连接失败：${phoneAIErrorMessage(error,error.status)}`,true);}};
 window.clearPhoneAIKey=function(){const config=readAI();config.apiKey='';saveAI(config);const input=document.getElementById('phoneAIKey');if(input)input.value='';phoneAISettingStatus('Key 已清除');};
 function phoneAISettingStatus(text,error=false){const node=document.getElementById('phoneAIStatus');if(node){node.textContent=text;node.style.color=error?'#a14f5c':'';}}
-function renderPhoneAIConfig(){const c=readAI(),base=document.getElementById('phoneAIBaseUrl'),key=document.getElementById('phoneAIKey'),model=document.getElementById('phoneAIModel'),prompt=document.getElementById('phoneAICustomPrompt');if(base)base.value=c.baseUrl||'https://api.openai.com/v1';if(key)key.value=c.apiKey||'';if(prompt)prompt.value=c.customPrompt||'';if(model&&c.model){model.innerHTML=`<option value="${esc(c.model)}">${esc(c.model)}</option>`;model.value=c.model;}phoneAISettingStatus(c.apiKey&&c.model?'已配置':'未配置');}
+function renderPhoneAIConfig(){const c=readAI(),provider=c.provider||'openai',preset=PHONE_AI_PROVIDERS[provider]||PHONE_AI_PROVIDERS.custom,providerSelect=document.getElementById('phoneAIProvider'),base=document.getElementById('phoneAIBaseUrl'),key=document.getElementById('phoneAIKey'),manual=document.getElementById('phoneAIManualModel'),prompt=document.getElementById('phoneAICustomPrompt');if(providerSelect)providerSelect.value=provider;if(base)base.value=c.baseUrl||preset.baseUrl||'https://api.openai.com/v1';if(key)key.value=c.apiKey||'';if(prompt)prompt.value=c.customPrompt||'';populatePhoneAIModels(preset.models,c.model||'');if(manual)manual.value=c.model&&!preset.models.includes(c.model)?c.model:'';phoneAISettingStatus(c.apiKey&&c.model?`已配置 · ${preset.name}`:'未配置');window.renderAiUsageStats?.();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderPhoneAIConfig,{once:true});else setTimeout(renderPhoneAIConfig,0);
 const oldOpenGlobal=window.openGlobalSettingsApp;if(typeof oldOpenGlobal==='function'&&!oldOpenGlobal._phonePatched){window.openGlobalSettingsApp=function(){const result=oldOpenGlobal.apply(this,arguments);setTimeout(renderPhoneAIConfig,0);return result;};window.openGlobalSettingsApp._phonePatched=true;}
 })();
@@ -31139,6 +32153,11 @@ function buildOverrides(){
       out.push(scope(s, '[data-perf-mode="lite"]')     + '{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}');
       stats.blurRules++;
     });
+  });
+  /* 迷你通话是透明的全屏命中层，绝不能被通用毛玻璃降级规则重新加上模糊；
+     否则整张聊天页面都会成为它的 backdrop，并在最小窗口状态下整体变糊。 */
+  ['balanced','lite'].forEach(function(mode){
+    out.push('html[data-perf-mode="' + mode + '"] #callModal.window-mini{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important}');
   });
 
   /* 无限循环动画：均衡档只停掉触发重排/重绘的那些，极简档全停。
@@ -31313,5 +32332,5 @@ window.MobiusPerf = {
 </script>
 <!-- ================= MÖBIUS · 流畅度补丁 v1 结束 ================= -->
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2eadf26ee8486b1',t:'MTc4NzMyODI0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2eadf26ee8486b1',t:'MTc4NzMyODI0Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2f22bbc8e959e41',t:'MTc4NzQwNDc4NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
